@@ -157,9 +157,9 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="animate-fade-in">
             <div className="w-full max-w-6xl mx-auto">
-              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-[1.1] px-1">
-                <span className="block hero-title">Transformamos tu</span>
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mt-1 sm:mt-2 hero-subtitle">
+              <h1 className="font-bold text-white mb-6 leading-[1.1] px-1">
+                <span className="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl hero-title">Transformamos tu</span>
+                <span className="block text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mt-1 sm:mt-2 hero-subtitle">
                   Negocio Digital
                 </span>
               </h1>

@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertLeadSchema, insertChatSessionSchema } from "@shared/schema";
 import { z } from "zod";
 import OpenAI from 'openai';
+import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -16,11 +17,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const leadData = insertLeadSchema.parse(req.body);
       const lead = await storage.createLead(leadData);
+      
+      // Enviar email de confirmación al cliente
+      const confirmationEmail = generateConfirmationEmail(leadData.name, leadData.company || 'No especificada');
+      await sendEmail({
+        to: leadData.email,
+        toName: leadData.name,
+        subject: confirmationEmail.subject,
+        htmlContent: confirmationEmail.htmlContent
+      });
+      
+      // Enviar notificación al administrador (usando un email por defecto)
+      const notificationEmail = generateNotificationEmail(leadData);
+      await sendEmail({
+        to: 'admin@arkodata.com', // Cambiar por tu email real
+        toName: 'Administrador ArkoData',
+        subject: notificationEmail.subject,
+        htmlContent: notificationEmail.htmlContent
+      });
+      
+      console.log(`Emails enviados para lead: ${leadData.name} (${leadData.email})`);
       res.json(lead);
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ message: "Invalid data", errors: error.errors });
       } else {
+        console.error('Error creando lead:', error);
         res.status(500).json({ message: "Internal server error" });
       }
     }
