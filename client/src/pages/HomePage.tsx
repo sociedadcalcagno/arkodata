@@ -20,15 +20,12 @@ import {
 import { useCreateLead } from '../lib/api';
 import { useToast } from '../hooks/use-toast';
 import AIChat from '../components/AIChat';
-import AdminLogin from '../components/AdminLogin';
-import AdminDashboard from '../components/AdminDashboard';
+
 
 export default function HomePage() {
   const [showAIChat, setShowAIChat] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
-  const [showEmailDashboard, setShowEmailDashboard] = useState(false);
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+
   
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -123,28 +120,7 @@ export default function HomePage() {
     }
   };
 
-  const handleAdminLogin = (success: boolean) => {
-    if (success) {
-      setIsAdminAuthenticated(true);
-      setShowAdminLogin(false);
-      setShowEmailDashboard(true);
-    }
-    setShowAdminLogin(false);
-  };
 
-  const handleEmailDashboardAccess = () => {
-    if (isAdminAuthenticated) {
-      setShowEmailDashboard(true);
-    } else {
-      setShowAdminLogin(true);
-    }
-  };
-
-  const handleAdminLogout = () => {
-    localStorage.removeItem('arko_admin_session');
-    setIsAdminAuthenticated(false);
-    setShowEmailDashboard(false);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
@@ -163,14 +139,6 @@ export default function HomePage() {
             </div>
             
             <div className="flex items-center space-x-4">
-              <button
-                onClick={handleEmailDashboardAccess}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
-              >
-                <Lock className="w-4 h-4" />
-                <span>Admin</span>
-              </button>
-              
               <button
                 onClick={() => setShowContactForm(true)}
                 className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
@@ -406,21 +374,7 @@ export default function HomePage() {
         <AIChat onClose={() => setShowAIChat(false)} />
       )}
 
-      {/* Admin Login Modal */}
-      {showAdminLogin && (
-        <AdminLogin 
-          onLogin={handleAdminLogin}
-          onClose={() => setShowAdminLogin(false)}
-        />
-      )}
 
-      {/* Admin Dashboard Modal */}
-      {showEmailDashboard && (
-        <AdminDashboard 
-          onClose={() => setShowEmailDashboard(false)}
-          onLogout={handleAdminLogout}
-        />
-      )}
     </div>
   );
 }
