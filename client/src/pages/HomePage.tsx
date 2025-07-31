@@ -21,7 +21,7 @@ import { useCreateLead } from '../lib/api';
 import { useToast } from '../hooks/use-toast';
 import AIChat from '../components/AIChat';
 import AdminLogin from '../components/AdminLogin';
-// import AdminDashboard from '../components/AdminDashboard';
+import AdminDashboard from '../components/AdminDashboard';
 
 export default function HomePage() {
   const [showAIChat, setShowAIChat] = useState(false);
@@ -416,37 +416,10 @@ export default function HomePage() {
 
       {/* Admin Dashboard Modal */}
       {showEmailDashboard && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-2xl w-full max-w-6xl h-[80vh] flex flex-col border border-red-500/30 shadow-2xl">
-            <div className="flex items-center justify-between p-6 border-b border-slate-700">
-              <div>
-                <h3 className="text-2xl font-bold text-white">Dashboard Administrativo</h3>
-                <p className="text-gray-400">Panel de administración temporal</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={handleAdminLogout}
-                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors"
-                >
-                  Cerrar Sesión
-                </button>
-                <button
-                  onClick={() => setShowEmailDashboard(false)}
-                  className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
-                >
-                  <X className="w-6 h-6 text-gray-400" />
-                </button>
-              </div>
-            </div>
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <Building className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <h4 className="text-xl font-semibold text-white mb-2">Dashboard en desarrollo</h4>
-                <p className="text-gray-400">Los leads capturados aparecerán aquí</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AdminDashboard 
+          onClose={() => setShowEmailDashboard(false)}
+          onLogout={handleAdminLogout}
+        />
       )}
     </div>
   );

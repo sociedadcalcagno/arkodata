@@ -9,6 +9,8 @@ import {
   type ChatSession,
   type InsertChatSession
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -27,90 +29,67 @@ export interface IStorage {
   getChatSession(id: number): Promise<ChatSession | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private leads: Map<number, Lead>;
-  private chatSessions: Map<number, ChatSession>;
-  private currentUserId: number;
-  private currentLeadId: number;
-  private currentChatId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.leads = new Map();
-    this.chatSessions = new Map();
-    this.currentUserId = 1;
-    this.currentLeadId = 1;
-    this.currentChatId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   // User methods
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   // Lead methods
   async createLead(insertLead: InsertLead): Promise<Lead> {
-    const id = this.currentLeadId++;
-    const lead: Lead = { 
-      ...insertLead,
-      phone: insertLead.phone ?? null,
-      company: insertLead.company ?? null,
-      id, 
-      createdAt: new Date() 
-    };
-    this.leads.set(id, lead);
+    const [lead] = await db
+      .insert(leads)
+      .values(insertLead)
+      .returning();
     return lead;
   }
 
   async getLeads(): Promise<Lead[]> {
-    return Array.from(this.leads.values()).sort((a, b) => 
-      b.createdAt.getTime() - a.createdAt.getTime()
-    );
+    return await db
+      .select()
+      .from(leads)
+      .orderBy(desc(leads.createdAt));
   }
 
   async getLead(id: number): Promise<Lead | undefined> {
-    return this.leads.get(id);
+    const [lead] = await db.select().from(leads).where(eq(leads.id, id));
+    return lead || undefined;
   }
 
   // Chat session methods
   async createChatSession(insertSession: InsertChatSession): Promise<ChatSession> {
-    const id = this.currentChatId++;
-    const session: ChatSession = { 
-      ...insertSession,
-      userName: insertSession.userName ?? null,
-      userEmail: insertSession.userEmail ?? null,
-      userCompany: insertSession.userCompany ?? null,
-      conversationSummary: insertSession.conversationSummary ?? null,
-      id, 
-      createdAt: new Date() 
-    };
-    this.chatSessions.set(id, session);
+    const [session] = await db
+      .insert(chatSessions)
+      .values(insertSession)
+      .returning();
     return session;
   }
 
   async getChatSessions(): Promise<ChatSession[]> {
-    return Array.from(this.chatSessions.values()).sort((a, b) => 
-      b.createdAt.getTime() - a.createdAt.getTime()
-    );
+    return await db
+      .select()
+      .from(chatSessions)
+      .orderBy(desc(chatSessions.createdAt));
   }
 
   async getChatSession(id: number): Promise<ChatSession | undefined> {
-    return this.chatSessions.get(id);
+    const [session] = await db.select().from(chatSessions).where(eq(chatSessions.id, id));
+    return session || undefined;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

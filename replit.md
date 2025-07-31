@@ -6,15 +6,17 @@ ArkoData is a technology solutions company's website featuring an AI assistant c
 ## Recent Changes
 - **2024-12-19**: Successfully migrated from Bolt to Replit environment
 - Implemented proper client/server separation with Express backend and React frontend
-- Created data models for leads and chat sessions with in-memory storage
+- Created data models for leads and chat sessions with PostgreSQL database
 - Established API endpoints with Zod validation
 - Migrated to TanStack Query for data fetching
 - Implemented proper TypeScript types and error handling
+- Added PostgreSQL database with Drizzle ORM for persistent data storage
 
 ## Project Architecture
 
 ### Backend (Express + TypeScript)
-- **Storage**: In-memory storage with interfaces for leads and chat sessions
+- **Database**: PostgreSQL with Drizzle ORM for persistent storage
+- **Storage**: DatabaseStorage class implementing IStorage interface
 - **API Routes**: RESTful endpoints for leads and chat sessions with validation
 - **Schema**: Shared TypeScript types and Zod schemas for data validation
 
