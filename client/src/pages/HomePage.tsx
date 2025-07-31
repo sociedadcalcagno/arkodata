@@ -159,7 +159,14 @@ export default function HomePage() {
             <div className="w-full max-w-6xl mx-auto">
               <h1 className="font-bold text-white leading-[1.1] px-1 mb-20 sm:mb-24 lg:mb-32">
                 <span className="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl hero-title">Transformamos tu</span>
-                <span className="block text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mt-1 sm:mt-2 hero-subtitle">
+                <span className="block text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mt-1 sm:mt-2 hero-subtitle" style={{
+                  background: 'linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  display: 'inline-block',
+                  lineHeight: '1.2'
+                }}>
                   Negocio Digital
                 </span>
               </h1>
