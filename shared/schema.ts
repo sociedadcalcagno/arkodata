@@ -21,6 +21,8 @@ export const leads = pgTable("leads", {
 
 export const chatSessions = pgTable("chat_sessions", {
   id: serial("id").primaryKey(),
+  userMessage: text("user_message").notNull(),
+  assistantResponse: text("assistant_response").notNull(),
   userName: text("user_name"),
   userEmail: text("user_email"),
   userCompany: text("user_company"),

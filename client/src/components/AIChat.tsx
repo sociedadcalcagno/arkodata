@@ -19,6 +19,7 @@ export default function AIChat({ onClose }: AIChatProps) {
       timestamp: new Date()
     }
   ]);
+  const [sessionId] = useState(() => `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -59,13 +60,16 @@ export default function AIChat({ onClose }: AIChatProps) {
     focusInput(); // Mantener foco después de enviar
 
     try {
-      // Llamada real a la API de OpenAI
+      // Llamada real a la API de OpenAI con sessionId para tracking
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userMessage.content }),
+        body: JSON.stringify({ 
+          message: userMessage.content,
+          sessionId: sessionId
+        }),
       });
 
       if (!response.ok) {

@@ -3,7 +3,6 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertLeadSchema, insertChatSessionSchema } from "@shared/schema";
 import { z } from "zod";
-//@ts-ignore
 import OpenAI from 'openai';
 
 // Initialize OpenAI
@@ -74,14 +73,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Chat endpoint
+  // AI Chat endpoint with lead capture
   app.post("/api/chat", async (req, res) => {
     try {
-      const { message } = req.body;
+      const { message, sessionId } = req.body;
       
       if (!message || typeof message !== 'string') {
         res.status(400).json({ message: "Message is required" });
         return;
+      }
+
+      // Detectar información de contacto en el mensaje
+      const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+      const phoneRegex = /(?:\+?56)?[\s\-]?[0-9][\s\-]?[0-9]{4}[\s\-]?[0-9]{4}|\+56[0-9]{9}|[0-9]{8,9}/g;
+      const nameRegex = /(?:me llamo|soy|mi nombre es|nombre:)\s+([A-Za-zÀ-ÿ\s]{2,})/gi;
+
+      const emails = message.match(emailRegex) || [];
+      const phones = message.match(phoneRegex) || [];
+      const names: string[] = [];
+      let nameMatch;
+      while ((nameMatch = nameRegex.exec(message)) !== null) {
+        names.push(nameMatch[1].trim());
       }
 
       const completion = await openai.chat.completions.create({
@@ -102,6 +114,7 @@ INSTRUCCIONES IMPORTANTES:
 - Sé profesional pero amigable y cercano
 - Usa información específica sobre ArkoData cuando sea relevante
 - Ayuda a generar leads preguntando por contacto cuando sea apropiado
+- Si detectas información de contacto (email, teléfono, nombre), confirma educadamente que la registrarás
 - Si no sabes algo específico, ofrece conectar con el equipo
 - Usa emojis moderadamente para hacer más amigable la conversación
 
@@ -122,6 +135,41 @@ Tu objetivo es ayudar, informar y generar interés en los servicios de ArkoData.
       });
 
       const response = completion.choices[0]?.message?.content || "Disculpa, no pude procesar tu consulta. ¿Podrías intentar de nuevo?";
+
+      // Si se detectó información de contacto, crear lead automáticamente
+      if (emails.length > 0 || phones.length > 0 || names.length > 0) {
+        try {
+          const leadData = {
+            name: names.length > 0 ? names[0] : 'Lead desde Chat',
+            email: emails.length > 0 ? emails[0]! : `chat-${Date.now()}@temp.lead`,
+            phone: phones.length > 0 ? phones[0] : null,
+            message: `Contacto capturado desde ArkoAsistente: ${message}`,
+            interest: 'Consulta vía Chat IA',
+            source: 'ArkoAsistente'
+          };
+
+          await storage.createLead(leadData);
+          console.log(`Lead capturado automáticamente: ${leadData.email}`);
+        } catch (leadError) {
+          console.error('Error creando lead automático:', leadError);
+        }
+      }
+
+      // Guardar sesión de chat si se proporciona sessionId
+      if (sessionId) {
+        try {
+          await storage.createChatSession({
+            userMessage: message,
+            assistantResponse: response,
+            userName: names.length > 0 ? names[0] : null,
+            userEmail: emails.length > 0 ? emails[0] : null,
+            userCompany: null,
+            conversationSummary: null
+          });
+        } catch (sessionError) {
+          console.error('Error guardando sesión de chat:', sessionError);
+        }
+      }
       
       res.json({ response });
     } catch (error) {

@@ -27,10 +27,11 @@ ArkoData is a technology solutions company's website featuring an AI assistant c
 - **Styling**: Tailwind CSS with custom ArkoData branding
 
 ### Key Features
-1. **ArkoAsistente AI Chat**: Interactive chatbot with predefined responses
+1. **ArkoAsistente AI Chat**: Interactive GPT-4 powered chatbot with automatic lead capture
 2. **Contact Form**: Lead capture with API integration
-3. **Admin Dashboard**: Lead management with authentication
-4. **Responsive Design**: Mobile-first approach with modern UI
+3. **Admin Dashboard**: Lead management with authentication and chat session tracking
+4. **Automatic Lead Detection**: Smart capture of contact info from chat conversations
+5. **Responsive Design**: Mobile-first approach with modern UI
 
 ### Security Features
 - Basic admin authentication with session management
