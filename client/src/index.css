@@ -45,12 +45,13 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Responsive text fixes for mobile - texto más pequeño */
+/* Responsive text fixes for mobile - texto más pequeño y mayor separación */
 @media (max-width: 640px) {
   .hero-title {
     font-size: 1.75rem !important; /* 28px */
     line-height: 1.1 !important;
     padding: 0 0.5rem !important;
+    margin-bottom: 3rem !important; /* Extra separación en móviles */
   }
   
   .hero-subtitle {
@@ -59,30 +60,35 @@
     padding: 0 0.5rem !important;
     word-break: break-word;
     hyphens: auto;
+    margin-bottom: 4rem !important; /* Extra separación del párrafo */
   }
 }
 
 @media (max-width: 475px) {
   .hero-title {
     font-size: 1.375rem !important; /* 22px */
+    margin-bottom: 2.5rem !important;
   }
   
   .hero-subtitle {
     font-size: 1.125rem !important; /* 18px - mucho más pequeño */
     word-break: break-word;
     hyphens: auto;
+    margin-bottom: 3.5rem !important;
   }
 }
 
 @media (max-width: 375px) {
   .hero-title {
     font-size: 1.25rem !important; /* 20px */
+    margin-bottom: 2rem !important;
   }
   
   .hero-subtitle {
     font-size: 1rem !important; /* 16px - extra pequeño */
     word-break: break-word;
     hyphens: auto;
+    margin-bottom: 3rem !important;
   }
 }
 
