@@ -22,14 +22,27 @@ export default function AIChat({ onClose }: AIChatProps) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const focusInput = () => {
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
+
   useEffect(() => {
     scrollToBottom();
+    focusInput(); // Enfocar input después de cada mensaje
   }, [messages]);
+
+  useEffect(() => {
+    // Enfocar input cuando se abre el chat
+    focusInput();
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -43,6 +56,7 @@ export default function AIChat({ onClose }: AIChatProps) {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    focusInput(); // Mantener foco después de enviar
 
     try {
       // Aquí iría la integración con OpenAI
@@ -65,6 +79,7 @@ export default function AIChat({ onClose }: AIChatProps) {
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      focusInput(); // Mantener foco después de recibir respuesta
     }
   };
 
@@ -198,6 +213,7 @@ export default function AIChat({ onClose }: AIChatProps) {
         <div className="p-6 border-t border-slate-700">
           <div className="flex space-x-3">
             <input
+              ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -205,6 +221,7 @@ export default function AIChat({ onClose }: AIChatProps) {
               placeholder="Escribe tu mensaje..."
               className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none transition-colors"
               disabled={isLoading}
+              autoFocus
             />
             <button
               onClick={handleSend}
