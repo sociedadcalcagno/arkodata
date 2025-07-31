@@ -199,15 +199,264 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+      {/* Nuestras Soluciones Tecnológicas Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Nuestras Soluciones Tecnológicas
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            {/* Soluciones Inteligentes */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-cyan-500/50 transition-all">
+              <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center mb-4">
+                <Brain className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Soluciones Inteligentes</h3>
+              <p className="text-gray-300 text-sm">
+                Implementamos sistemas de IA avanzados que automatizan procesos y mejoran la toma de decisiones en tu organización.
+              </p>
+            </div>
+
+            {/* Infraestructura Robusta */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-cyan-500/50 transition-all">
+              <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center mb-4">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Infraestructura Robusta</h3>
+              <p className="text-gray-300 text-sm">
+                Desarrollamos arquitecturas tecnológicas sólidas y escalables que soportan el crecimiento de tu empresa.
+              </p>
+            </div>
+
+            {/* Desarrollo Personalizado */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50 hover:border-cyan-500/50 transition-all">
+              <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Desarrollo Personalizado</h3>
+              <p className="text-gray-300 text-sm">
+                Creamos soluciones a medida que se adaptan perfectamente a las necesidades específicas de tu negocio.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Catálogo Completo de Soluciones */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Catálogo Completo de Soluciones
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Inteligencia Artificial & Sistemas */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center mr-3">
+                  <Bot className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Inteligencia Artificial & Sistemas</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Chatbots y asistentes virtuales</li>
+                <li>• Análisis predictivo avanzado</li>
+                <li>• Machine Learning personalizado</li>
+                <li>• Automatización de procesos RPA</li>
+                <li>• Sistemas de recomendación</li>
+                <li>• Procesamiento de lenguaje natural</li>
+                <li>• Computer Vision</li>
+                <li>• Analytics e inteligencia de negocios</li>
+              </ul>
+            </div>
+
+            {/* Administración - Agentes */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center mr-3">
+                  <Users className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Administración - Agentes</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Sistemas CRM avanzados</li>
+                <li>• Gestión de leads automática</li>
+                <li>• Workflows de ventas</li>
+                <li>• Dashboard de métricas</li>
+                <li>• Integración con herramientas</li>
+                <li>• Automatización de follow-ups</li>
+                <li>• Reportes personalizados</li>
+              </ul>
+            </div>
+
+            {/* Cloud & Storage */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-purple-500 rounded flex items-center justify-center mr-3">
+                  <Building className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Cloud & Storage</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Migración a la nube</li>
+                <li>• Arquitecturas serverless</li>
+                <li>• Bases de datos escalables</li>
+                <li>• Backup automático</li>
+                <li>• CDN y optimización</li>
+                <li>• Monitoreo 24/7</li>
+              </ul>
+            </div>
+
+            {/* Desarrollo de Software */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-green-500 rounded flex items-center justify-center mr-3">
+                  <TrendingUp className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Desarrollo de Software</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Aplicaciones web modernas</li>
+                <li>• Apps móviles nativas</li>
+                <li>• APIs y microservicios</li>
+                <li>• E-commerce personalizado</li>
+                <li>• Sistemas de gestión</li>
+                <li>• Integraciones complejas</li>
+              </ul>
+            </div>
+
+            {/* Seguridad & Compliance */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-red-500 rounded flex items-center justify-center mr-3">
+                  <Shield className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Seguridad & Compliance</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Auditorías de seguridad</li>
+                <li>• Implementación ISO 27001</li>
+                <li>• Protección de datos GDPR</li>
+                <li>• Pentesting y vulnerabilidades</li>
+                <li>• Backup y recuperación</li>
+                <li>• Cifrado end-to-end</li>
+              </ul>
+            </div>
+
+            {/* Automatización & Testing */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-yellow-500 rounded flex items-center justify-center mr-3">
+                  <Zap className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Automatización & Testing</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• CI/CD pipelines</li>
+                <li>• Testing automatizado</li>
+                <li>• DevOps y deployment</li>
+                <li>• Monitoreo de aplicaciones</li>
+                <li>• Quality assurance</li>
+                <li>• Performance optimization</li>
+              </ul>
+            </div>
+
+            {/* Consultoría & Soporte */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center mr-3">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Consultoría & Soporte</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Análisis de requerimientos</li>
+                <li>• Arquitectura de soluciones</li>
+                <li>• Capacitación técnica</li>
+                <li>• Soporte 24/7</li>
+                <li>• Mantenimiento preventivo</li>
+                <li>• Optimización continua</li>
+              </ul>
+            </div>
+
+            {/* Administración & Redes */}
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-teal-500 rounded flex items-center justify-center mr-3">
+                  <Building className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Administración & Redes</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li>• Administración de servidores</li>
+                <li>• Configuración de redes</li>
+                <li>• Virtualización VMware</li>
+                <li>• Balanceadores de carga</li>
+                <li>• VPN corporativas</li>
+                <li>• Firewall y seguridad</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Por qué elegirnos Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              ¿Por qué elegirnos?
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Calendar className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Capacidad Garantizada</h3>
+              <p className="text-gray-300">
+                Garantizamos la disponibilidad de nuestros especialistas para atender tus proyectos con los más altos estándares de calidad.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Tecnología de Vanguardia</h3>
+              <p className="text-gray-300">
+                Utilizamos las últimas tecnologías y metodologías ágiles para entregarte soluciones modernas y eficientes.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">Equipo Calificado</h3>
+              <p className="text-gray-300">
+                Nuestro equipo está conformado por profesionales certificados con amplia experiencia en proyectos corporativos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section Original - Mantenemos pero simplificado */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Nuestras Soluciones
+              Nuestros Servicios Destacados
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Ofrecemos tecnología de vanguardia para impulsar tu empresa hacia el futuro
+              Soluciones tecnológicas de vanguardia para impulsar tu empresa hacia el futuro
             </p>
           </div>
 
