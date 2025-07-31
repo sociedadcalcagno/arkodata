@@ -125,13 +125,13 @@
   position: absolute;
   top: -10px;
   right: -10px;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  background: linear-gradient(135deg, #ff6600 0%, #ff8800 100%);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: bold;
   color: white;
-  box-shadow: 0 2px 10px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 2px 10px rgba(255, 102, 0, 0.3);
   animation: bounce 2s infinite;
 }
 
@@ -148,41 +148,26 @@
 }
 
 .arkoasistente-icon {
-  background: linear-gradient(135deg, #63f2ff 0%, #0099ff 100%);
-  animation: robotGlow 3s ease-in-out infinite alternate;
+  position: relative;
 }
 
-@keyframes robotGlow {
-  from {
-    box-shadow: 0 0 5px rgba(99, 242, 255, 0.5);
+.arkoasistente-icon::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #00ffff 0%, #0066ff 100%);
+  border-radius: 12px;
+  z-index: -1;
+  animation: borderGlow 3s linear infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
   }
-  to {
-    box-shadow: 0 0 15px rgba(99, 242, 255, 0.8), 0 0 25px rgba(0, 153, 255, 0.4);
-  }
-}
-
-/* ArkoAsistente video modal animations */
-.arkobot-message {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: messageAppear 0.8s ease-out forwards;
-}
-
-.animation-delay-1 {
-  animation-delay: 1s;
-}
-
-.animation-delay-2 {
-  animation-delay: 2s;
-}
-
-.animation-delay-3 {
-  animation-delay: 3s;
-}
-
-@keyframes messageAppear {
-  to {
+  50% {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1.05);
   }
 }
