@@ -157,7 +157,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="animate-fade-in">
             <div className="w-full max-w-6xl mx-auto">
-              <h1 className="font-bold text-white leading-[1.1] px-1 mb-20 sm:mb-24 lg:mb-32">
+              <h1 className="font-bold text-white leading-[1.1] px-1 mb-8 sm:mb-12 lg:mb-16">
                 <span className="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl hero-title">Transformamos tu</span>
                 <span className="block text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mt-1 sm:mt-2 hero-subtitle" style={{
                   background: 'linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%)',
@@ -172,7 +172,7 @@ export default function HomePage() {
               </h1>
             </div>
             
-            <div className="mt-16 sm:mt-20 lg:mt-24">
+            <div className="mt-4 sm:mt-6 lg:mt-8">
               <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed px-3">
                 Estamos aquí para ayudarte a transformar tu negocio con soluciones tecnológicas innovadoras
               </p>

@@ -51,7 +51,7 @@
     font-size: 1.75rem !important; /* 28px */
     line-height: 1.1 !important;
     padding: 0 0.5rem !important;
-    margin-bottom: 3rem !important; /* Extra separación en móviles */
+    margin-bottom: 1.5rem !important; /* Separación reducida en móviles */
   }
   
   .hero-subtitle {
@@ -60,7 +60,7 @@
     padding: 0.25rem 0.5rem !important; /* Agregado padding vertical */
     word-break: break-word;
     hyphens: auto;
-    margin-bottom: 4rem !important; /* Extra separación del párrafo */
+    margin-bottom: 2rem !important; /* Separación reducida del párrafo */
     display: inline-block !important;
   }
 }
@@ -77,7 +77,7 @@
     padding: 0.25rem 0.5rem !important;
     word-break: break-word;
     hyphens: auto;
-    margin-bottom: 3.5rem !important;
+    margin-bottom: 1.5rem !important;
     display: inline-block !important;
   }
 }
@@ -94,7 +94,7 @@
     padding: 0.25rem 0.5rem !important;
     word-break: break-word;
     hyphens: auto;
-    margin-bottom: 3rem !important;
+    margin-bottom: 1rem !important;
     display: inline-block !important;
   }
 }
