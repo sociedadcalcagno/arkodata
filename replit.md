@@ -4,6 +4,9 @@
 ArkoData is a technology solutions company's website featuring an AI assistant called "ArkoAsistente". The platform allows visitors to interact with an AI chatbot, submit contact forms, and enables administrators to manage leads through a dashboard.
 
 ## Recent Changes
+- **2025-07-31**: Updated hero section to match current ArkoData.cl branding
+- Added "Sociedad Calcagno SPA" subtitle to company name
+- Changed main title to official ArkoData messaging: "Transformando negocios a través de soluciones tecnológicas innovadoras"
 - **2024-12-19**: Successfully migrated from Bolt to Replit environment
 - Implemented proper client/server separation with Express backend and React frontend
 - Created data models for leads and chat sessions with PostgreSQL database

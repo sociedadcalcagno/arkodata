@@ -51,12 +51,12 @@
     font-size: 1.75rem !important; /* 28px */
     line-height: 1.1 !important;
     padding: 0 0.5rem !important;
-    margin-bottom: 1.5rem !important; /* Separación reducida en móviles */
+    margin-bottom: 0.5rem !important;
   }
   
   .hero-subtitle {
-    font-size: 1.5rem !important; /* 24px - más pequeño */
-    line-height: 1.2 !important; /* Aumentado para evitar cortes */
+    font-size: 1rem !important; /* 16px - más pequeño para el subtítulo largo */
+    line-height: 1.3 !important; /* Aumentado para evitar cortes */
     padding: 0.25rem 0.5rem !important; /* Agregado padding vertical */
     word-break: break-word;
     hyphens: auto;
@@ -68,12 +68,12 @@
 @media (max-width: 475px) {
   .hero-title {
     font-size: 1.375rem !important; /* 22px */
-    margin-bottom: 2.5rem !important;
+    margin-bottom: 0.5rem !important;
   }
   
   .hero-subtitle {
-    font-size: 1.125rem !important; /* 18px - mucho más pequeño */
-    line-height: 1.3 !important;
+    font-size: 0.875rem !important; /* 14px - más pequeño para móviles */
+    line-height: 1.4 !important;
     padding: 0.25rem 0.5rem !important;
     word-break: break-word;
     hyphens: auto;
@@ -85,12 +85,12 @@
 @media (max-width: 375px) {
   .hero-title {
     font-size: 1.25rem !important; /* 20px */
-    margin-bottom: 2rem !important;
+    margin-bottom: 0.5rem !important;
   }
   
   .hero-subtitle {
-    font-size: 1rem !important; /* 16px - extra pequeño */
-    line-height: 1.4 !important;
+    font-size: 0.75rem !important; /* 12px - extra pequeño para pantallas muy pequeñas */
+    line-height: 1.5 !important;
     padding: 0.25rem 0.5rem !important;
     word-break: break-word;
     hyphens: auto;

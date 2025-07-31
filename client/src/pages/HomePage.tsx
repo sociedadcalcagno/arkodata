@@ -158,8 +158,9 @@ export default function HomePage() {
           <div className="animate-fade-in">
             <div className="w-full max-w-6xl mx-auto">
               <h1 className="font-bold text-white leading-[1.1] px-1 mb-8 sm:mb-12 lg:mb-16">
-                <span className="block text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl hero-title">Transformamos tu</span>
-                <span className="block text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mt-1 sm:mt-2 hero-subtitle" style={{
+                <span className="block text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl hero-title">ArkoData</span>
+                <span className="block text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-gray-300 mt-1 mb-2">Sociedad Calcagno SPA</span>
+                <span className="block text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-1 sm:mt-2 hero-subtitle" style={{
                   background: 'linear-gradient(90deg, #22d3ee 0%, #3b82f6 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -167,14 +168,14 @@ export default function HomePage() {
                   display: 'inline-block',
                   lineHeight: '1.2'
                 }}>
-                  Negocio Digital
+                  Transformando negocios a través de soluciones tecnológicas innovadoras
                 </span>
               </h1>
             </div>
             
             <div className="mt-4 sm:mt-6 lg:mt-8">
               <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed px-3">
-                Estamos aquí para ayudarte a transformar tu negocio con soluciones tecnológicas innovadoras
+                Estamos aquí para ayudarte a transformar tu negocio con nuestras soluciones tecnológicas
               </p>
             </div>
             
