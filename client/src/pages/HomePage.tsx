@@ -153,16 +153,18 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-12 sm:py-16 lg:py-20 px-2 sm:px-6 lg:px-8 overflow-hidden">
         <div className="max-w-7xl mx-auto text-center">
           <div className="animate-fade-in">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight px-2">
-              Transformamos tu
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mt-1 sm:mt-2">
-                Negocio Digital
-              </span>
-            </h1>
-            <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed px-4">
+            <div className="w-full max-w-6xl mx-auto">
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-[1.1] px-1">
+                <span className="block hero-title">Transformamos tu</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mt-1 sm:mt-2 hero-subtitle">
+                  Negocio Digital
+                </span>
+              </h1>
+            </div>
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed px-3">
               Estamos aquí para ayudarte a transformar tu negocio con soluciones tecnológicas innovadoras
             </p>
             
