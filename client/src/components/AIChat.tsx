@@ -15,7 +15,7 @@ export default function AIChat({ onClose }: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: '¡Hola! Soy tu ArkoAsistente inteligente 🤖\n\nPuedo ayudarte con:\n• Información sobre nuestros servicios\n• Resolver dudas técnicas\n• Conectarte con nuestro equipo\n• Generar propuestas personalizadas\n\n¿En qué puedo ayudarte hoy?',
+      content: '¡Hola! Soy ArkoAsistente, tu asistente virtual inteligente 🤖\n\nEstoy aquí para ayudarte con:\n• Información sobre servicios de ArkoData\n• Resoluciones técnicas y consultas\n• Conectarte con nuestro equipo especializado\n• Cotizaciones y propuestas personalizadas\n\n¿En qué puedo ayudarte hoy?',
       timestamp: new Date()
     }
   ]);
@@ -59,13 +59,24 @@ export default function AIChat({ onClose }: AIChatProps) {
     focusInput(); // Mantener foco después de enviar
 
     try {
-      // Aquí iría la integración con OpenAI
-      // Por ahora, respuestas simuladas inteligentes
-      const response = await simulateAIResponse(userMessage.content);
+      // Llamada real a la API de OpenAI
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userMessage.content }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
+
+      const data = await response.json();
       
       const assistantMessage: Message = {
         role: 'assistant',
-        content: response,
+        content: data.response,
         timestamp: new Date()
       };
 
@@ -83,40 +94,7 @@ export default function AIChat({ onClose }: AIChatProps) {
     }
   };
 
-  const simulateAIResponse = async (userInput: string): Promise<string> => {
-    // Simular delay de API
-    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const input = userInput.toLowerCase();
-
-    // Respuestas inteligentes basadas en palabras clave
-    if (input.includes('precio') || input.includes('costo') || input.includes('cuanto')) {
-      return `💰 **Precios de ArkoData**\n\nNuestros precios varían según tus necesidades:\n\n🔹 **Consultoría básica**: Desde $150.000 CLP\n🔹 **Desarrollo web**: Desde $500.000 CLP\n🔹 **ArkoAsistente**: Desde $80.000 CLP/mes\n🔹 **Soluciones IA**: Cotización personalizada\n\n¿Te gustaría que un asesor te prepare una cotización específica para tu proyecto?`;
-    }
-
-    if (input.includes('arkoasistente') || input.includes('asistente') || input.includes('bot')) {
-      return `🤖 **ArkoAsistente - Tu Asistente Virtual**\n\n✨ **Características principales:**\n• Atención 24/7 automatizada\n• Captura de leads inteligente\n• Integración WhatsApp y Web\n• Respuestas personalizadas\n• Dashboard de gestión\n\n📊 **Beneficios:**\n• Aumenta conversiones hasta 40%\n• Reduce tiempo de respuesta a segundos\n• Captura leads mientras duermes\n\n¿Quieres ver una demo personalizada?`;
-    }
-
-    if (input.includes('web') || input.includes('sitio') || input.includes('página')) {
-      return `🌐 **Desarrollo Web Profesional**\n\n🚀 **Nuestros servicios incluyen:**\n• Diseño responsive moderno\n• Optimización SEO avanzada\n• E-commerce completo\n• Aplicaciones web progresivas\n• Integración con sistemas existentes\n\n⚡ **Tecnologías que usamos:**\n• React, Next.js, Vue\n• Node.js, Python\n• Bases de datos modernas\n• Cloud hosting optimizado\n\n¿Tienes algún proyecto específico en mente?`;
-    }
-
-    if (input.includes('ia') || input.includes('inteligencia artificial') || input.includes('machine learning')) {
-      return `🧠 **Soluciones de Inteligencia Artificial**\n\n🎯 **Servicios especializados:**\n• Chatbots conversacionales\n• Análisis predictivo de datos\n• Automatización de procesos\n• Reconocimiento de patrones\n• Sistemas de recomendación\n\n💡 **Casos de uso populares:**\n• Atención al cliente automatizada\n• Análisis de sentimientos\n• Optimización de inventarios\n• Detección de fraudes\n\n¿En qué área te gustaría implementar IA?`;
-    }
-
-    if (input.includes('contacto') || input.includes('equipo') || input.includes('asesor')) {
-      return `📞 **Contacta con Nuestro Equipo**\n\n👥 **Formas de contacto:**\n• **WhatsApp**: +56 9 3355 3024\n• **Email**: contacto@arkodata.cl\n• **Formulario web**: Disponible en la página\n\n⏰ **Horarios de atención:**\n• Lunes a Viernes: 9:00 - 18:00\n• Sábados: 10:00 - 14:00\n• Emergencias: 24/7 por WhatsApp\n\n¿Prefieres que un asesor te contacte directamente?`;
-    }
-
-    if (input.includes('seguridad') || input.includes('ciberseguridad') || input.includes('protección')) {
-      return `🛡️ **Ciberseguridad Empresarial**\n\n🔒 **Servicios de protección:**\n• Auditorías de seguridad completas\n• Protección contra malware avanzado\n• Backup y recuperación de datos\n• Capacitación en seguridad\n• Monitoreo 24/7\n\n⚠️ **Estadísticas importantes:**\n• 95% de ataques son evitables\n• Backup reduce pérdidas en 80%\n• Capacitación previene 70% de incidentes\n\n¿Quieres una evaluación gratuita de tu seguridad actual?`;
-    }
-
-    // Respuesta por defecto inteligente
-    return `Entiendo tu consulta sobre "${userInput}". \n\n🎯 **Te puedo ayudar con:**\n• Información detallada sobre nuestros servicios\n• Cotizaciones personalizadas\n• Conexión con nuestro equipo técnico\n• Programar una demo gratuita\n\n¿Hay algo específico que te gustaría saber sobre ArkoData o nuestras soluciones tecnológicas?`;
-  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
