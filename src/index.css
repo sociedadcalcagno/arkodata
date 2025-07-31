@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom styles for ArkoData branding */
+.bg-arkodata {
+  background: linear-gradient(135deg, #003366 0%, #005599 50%, #0077CC 100%);
+}
+
+.text-arkodata {
+  background: linear-gradient(90deg, #ffffff 0%, #e0f2ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* New AI section styles */
+.ai-card {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ai-card:hover {
+  box-shadow: 0 0 20px rgba(99, 242, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.ai-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, #00ffff 0%, #00ccff 100%);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #003366;
+  box-shadow: 0 2px 10px rgba(0, 204, 255, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 204, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 204, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 204, 255, 0);
+  }
+}
+
+.ai-icon {
+  background: linear-gradient(135deg, #00ffff 0%, #00ccff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 2px rgba(0, 204, 255, 0.6));
+  }
+  to {
+    filter: drop-shadow(0 0 6px rgba(0, 204, 255, 0.9));
+  }
+}
+
+.ai-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(99, 242, 255, 0.2);
+  color: #63f2ff;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* ArkoAsistente section styles */
+.arkoasistente-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+  border: 1px solid rgba(99, 242, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.arkoasistente-card:hover {
+  box-shadow: 0 0 30px rgba(99, 242, 255, 0.4);
+  transform: translateY(-3px);
+  border-color: rgba(99, 242, 255, 0.6);
+}
+
+.arkoasistente-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 2px 10px rgba(255, 107, 53, 0.4);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+.arkoasistente-icon {
+  background: linear-gradient(135deg, #63f2ff 0%, #0099ff 100%);
+  animation: robotGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes robotGlow {
+  from {
+    box-shadow: 0 0 5px rgba(99, 242, 255, 0.5);
+  }
+  to {
+    box-shadow: 0 0 15px rgba(99, 242, 255, 0.8), 0 0 25px rgba(0, 153, 255, 0.4);
+  }
+}
+
+/* ArkoAsistente video modal animations */
+.arkobot-message {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: messageAppear 0.8s ease-out forwards;
+}
+
+.animation-delay-1 {
+  animation-delay: 1s;
+}
+
+.animation-delay-2 {
+  animation-delay: 2s;
+}
+
+.animation-delay-3 {
+  animation-delay: 3s;
+}
+
+@keyframes messageAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
