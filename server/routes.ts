@@ -27,11 +27,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         htmlContent: confirmationEmail.htmlContent
       });
       
-      // Enviar notificación al administrador (usando un email por defecto)
+      // Enviar notificación al administrador 
       const notificationEmail = generateNotificationEmail(leadData);
       await sendEmail({
-        to: 'admin@arkodata.com', // Cambiar por tu email real
-        toName: 'Administrador ArkoData',
+        to: 'gmo.calcagno@gmail.com',
+        toName: 'Guillermo Calcagno - ArkoData',
         subject: notificationEmail.subject,
         htmlContent: notificationEmail.htmlContent
       });
