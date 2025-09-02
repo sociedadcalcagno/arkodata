@@ -64,3 +64,5 @@ shared/
 - Language: Spanish interface for Chilean market
 - Design: Modern, professional with cyan/blue color scheme
 - Functionality: Focus on lead generation and business automation
+- **CRITICAL**: Always ask before implementing ANY changes - user wants explicit control
+- **Email Configuration**: Use contacto@arkodata.cl for all business communications, never personal emails

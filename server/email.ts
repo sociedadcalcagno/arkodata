@@ -29,7 +29,7 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
       body: JSON.stringify({
         sender: {
           name: 'ArkoData',
-          email: 'gmo.calcagno@gmail.com'
+          email: 'contacto@arkodata.cl'
         },
         to: [{
           email: params.to,
