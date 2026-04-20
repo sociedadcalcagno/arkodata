@@ -94,9 +94,9 @@ Cuéntame qué quieres resolver en tu empresa y te respondo con una orientación
 }
 
 // Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Lead routes
@@ -207,7 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       let response = '';
 
-      if (!process.env.OPENAI_API_KEY) {
+      if (!openai) {
         response = buildFallbackResponse(message);
       } else {
         const completion = await openai.chat.completions.create({
