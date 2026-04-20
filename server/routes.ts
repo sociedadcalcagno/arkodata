@@ -2,9 +2,120 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertLeadSchema, insertChatSessionSchema } from "@shared/schema";
+import { ARKO_HELP_DOCS } from "@shared/arko-help";
 import { z } from "zod";
 import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
+
+type ChatMsg = { role: 'user' | 'assistant'; content: string };
+
+function normalizeHelpText(value: unknown) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function tokenizeHelpText(value: unknown) {
+  return normalizeHelpText(value).split(' ').filter(Boolean);
+}
+
+function searchHelpDocs(question: string) {
+  const questionTokens = new Set(tokenizeHelpText(question));
+  const hits: Array<{ title: string; heading: string; snippet: string; score: number }> = [];
+
+  for (const doc of ARKO_HELP_DOCS) {
+    for (const section of doc.sections) {
+      const content = `${doc.title} ${doc.summary} ${section.heading} ${section.body}`;
+      const sectionTokens = tokenizeHelpText(content);
+      let score = 0;
+      for (const token of sectionTokens) {
+        if (questionTokens.has(token)) score += 1;
+      }
+      if (score > 0) {
+        hits.push({
+          title: doc.title,
+          heading: section.heading,
+          snippet: section.body,
+          score,
+        });
+      }
+    }
+  }
+
+  return hits.sort((a, b) => b.score - a.score).slice(0, 3);
+}
+
+function buildBaseHelpContext() {
+  return ARKO_HELP_DOCS
+    .map((doc) => `# ${doc.title}\n${doc.summary}\n${doc.sections.map((section) => `- ${section.heading}: ${section.body}`).join('\n')}`)
+    .join('\n\n');
+}
+
+function buildMockAnswer(question: string, hits: ReturnType<typeof searchHelpDocs>) {
+  const normalized = normalizeHelpText(question);
+
+  if (/^(hola|buenos dias|buen dia|buenas tardes|buenas noches)\b/.test(normalized)) {
+    return 'Hola. Soy ArkoAsistente. Puedo ayudarte a entender los servicios de ArkoData, aterrizar una necesidad tecnica o comercial y orientarte hacia una propuesta concreta. Cuéntame que quieres resolver.';
+  }
+
+  if (hits.length === 0) {
+    return [
+      'Te ayudo a enfocar tu requerimiento.',
+      '',
+      'Puedo orientarte en:',
+      '- desarrollo web y aplicaciones a medida',
+      '- inteligencia artificial y chatbots',
+      '- automatizacion de procesos',
+      '- ciberseguridad e infraestructura',
+      '- consultoria tecnologica',
+      '',
+      'Si quieres una respuesta mas precisa, dime tu rubro, el problema actual y lo que esperas lograr.'
+    ].join('\n');
+  }
+
+  return [
+    'Te guio con base en los servicios actuales de ArkoData:',
+    '',
+    ...hits.map((hit) => `- ${hit.title} > ${hit.heading}:\n${hit.snippet}`),
+    '',
+    'Si quieres, dame mas contexto de tu empresa o proyecto y te sugiero una siguiente accion concreta.'
+  ].join('\n');
+}
+
+async function buildAiAnswer(question: string, history: ChatMsg[], context: string) {
+  if (!openai) return null;
+
+  const historyText = history
+    .slice(-10)
+    .map((message) => `${message.role === 'user' ? 'Usuario' : 'Asistente'}: ${message.content}`)
+    .join('\n');
+
+  const prompt = [
+    'Eres ArkoAsistente, asistente comercial y tecnico de ArkoData.',
+    'Respondes solo en espanol chileno.',
+    'Prioriza el contexto entregado sobre servicios y forma de trabajo.',
+    'No inventes servicios, precios cerrados, integraciones o capacidades no confirmadas.',
+    'Si falta contexto, haz una sola pregunta concreta para avanzar.',
+    'Busca orientar al usuario hacia una propuesta clara o al contacto con el equipo.',
+    '',
+    `Contexto:\n${context}`,
+    historyText ? `Conversacion previa:\n${historyText}` : '',
+    `Pregunta: ${question}`,
+    'Respuesta:'
+  ].filter(Boolean).join('\n\n');
+
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4',
+    messages: [{ role: 'user', content: prompt }],
+    max_tokens: 500,
+    temperature: 0.5,
+  });
+
+  return completion.choices[0]?.message?.content?.trim() || null;
+}
 
 function buildFallbackResponse(message: string) {
   const normalizedMessage = message.toLowerCase();
@@ -186,6 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/chat", async (req, res) => {
     try {
       const { message, sessionId } = req.body;
+      const historyIn = Array.isArray(req.body?.history) ? req.body.history : [];
       
       if (!message || typeof message !== 'string') {
         res.status(400).json({ message: "Message is required" });
@@ -205,50 +317,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         names.push(nameMatch[1].trim());
       }
 
-      let response = '';
+      const history: ChatMsg[] = historyIn
+        .map((entry: any) => ({
+          role: entry?.role === 'assistant' ? 'assistant' : 'user',
+          content: String(entry?.content || '').trim(),
+        }))
+        .filter((entry: ChatMsg) => entry.content)
+        .slice(-20);
 
-      if (!openai) {
-        response = buildFallbackResponse(message);
-      } else {
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4",
-          messages: [
-            {
-              role: "system",
-              content: `Eres ArkoAsistente, el asistente virtual inteligente de ArkoData, una empresa chilena de soluciones tecnológicas especializada en:
+      const hits = searchHelpDocs(message);
+      const context = [buildBaseHelpContext(), ...hits.map((hit) => `# ${hit.title} > ${hit.heading}\n${hit.snippet}`)].join('\n\n');
 
-• Desarrollo web y aplicaciones móviles
-• Inteligencia artificial y chatbots
-• Ciberseguridad empresarial
-• Consultoría tecnológica
-• Automatización de procesos
-
-INSTRUCCIONES IMPORTANTES:
-- Responde SIEMPRE en español chileno
-- Sé profesional pero amigable y cercano
-- Usa información específica sobre ArkoData cuando sea relevante
-- Ayuda a generar leads preguntando por contacto cuando sea apropiado
-- Si detectas información de contacto (email, teléfono, nombre), confirma educadamente que la registrarás
-- Si no sabes algo específico, ofrece conectar con el equipo
-- Usa emojis moderadamente para hacer más amigable la conversación
-
-INFORMACIÓN DE CONTACTO:
-- WhatsApp: +56 9 3355 3024
-- Email: contacto@arkodata.cl
-- Horarios: Lunes a Viernes 9:00-18:00, Sábados 10:00-14:00
-
-Tu objetivo es ayudar, informar y generar interés en los servicios de ArkoData.`
-            },
-            {
-              role: "user",
-              content: message
-            }
-          ],
-          max_tokens: 500,
-          temperature: 0.7,
-        });
-
-        response = completion.choices[0]?.message?.content || buildFallbackResponse(message);
+      let response = await buildAiAnswer(message, history, context);
+      if (!response) {
+        response = hits.length > 0 ? buildMockAnswer(message, hits) : buildFallbackResponse(message);
       }
 
       // Si se detectó información de contacto, crear lead automáticamente
@@ -286,7 +368,7 @@ Tu objetivo es ayudar, informar y generar interés en los servicios de ArkoData.
         }
       }
       
-      res.json({ response });
+      res.json({ response, hits: hits.map((hit) => ({ title: hit.title, heading: hit.heading })) });
     } catch (error) {
       console.error('OpenAI API Error:', error);
       res.json({ 

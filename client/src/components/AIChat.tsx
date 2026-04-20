@@ -60,7 +60,11 @@ export default function AIChat({ onClose }: AIChatProps) {
     focusInput(); // Mantener foco después de enviar
 
     try {
-      // Llamada real a la API de OpenAI con sessionId para tracking
+      const history = [...messages, userMessage].map((message) => ({
+        role: message.role,
+        content: message.content,
+      }));
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -68,7 +72,8 @@ export default function AIChat({ onClose }: AIChatProps) {
         },
         body: JSON.stringify({ 
           message: userMessage.content,
-          sessionId: sessionId
+          sessionId: sessionId,
+          history,
         }),
       });
 
