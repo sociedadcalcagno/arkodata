@@ -1,0 +1,6 @@
+.git
+.local
+dist
+node_modules
+arkodata.zip
+*.log

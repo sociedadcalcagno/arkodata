@@ -6,6 +6,93 @@ import { z } from "zod";
 import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
 
+function buildFallbackResponse(message: string) {
+  const normalizedMessage = message.toLowerCase();
+
+  if (/(hola|buenas|buenos dias|buen día|buenas tardes|buenas noches)/i.test(normalizedMessage)) {
+    return `Hola, soy ArkoAsistente. Puedo orientarte sobre los servicios de ArkoData y ayudarte a encontrar la mejor alternativa para tu empresa.
+
+Hoy te puedo apoyar con:
+- Desarrollo web y plataformas a medida
+- Automatización de procesos
+- Inteligencia artificial y chatbots
+- Ciberseguridad e infraestructura
+- Consultoría tecnológica
+
+Cuéntame qué necesitas y te ayudo a enfocarlo.`;
+  }
+
+  if (/(ia|inteligencia artificial|chatbot|bot|asistente)/i.test(normalizedMessage)) {
+    return `En ArkoData implementamos soluciones de inteligencia artificial orientadas a negocio, como asistentes virtuales, automatización de atención, captura de leads y apoyo operativo.
+
+Si quieres, puedo ayudarte a definir una solución según tu caso:
+- atención a clientes
+- ventas y captación de prospectos
+- soporte interno
+- automatización de tareas repetitivas
+
+Si me cuentas tu rubro o necesidad, te propongo una opción concreta.`;
+  }
+
+  if (/(web|pagina|página|sitio|landing|app|aplicacion|aplicación|software)/i.test(normalizedMessage)) {
+    return `ArkoData desarrolla sitios web, landing pages, plataformas internas y aplicaciones a medida.
+
+Podemos ayudarte con:
+- sitios corporativos y comerciales
+- formularios y captación de leads
+- dashboards y sistemas internos
+- integraciones con terceros
+- mejoras de rendimiento y experiencia móvil
+
+Si quieres, dime qué estás buscando construir y te indico un camino recomendado.`;
+  }
+
+  if (/(ciber|seguridad|seguro|infraestructura|servidor|nube|cloud|docker)/i.test(normalizedMessage)) {
+    return `También apoyamos en infraestructura y ciberseguridad para que tus sistemas sean más confiables, escalables y seguros.
+
+Podemos revisar:
+- despliegue en nube o contenedores
+- hardening y buenas prácticas
+- continuidad operacional
+- monitoreo y estabilidad
+- arquitectura para crecimiento
+
+Si me indicas tu entorno actual, te sugiero por dónde partir.`;
+  }
+
+  if (/(precio|precios|valor|costo|cotiza|cotizacion|cotización|presupuesto)/i.test(normalizedMessage)) {
+    return `En ArkoData las propuestas se ajustan al alcance, complejidad y etapa del proyecto.
+
+Para orientarte mejor, normalmente definimos:
+- objetivo del proyecto
+- funcionalidades necesarias
+- plazos esperados
+- si necesitas soporte, IA, integraciones o infraestructura
+
+Si quieres, descríbeme lo que necesitas y te ayudo a ordenarlo para una cotización.`;
+  }
+
+  if (/(contacto|whatsapp|correo|email|llamar|reunion|reunión|agendar)/i.test(normalizedMessage)) {
+    return `Claro. Puedes contactar al equipo de ArkoData por estos canales:
+
+- Email: contacto@arkodata.cl
+- WhatsApp: +56 9 3355 3024
+- Horario: lunes a viernes de 9:00 a 18:00, sábado de 10:00 a 14:00
+
+Si prefieres, también puedes dejar tu nombre, correo y lo que necesitas, y te orientamos desde aquí.`;
+  }
+
+  return `Puedo ayudarte con los principales servicios de ArkoData:
+
+- desarrollo web y aplicaciones a medida
+- inteligencia artificial y chatbots
+- automatización de procesos
+- ciberseguridad e infraestructura
+- consultoría tecnológica
+
+Cuéntame qué quieres resolver en tu empresa y te respondo con una orientación más concreta.`;
+}
+
 // Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -118,12 +205,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         names.push(nameMatch[1].trim());
       }
 
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: `Eres ArkoAsistente, el asistente virtual inteligente de ArkoData, una empresa chilena de soluciones tecnológicas especializada en:
+      let response = '';
+
+      if (!process.env.OPENAI_API_KEY) {
+        response = buildFallbackResponse(message);
+      } else {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4",
+          messages: [
+            {
+              role: "system",
+              content: `Eres ArkoAsistente, el asistente virtual inteligente de ArkoData, una empresa chilena de soluciones tecnológicas especializada en:
 
 • Desarrollo web y aplicaciones móviles
 • Inteligencia artificial y chatbots
@@ -146,17 +238,18 @@ INFORMACIÓN DE CONTACTO:
 - Horarios: Lunes a Viernes 9:00-18:00, Sábados 10:00-14:00
 
 Tu objetivo es ayudar, informar y generar interés en los servicios de ArkoData.`
-          },
-          {
-            role: "user",
-            content: message
-          }
-        ],
-        max_tokens: 500,
-        temperature: 0.7,
-      });
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ],
+          max_tokens: 500,
+          temperature: 0.7,
+        });
 
-      const response = completion.choices[0]?.message?.content || "Disculpa, no pude procesar tu consulta. ¿Podrías intentar de nuevo?";
+        response = completion.choices[0]?.message?.content || buildFallbackResponse(message);
+      }
 
       // Si se detectó información de contacto, crear lead automáticamente
       if (emails.length > 0 || phones.length > 0 || names.length > 0) {
@@ -196,8 +289,8 @@ Tu objetivo es ayudar, informar y generar interés en los servicios de ArkoData.
       res.json({ response });
     } catch (error) {
       console.error('OpenAI API Error:', error);
-      res.status(500).json({ 
-        message: "Lo siento, tuve un problema técnico. ¿Podrías intentar de nuevo o contactar directamente a nuestro equipo?"
+      res.json({ 
+        response: buildFallbackResponse(req.body?.message || '')
       });
     }
   });
