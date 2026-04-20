@@ -25,6 +25,7 @@ import AIChat from '../components/AIChat';
 export default function HomePage() {
   const [showAIChat, setShowAIChat] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showApproachModal, setShowApproachModal] = useState(false);
 
   
   const [contactForm, setContactForm] = useState({
@@ -168,15 +169,29 @@ export default function HomePage() {
                   display: 'inline-block',
                   lineHeight: '1.2'
                 }}>
-                  Transformando negocios a través de soluciones tecnológicas innovadoras
+                  Adaptamos procesos reales con tecnologia e inteligencia aplicada al negocio
                 </span>
               </h1>
             </div>
             
             <div className="mt-4 sm:mt-6 lg:mt-8">
               <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed px-3">
-                Estamos aquí para ayudarte a transformar tu negocio con nuestras soluciones tecnológicas
+                No partimos desde el software. Partimos desde como opera tu empresa, donde se frena y como combinar procesos, personas e IA para que el cambio sea util, adoptable y sostenible.
               </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto mb-8 px-3">
+              <div className="bg-white/8 border border-white/15 rounded-2xl p-4 sm:p-5 backdrop-blur-sm text-left">
+                <p className="text-sm sm:text-base text-gray-200 leading-relaxed">
+                  Nos importa entender los matices de cada operacion. Empresas grandes, medianas y pequenas no necesitan copiar un sistema rigido: necesitan una estructura capaz de factorizar lo que ya existe, adaptar flujos y dar soporte real a sus usuarios.
+                </p>
+                <button
+                  onClick={() => setShowApproachModal(true)}
+                  className="mt-4 inline-flex items-center rounded-lg border border-cyan-400/50 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200 transition-colors hover:bg-cyan-400/20"
+                >
+                  Como entendemos tu operacion
+                </button>
+              </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -199,6 +214,79 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {showApproachModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-3xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5 sm:px-8">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">Nuestra Logica</p>
+                <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl">La tecnologia es el medio, no el centro</h2>
+              </div>
+              <button
+                onClick={() => setShowApproachModal(false)}
+                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-6 px-6 py-6 sm:px-8 sm:py-8">
+              <p className="text-base leading-relaxed text-gray-200 sm:text-lg">
+                En ArkoData no creemos que una empresa mejore solo por comprar software. Lo que realmente genera valor es la capacidad de entender como funciona su operacion, separar lo esencial de lo accesorio y adaptar tecnologia e inteligencia artificial al flujo real del negocio.
+              </p>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <h3 className="text-lg font-semibold text-white">1. Entender</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                    Leemos procesos, fricciones, dependencias, personas y excepciones. Nos importa la complejidad real, no una version simplificada en PowerPoint.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <h3 className="text-lg font-semibold text-white">2. Factorizar</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                    Ordenamos la logica del negocio para que no dependa de una sola herramienta. Eso permite integrar, automatizar y evolucionar sin quedar amarrados a un software rigido.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <h3 className="text-lg font-semibold text-white">3. Acompanar al usuario</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                    Disenamos soluciones que apoyan al usuario final, respetan sus matices operativos y le entregan confianza para adoptar el cambio con claridad.
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
+                <p className="text-sm leading-relaxed text-cyan-50 sm:text-base">
+                  Para grandes, medianas y pequenas empresas, eso significa algo concreto: combinar procesos, sistemas existentes e IA de forma adaptable. No para imponer una plataforma, sino para liderar mejor, apoyar mejor y responder mejor frente a escenarios reales.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                  onClick={() => {
+                    setShowApproachModal(false);
+                    setShowAIChat(true);
+                  }}
+                  className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 font-semibold text-white transition-all hover:from-cyan-600 hover:to-blue-700"
+                >
+                  Conversar con ArkoAsistente
+                </button>
+                <button
+                  onClick={() => {
+                    setShowApproachModal(false);
+                    setShowContactForm(true);
+                  }}
+                  className="rounded-xl border border-cyan-400 px-5 py-3 font-semibold text-cyan-200 transition-colors hover:bg-cyan-400 hover:text-slate-900"
+                >
+                  Hablar con el equipo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Nuestras Soluciones Tecnológicas Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">

@@ -42,6 +42,14 @@ export const ARKO_HELP_DOCS: ArkoHelpDoc[] = [
     summary: 'Como ArkoData orienta proyectos y cotizaciones.',
     sections: [
       {
+        heading: 'La logica de ArkoData',
+        body: 'ArkoData no parte desde vender software por si mismo. Parte desde entender procesos reales, sus matices operativos y la forma en que cada empresa trabaja. El objetivo es adaptar tecnologia, sistemas e inteligencia artificial al flujo del negocio, no obligar al negocio a adaptarse a una herramienta rigida.',
+      },
+      {
+        heading: 'Factorizar y adaptar procesos',
+        body: 'El enfoque de ArkoData busca factorizar procesos, ordenar su logica y desacoplar dependencias innecesarias. Eso permite integrar sistemas existentes, automatizar donde si conviene y acompanar al usuario con una solucion que genera confianza porque respeta la complejidad real de la operacion.',
+      },
+      {
         heading: 'Levantamiento y definicion',
         body: 'Para preparar una propuesta, normalmente se revisa el objetivo del proyecto, el problema actual, las funcionalidades esperadas, las integraciones necesarias y los plazos. Con eso se ordena una recomendacion concreta.',
       },
