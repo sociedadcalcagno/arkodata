@@ -145,8 +145,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
       <header className="sticky top-0 z-40 border-b border-cyan-300/20 bg-[#041a36]/84 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a href="#hero" className="flex items-center gap-3">
-            <div className="rounded-full bg-slate-950 p-1.5 ring-1 ring-cyan-300/35 shadow-[0_0_34px_rgba(34,211,238,0.34)]">
-              <img src="/ArkoData.png" alt="ArkoData" className="h-11 w-11 rounded-full object-cover" />
+            <div className="flex-shrink-0">
+              <img src="/ArkoData.png" alt="ArkoData" className="h-12 w-12" />
             </div>
             <div>
               <p className="text-lg font-semibold tracking-tight text-white">ArkoData</p>
