@@ -15,7 +15,7 @@ export default function AIChat({ onClose }: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: '¡Hola! Soy ArkoAsistente, tu asistente virtual inteligente 🤖\n\nEstoy aquí para ayudarte con:\n• Información sobre servicios de ArkoData\n• Resoluciones técnicas y consultas\n• Conectarte con nuestro equipo especializado\n• Cotizaciones y propuestas personalizadas\n\n¿En qué puedo ayudarte hoy?',
+      content: 'Hola, soy ArkoAsistente. Puedo ayudarte a explorar como ArkoData aplica IA a procesos empresariales complejos, automatizacion operacional, integracion de sistemas y plataformas corporativas.\n\nSi quieres, cuentame tu operacion o desafio y lo aterrizamos en una oportunidad concreta.',
       timestamp: new Date()
     }
   ]);

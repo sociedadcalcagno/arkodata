@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background: #041a36;
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(0, 195, 255, 0.18), transparent 26%),
+    linear-gradient(180deg, #041a36 0%, #06315f 48%, #041a36 100%);
+  color: #f8fafc;
+}
+
+#root {
+  min-height: 100vh;
+  background: transparent;
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

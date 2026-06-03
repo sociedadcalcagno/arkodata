@@ -23,6 +23,10 @@ export const ARKO_HELP_DOCS: ArkoHelpDoc[] = [
         body: 'ArkoData implementa asistentes virtuales, chatbots comerciales, automatizacion de respuestas, captura de leads y apoyo operativo con IA. El objetivo es mejorar la atencion, responder mas rapido y convertir mas oportunidades.',
       },
       {
+        heading: 'Marketing digital',
+        body: 'ArkoData incorpora marketing digital como una linea complementaria para potenciar presencia, captacion, conversion y seguimiento comercial. Esto permite unir tecnologia, automatizacion y crecimiento de negocio.',
+      },
+      {
         heading: 'Automatizacion de procesos',
         body: 'ArkoData automatiza tareas repetitivas, formularios, integraciones y flujos internos para reducir tiempos manuales y errores. Esto incluye procesos comerciales, operativos y administrativos.',
       },
@@ -48,6 +52,10 @@ export const ARKO_HELP_DOCS: ArkoHelpDoc[] = [
       {
         heading: 'Factorizar y adaptar procesos',
         body: 'El enfoque de ArkoData busca factorizar procesos, ordenar su logica y desacoplar dependencias innecesarias. Eso permite integrar sistemas existentes, automatizar donde si conviene y acompanar al usuario con una solucion que genera confianza porque respeta la complejidad real de la operacion.',
+      },
+      {
+        heading: 'Experiencia con clientes y operaciones reales',
+        body: 'ArkoData comunica experiencia reciente asociada a Claro Chile, Entel y Pagos Honorarios Medicos Chile, donde el valor no estuvo solo en construir software, sino en acompanar procesos, administracion de proyectos, continuidad operativa y adaptacion de flujos reales.',
       },
       {
         heading: 'Levantamiento y definicion',
