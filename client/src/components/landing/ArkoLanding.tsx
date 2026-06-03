@@ -1,22 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  ArrowRight,
-  Bot,
-  BrainCircuit,
-  Cable,
-  CheckCircle2,
-  ChevronRight,
-  Database,
-  FileSearch,
-  LineChart,
-  MessageCircle,
-  Network,
-  ScanSearch,
-  ServerCog,
-  ShieldCheck,
-  Sparkles,
-} from 'lucide-react';
+import { ArrowRight, Bot, BrainCircuit, Cable, Database, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles } from 'lucide-react';
+import AIOperatingSystem from './AIOperatingSystem';
 
 type ArkoLandingProps = {
   onOpenChat: () => void;
@@ -140,180 +125,6 @@ function MiniNode({ label, active = false }: { label: string; active?: boolean }
   );
 }
 
-function ControlLayerVisual() {
-  const financialBars = [42, 66, 54, 76, 62, 88, 72, 94];
-  const decisionQueue = [
-    { label: 'Honorarios', value: '$42.8M', status: 'OK' },
-    { label: 'Documentos', value: '1.284', status: 'IA' },
-    { label: 'Riesgo', value: 'Bajo', status: 'Live' },
-  ];
-  const metrics = [
-    { label: 'Cashflow controlado', value: '$128.4M', tone: 'text-cyan-50' },
-    { label: 'Decisiones IA', value: '18.240', tone: 'text-emerald-200' },
-    { label: 'Riesgo operativo', value: '3.2%', tone: 'text-sky-200' },
-  ];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 28, scale: 0.98 }}
-      animate={{ opacity: 1, y: [0, -8, 0], scale: 1 }}
-      transition={{ opacity: { duration: 0.8, ease: 'easeOut' }, scale: { duration: 0.8, ease: 'easeOut' }, y: { duration: 7, repeat: Infinity, ease: 'easeInOut' } }}
-      className="relative mx-auto w-full max-w-[440px]"
-    >
-      <div className="absolute -inset-8 rounded-[4rem] bg-[radial-gradient(circle_at_50%_36%,rgba(0,195,255,0.38),transparent_58%)] blur-3xl" />
-      <div className="absolute -inset-2 rounded-[3.2rem] bg-gradient-to-b from-cyan-300/20 via-blue-500/10 to-transparent blur-xl" />
-
-      <motion.div
-        whileHover={{ rotateX: 3, rotateY: -4, y: -8, scale: 1.015 }}
-        transition={{ duration: 0.25 }}
-        className="relative rounded-[2.8rem] border border-cyan-200/35 bg-[#020817] p-2.5 shadow-[0_42px_130px_rgba(0,0,0,0.62),0_0_90px_rgba(34,211,238,0.24)] ring-1 ring-white/10"
-      >
-        <div className="absolute left-1/2 top-3 z-20 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/18" />
-        <div className="absolute right-1 top-24 h-20 w-1 rounded-full bg-cyan-200/20" />
-        <div className="absolute left-1 top-32 h-14 w-1 rounded-full bg-cyan-200/15" />
-
-        <div className="relative overflow-hidden rounded-[2.35rem] border border-white/10 bg-[linear-gradient(180deg,#07396f_0%,#05284f_46%,#041a36_100%)] p-3.5 pt-8 sm:p-4 sm:pt-9">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_8%,rgba(34,211,238,0.28),transparent_28%),radial-gradient(circle_at_88%_18%,rgba(0,102,255,0.22),transparent_30%),linear-gradient(rgba(125,211,252,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.04)_1px,transparent_1px)] bg-[size:auto,auto,34px_34px,34px_34px]" />
-          <motion.div
-            animate={{ x: ['-35%', '135%'], opacity: [0, 0.75, 0] }}
-            transition={{ duration: 4.6, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute top-0 h-full w-24 rotate-12 bg-gradient-to-r from-transparent via-cyan-100/16 to-transparent"
-          />
-
-          <div className="relative mb-3 flex items-center justify-between border-b border-cyan-200/12 pb-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-300/40 bg-cyan-300/12 shadow-[0_0_24px_rgba(34,211,238,0.2)]">
-                <Network className="h-5 w-5 text-cyan-100" />
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-cyan-100/65">ArkoData App</p>
-                <p className="text-sm font-semibold text-white sm:text-base">Financial Intelligence OS</p>
-              </div>
-            </div>
-            <motion.div
-              animate={{ boxShadow: ['0 0 0 rgba(110,231,183,0)', '0 0 26px rgba(110,231,183,0.28)', '0 0 0 rgba(110,231,183,0)'] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-              className="flex items-center gap-2 rounded-full border border-emerald-300/35 bg-emerald-300/14 px-3 py-1.5 text-xs font-semibold text-emerald-100"
-            >
-              <motion.span animate={{ scale: [1, 1.35, 1] }} transition={{ duration: 1.6, repeat: Infinity }} className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.9)]" />
-              Live
-            </motion.div>
-          </div>
-
-          <div className="relative space-y-2.5">
-            <div className="grid grid-cols-3 gap-2">
-              {metrics.map((metric) => (
-                <motion.div
-                  key={metric.label}
-                  whileHover={{ y: -5, scale: 1.035 }}
-                  transition={{ duration: 0.18 }}
-                  className="rounded-2xl border border-cyan-200/18 bg-white/[0.08] p-2.5 backdrop-blur-md transition-colors hover:border-cyan-200/55 hover:bg-cyan-300/14"
-                >
-                  <p className="text-[9px] font-bold uppercase leading-4 tracking-[0.14em] text-cyan-100/52">{metric.label}</p>
-                  <p className={`mt-1.5 text-base font-bold sm:text-lg ${metric.tone}`}>{metric.value}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.18 }} className="rounded-[1.35rem] border border-cyan-200/16 bg-slate-950/42 p-3 backdrop-blur-md transition-colors hover:border-cyan-300/40 hover:bg-slate-950/58">
-              <div className="mb-3 flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-cyan-100/45">Flujo financiero inteligente</p>
-                  <p className="mt-1 text-base font-semibold text-white">Revenue Operations</p>
-                </div>
-                <LineChart className="h-5 w-5 text-cyan-200" />
-              </div>
-              <div className="relative h-28 overflow-hidden rounded-2xl border border-cyan-200/12 bg-[#041a36]/82 p-3">
-                <div className="absolute inset-x-3 top-1/2 h-px bg-white/10" />
-                <svg viewBox="0 0 320 140" className="h-full w-full overflow-visible">
-                  <motion.path
-                    d="M4 112 C42 96, 62 118, 91 82 C126 38, 142 76, 174 58 C218 32, 232 52, 266 28 C288 14, 302 22, 318 10"
-                    fill="none"
-                    stroke="rgba(125,211,252,0.96)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0, opacity: 0.4 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    transition={{ duration: 1.5, ease: 'easeOut' }}
-                  />
-                  <path
-                    d="M4 112 C42 96, 62 118, 91 82 C126 38, 142 76, 174 58 C218 32, 232 52, 266 28 C288 14, 302 22, 318 10 L318 140 L4 140 Z"
-                    fill="url(#financeGlowMobile)"
-                  />
-                  <defs>
-                    <linearGradient id="financeGlowMobile" x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0%" stopColor="rgba(34,211,238,0.34)" />
-                      <stop offset="100%" stopColor="rgba(34,211,238,0)" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div className="absolute bottom-3 left-3 rounded-full border border-emerald-300/30 bg-emerald-300/12 px-3 py-1 text-xs font-semibold text-emerald-100">+24.8% eficiencia</div>
-              </div>
-            </motion.div>
-
-            <div className="grid gap-2.5 sm:grid-cols-[1fr_0.82fr]">
-              <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.18 }} className="rounded-[1.35rem] border border-cyan-200/16 bg-white/[0.07] p-3 backdrop-blur-md transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/[0.1]">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-white">Decision Queue</p>
-                  <BrainCircuit className="h-5 w-5 text-cyan-200" />
-                </div>
-                <div className="space-y-2">
-                  {decisionQueue.map((item) => (
-                    <motion.div key={item.label} whileHover={{ x: 5 }} transition={{ duration: 0.16 }} className="rounded-2xl border border-cyan-200/12 bg-slate-950/55 p-2.5 transition-colors hover:border-cyan-300/35 hover:bg-slate-950/78">
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-xs font-semibold text-slate-300">{item.label}</p>
-                        <span className="rounded-full bg-cyan-300/12 px-2 py-1 text-[10px] font-semibold text-cyan-100">{item.status}</span>
-                      </div>
-                      <p className="mt-1 text-base font-bold text-white">{item.value}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.18 }} className="rounded-[1.35rem] border border-cyan-200/16 bg-white/[0.07] p-3 backdrop-blur-md transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/[0.1]">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-white">Executive Signal</p>
-                  <ShieldCheck className="h-5 w-5 text-emerald-200" />
-                </div>
-                <p className="text-3xl font-bold tracking-tight text-white">$2.4B</p>
-                <p className="mt-1 text-xs leading-5 text-slate-300">flujo operacional monitoreado</p>
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/12">
-                  <motion.div initial={{ width: 0 }} animate={{ width: '91%' }} transition={{ duration: 1.1, delay: 0.4 }} className="h-full rounded-full bg-gradient-to-r from-blue-500 via-cyan-300 to-white" />
-                </div>
-                <div className="mt-3 grid h-14 grid-cols-4 items-end gap-1.5 rounded-2xl border border-cyan-200/10 bg-slate-950/42 p-2">
-                  {financialBars.slice(4).map((height, index) => (
-                    <motion.div key={height + index} animate={{ height: [`${height - 10}%`, `${height}%`, `${height - 6}%`] }} transition={{ duration: 2.6 + index * 0.2, repeat: Infinity, ease: 'easeInOut' }} className="rounded-full bg-gradient-to-t from-blue-500 via-cyan-400 to-white shadow-[0_0_14px_rgba(34,211,238,0.34)]" />
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-
-            <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.18 }} className="rounded-[1.35rem] border border-cyan-200/18 bg-slate-950/44 p-3 backdrop-blur-md transition-colors hover:border-cyan-300/40 hover:bg-slate-950/62">
-              <div className="mb-3 flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-cyan-100/45">AI Assistant</p>
-                  <p className="text-sm font-semibold text-white">ArkoAsistente</p>
-                </div>
-                <MessageCircle className="h-5 w-5 text-cyan-200" />
-              </div>
-              <div className="grid gap-2 sm:grid-cols-[0.92fr_1.08fr]">
-                <div className="rounded-2xl bg-[#041a36]/78 p-2.5 text-xs leading-5 text-slate-300">Proyecta ahorro mensual y riesgo.</div>
-                <div className="rounded-2xl border border-cyan-300/25 bg-cyan-300/12 p-2.5 text-xs font-semibold leading-5 text-cyan-50">Ahorro: $18.6M / mes. Prioridad: pagos.</div>
-              </div>
-            </motion.div>
-
-            <div className="grid grid-cols-4 gap-2">
-              <MiniNode label="Pagos" active />
-              <MiniNode label="Riesgo" />
-              <MiniNode label="Datos" />
-              <MiniNode label="IA" active />
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
 
 export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingProps) {
   const [selectedProcess, setSelectedProcess] = useState(processOptions[0]);
@@ -365,7 +176,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
         <section id="hero" className="relative px-4 pb-20 pt-14 sm:px-6 lg:px-8 lg:pb-28 lg:pt-20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(0,195,255,0.28),transparent_32%),radial-gradient(circle_at_86%_18%,rgba(0,102,255,0.28),transparent_30%),radial-gradient(circle_at_55%_78%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#041a36_0%,#06315f_48%,#084b86_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(125,211,252,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.055)_1px,transparent_1px)] bg-[size:72px_72px] opacity-50" />
-          <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="relative mx-auto max-w-7xl space-y-14">
             <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, ease: 'easeOut' }}>
               <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-cyan-200/35 bg-cyan-300/[0.14] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-50 shadow-[0_0_34px_rgba(34,211,238,0.18)]">
                 <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.8)]" />
@@ -402,7 +213,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
               </div>
             </motion.div>
 
-            <ControlLayerVisual />
+            <AIOperatingSystem />
           </div>
         </section>
 
