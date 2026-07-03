@@ -68,6 +68,8 @@ export default function AIChat({ onClose }: AIChatProps) {
     focusInput(); // Mantener foco después de enviar
 
     try {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 18000);
       const history = [...messages, userMessage].map((message) => ({
         role: message.role,
         content: message.content,
@@ -75,6 +77,7 @@ export default function AIChat({ onClose }: AIChatProps) {
 
       const response = await fetch('/api/chat', {
         method: 'POST',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -84,6 +87,7 @@ export default function AIChat({ onClose }: AIChatProps) {
           history,
         }),
       });
+      window.clearTimeout(timeout);
 
       if (!response.ok) {
         throw new Error('Failed to get AI response');

@@ -109,14 +109,17 @@ async function buildAiAnswer(question: string, history: ChatMsg[], context: stri
     'Respuesta:'
   ].filter(Boolean).join('\n\n');
 
-  const completion = await openai.chat.completions.create({
-    model: 'gpt-4',
-    messages: [{ role: 'user', content: prompt }],
-    max_tokens: 500,
-    temperature: 0.5,
-  });
+  const completion = await Promise.race([
+    openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 500,
+      temperature: 0.5,
+    }),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), 12000)),
+  ]);
 
-  return completion.choices[0]?.message?.content?.trim() || null;
+  return completion?.choices[0]?.message?.content?.trim() || null;
 }
 
 function buildFallbackResponse(message: string) {
@@ -181,6 +184,27 @@ Si me indicas tu entorno actual, te sugiero por dónde partir.`;
 3. Costo hora aproximado del equipo que lo ejecuta.
 
 Con eso puedo proyectar horas recuperadas, ahorro mensual y que parte conviene automatizar primero.`;
+  }
+
+  if (/(contabilidad|contable|factura|facturas|conciliacion|conciliación|pago|pagos|cartola|cartolas|honorario|honorarios|finanza|finanzas)/i.test(normalizedMessage)) {
+    return `Buen caso. En contabilidad normalmente hay varias oportunidades de automatizacion con IA y reglas de negocio.
+
+Oportunidad detectada:
+- lectura y clasificacion de facturas, boletas, respaldos y cartolas
+- conciliacion de pagos y documentos
+- validacion de montos, fechas, proveedores y estados
+- alertas por inconsistencias o documentos faltantes
+
+Que automatizaria ArkoData:
+- OCR/document intelligence
+- motor de reglas contables
+- flujo de aprobacion y excepciones
+- dashboard de trazabilidad financiera
+
+Para estimar ahorro dime 3 datos:
+1. Cuantos documentos o movimientos revisan al mes.
+2. Cuantos minutos toma revisar cada uno.
+3. Cuantas personas participan en el proceso.`;
   }
 
   if (/(contacto|whatsapp|correo|email|llamar|reunion|reunión|agendar)/i.test(normalizedMessage)) {

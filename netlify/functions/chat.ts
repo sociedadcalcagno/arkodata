@@ -53,6 +53,29 @@ function fallback(message: string) {
     ].join('\n');
   }
 
+  if (/(contabilidad|contable|factura|facturas|conciliacion|conciliación|pago|pagos|cartola|cartolas|honorario|honorarios|finanza|finanzas)/i.test(normalized)) {
+    return [
+      'Buen caso. En contabilidad normalmente hay varias oportunidades de automatizacion con IA y reglas de negocio.',
+      '',
+      'Oportunidad detectada:',
+      '- lectura y clasificacion de facturas, boletas, respaldos y cartolas',
+      '- conciliacion de pagos y documentos',
+      '- validacion de montos, fechas, proveedores y estados',
+      '- alertas por inconsistencias o documentos faltantes',
+      '',
+      'Que automatizaria ArkoData:',
+      '- OCR/document intelligence',
+      '- motor de reglas contables',
+      '- flujo de aprobacion y excepciones',
+      '- dashboard de trazabilidad financiera',
+      '',
+      'Para estimar ahorro dime 3 datos:',
+      '1. Cuantos documentos o movimientos revisan al mes.',
+      '2. Cuantos minutos toma revisar cada uno.',
+      '3. Cuantas personas participan en el proceso.'
+    ].join('\n');
+  }
+
   if (/(contacto|diagnostico|reunion|correo|whatsapp)/i.test(normalized)) {
     return 'Puedes solicitar un diagnostico en el formulario o escribir a contacto@arkodata.cl. Tambien podemos orientar desde aqui si me cuentas tu empresa, proceso y principal dolor operacional.';
   }
@@ -71,6 +94,9 @@ function fallback(message: string) {
 
 async function askOpenAI(message: string, history: ChatMsg[]) {
   if (!process.env.OPENAI_API_KEY) return null;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
 
   const historyText = history
     .slice(-10)
@@ -96,27 +122,35 @@ async function askOpenAI(message: string, history: ChatMsg[]) {
     `Pregunta:\n${message}`,
   ].filter(Boolean).join('\n\n');
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.45,
-      max_tokens: 520,
-    }),
-  });
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.45,
+        max_tokens: 520,
+      }),
+    });
 
-  if (!response.ok) {
-    console.error('OpenAI error:', response.status, await response.text());
+    if (!response.ok) {
+      console.error('OpenAI error:', response.status, await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content?.trim() || null;
+  } catch (error) {
+    console.error('OpenAI request failed or timed out:', error);
     return null;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  const data = await response.json();
-  return data.choices?.[0]?.message?.content?.trim() || null;
 }
 
 export async function handler(event: any) {
