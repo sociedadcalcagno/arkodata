@@ -97,10 +97,68 @@ const methodology = ['Discovery', 'Architecture', 'Automation', 'AI Layer', 'Int
 const techTags = ['OpenAI', 'Claude', 'Node.js', 'Python', 'PostgreSQL', 'Docker', 'APIs', 'OCR', 'RPA', 'AWS', 'Azure', 'Talend'];
 
 const processOptions = [
-  { id: 'documents', label: 'Gestion documental', automation: 0.72, errorReduction: 0.64, description: 'OCR, clasificacion, validacion y trazabilidad de documentos.' },
-  { id: 'payments', label: 'Pagos y conciliacion', automation: 0.68, errorReduction: 0.58, description: 'Reglas de negocio, aprobaciones, cartolas y control financiero.' },
-  { id: 'support', label: 'Atencion interna', automation: 0.54, errorReduction: 0.42, description: 'ArkoAsistente conectado a procesos, datos y preguntas frecuentes.' },
-  { id: 'operations', label: 'Operacion y workflow', automation: 0.61, errorReduction: 0.5, description: 'Estados, alertas, integraciones y seguimiento operacional.' },
+  {
+    id: 'documents',
+    label: 'Gestion documental',
+    automation: 0.72,
+    errorReduction: 0.64,
+    description: 'OCR, clasificacion, validacion y trazabilidad de documentos.',
+    pain: 'Demasiado tiempo leyendo, ordenando y validando respaldos manualmente.',
+    solution: 'Motor documental con OCR, reglas, alertas y dashboard ejecutivo.',
+    outcome: 'Menos digitacion, menos reproceso y mayor trazabilidad documental.',
+    deliverables: ['OCR + clasificacion', 'Validaciones automaticas', 'Repositorio trazable'],
+  },
+  {
+    id: 'payments',
+    label: 'Pagos y conciliacion',
+    automation: 0.68,
+    errorReduction: 0.58,
+    description: 'Reglas de negocio, aprobaciones, cartolas y control financiero.',
+    pain: 'Pagos, calculos y conciliaciones dependen de planillas o revision manual.',
+    solution: 'Motor de reglas financieras, aprobaciones, cartolas y control de excepciones.',
+    outcome: 'Ciclos de pago mas rapidos, menos errores y visibilidad financiera.',
+    deliverables: ['Motor de reglas', 'Control de aprobaciones', 'Dashboard financiero'],
+  },
+  {
+    id: 'support',
+    label: 'Atencion interna',
+    automation: 0.54,
+    errorReduction: 0.42,
+    description: 'ArkoAsistente conectado a procesos, datos y preguntas frecuentes.',
+    pain: 'Equipos responden las mismas preguntas y pierden tiempo buscando informacion.',
+    solution: 'Agente IA conectado a base documental, procesos internos y captura de leads.',
+    outcome: 'Respuestas mas rapidas, soporte escalable y mejor experiencia de usuario.',
+    deliverables: ['ArkoAsistente', 'Base de conocimiento', 'Captura de oportunidades'],
+  },
+  {
+    id: 'operations',
+    label: 'Operacion y workflow',
+    automation: 0.61,
+    errorReduction: 0.5,
+    description: 'Estados, alertas, integraciones y seguimiento operacional.',
+    pain: 'Procesos cruzan areas sin control claro de estados, responsables ni SLA.',
+    solution: 'Workflow operacional con estados, integraciones, alertas y trazabilidad.',
+    outcome: 'Operaciones mas visibles, responsables claros y menos cuellos de botella.',
+    deliverables: ['Flujos automatizados', 'Integraciones API', 'Monitoreo operacional'],
+  },
+];
+
+const implementationPlans = [
+  {
+    name: 'Diagnostico IA',
+    description: 'Mapeamos procesos, estimamos ahorro y definimos una ruta ejecutiva.',
+    items: ['Levantamiento operativo', 'Mapa de fricciones', 'Estimacion de impacto', 'Roadmap de automatizacion'],
+  },
+  {
+    name: 'Piloto Inteligente',
+    description: 'Implementamos un caso acotado para medir impacto real rapido.',
+    items: ['Un proceso priorizado', 'Agente IA o automatizacion', 'Dashboard inicial', 'Medicion de ahorro'],
+  },
+  {
+    name: 'Implementacion Enterprise',
+    description: 'Escalamos la solucion con integraciones, control y mejora continua.',
+    items: ['Integraciones corporativas', 'Motor de reglas', 'Trazabilidad completa', 'Soporte evolutivo'],
+  },
 ];
 
 function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -155,10 +213,11 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           </a>
 
           <nav className="hidden items-center gap-7 text-sm text-slate-400 lg:flex">
+            <a href="#procesos" className="transition-colors hover:text-white">Procesos</a>
             <a href="#modelo" className="transition-colors hover:text-white">Modelo</a>
             <a href="#modulos" className="transition-colors hover:text-white">Modulos</a>
             <a href="#impacto" className="transition-colors hover:text-white">Impacto</a>
-            <a href="#tecnologia" className="transition-colors hover:text-white">Tecnologia</a>
+            <a href="#planes" className="transition-colors hover:text-white">Planes</a>
             <a href="#contacto" className="transition-colors hover:text-white">Contacto</a>
           </nav>
 
@@ -183,17 +242,17 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 Enterprise AI Operations
               </div>
               <h1 className="max-w-5xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl">
-                La capa de inteligencia que convierte procesos criticos en decisiones automatizadas.
+                Automatiza procesos, reduce costos y convierte tu operacion en una plataforma inteligente.
               </h1>
               <p className="mt-7 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                ArkoData integra datos, documentos, reglas de negocio e IA para automatizar operaciones complejas con trazabilidad completa y control ejecutivo.
+                Implementamos IA, agentes inteligentes, automatizacion documental, integraciones y dashboards para que empresas operen con menos friccion, menos error y mayor control.
               </p>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
                 <button
                   onClick={onOpenContact}
                   className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 px-7 py-4 text-base font-semibold text-slate-950 shadow-[0_22px_75px_rgba(34,211,238,0.35)] transition-all hover:-translate-y-0.5 hover:shadow-[0_28px_90px_rgba(34,211,238,0.48)]"
                 >
-                  Solicitar diagnostico
+                  Calcular ahorro operativo
                   <ArrowRight className="h-5 w-5" />
                 </button>
                 <button
@@ -205,7 +264,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 </button>
               </div>
               <div className="mt-10 grid max-w-2xl gap-3 sm:grid-cols-3">
-                {['IA conectada', 'Trazabilidad total', 'Integracion real'].map((item) => (
+                {['Ahorro medible', 'IA aplicada', 'Control operacional'].map((item) => (
                   <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm font-semibold text-slate-200">
                     {item}
                   </div>
@@ -232,6 +291,89 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                   {item}
                 </motion.span>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="procesos" className="relative bg-[#041a36] px-4 py-20 sm:px-6 lg:px-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(34,211,238,0.12),transparent_30%),radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.12),transparent_28%)]" />
+          <div className="relative mx-auto max-w-7xl">
+            <SectionHeader
+              eyebrow="Elige Tu Proceso"
+              title="Muestra al cliente donde puede ganar tiempo, plata y control con IA."
+              description="Cada empresa tiene fricciones distintas. ArkoData parte identificando el proceso correcto, estimando impacto y transformandolo en una automatizacion medible."
+            />
+            <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
+              <div className="grid gap-3">
+                {processOptions.map((process) => (
+                  <button
+                    key={process.id}
+                    onClick={() => setSelectedProcess(process)}
+                    className={`group rounded-[1.4rem] border p-5 text-left transition-all hover:-translate-y-1 ${selectedProcess.id === process.id ? 'border-cyan-200/70 bg-cyan-300/16 shadow-[0_0_34px_rgba(34,211,238,0.2)]' : 'border-cyan-300/14 bg-white/[0.045] hover:border-cyan-300/40 hover:bg-cyan-300/10'}`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-lg font-semibold text-white">{process.label}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-300">{process.description}</p>
+                      </div>
+                      <ChevronRight className="h-5 w-5 flex-shrink-0 text-cyan-200 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              <motion.div
+                key={selectedProcess.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.28 }}
+                className="overflow-hidden rounded-[2rem] border border-cyan-300/24 bg-[linear-gradient(145deg,#05284f,#07396f_52%,#0a5cab)] p-6 shadow-[0_30px_100px_rgba(0,0,0,0.28)]"
+              >
+                <div className="grid gap-5 lg:grid-cols-[1fr_0.78fr]">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">Proceso seleccionado</p>
+                    <h3 className="mt-3 text-3xl font-semibold text-white">{selectedProcess.label}</h3>
+                    <div className="mt-6 grid gap-4">
+                      <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Dolor operativo</p>
+                        <p className="mt-2 text-sm leading-7 text-slate-200">{selectedProcess.pain}</p>
+                      </div>
+                      <div className="rounded-2xl border border-cyan-300/22 bg-cyan-300/10 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Como lo resolvemos</p>
+                        <p className="mt-2 text-sm leading-7 text-cyan-50">{selectedProcess.solution}</p>
+                      </div>
+                      <div className="rounded-2xl border border-emerald-300/22 bg-emerald-300/10 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">Resultado esperado</p>
+                        <p className="mt-2 text-sm leading-7 text-emerald-50">{selectedProcess.outcome}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rounded-[1.6rem] border border-white/10 bg-slate-950/45 p-5">
+                    <p className="text-sm font-semibold text-white">Impacto estimado</p>
+                    <div className="mt-5 space-y-4">
+                      <div>
+                        <div className="mb-2 flex justify-between text-sm text-slate-300"><span>Automatizable</span><span>{Math.round(selectedProcess.automation * 100)}%</span></div>
+                        <div className="h-2 rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-blue-400" style={{ width: `${Math.round(selectedProcess.automation * 100)}%` }} /></div>
+                      </div>
+                      <div>
+                        <div className="mb-2 flex justify-between text-sm text-slate-300"><span>Reduccion de error</span><span>-{Math.round(selectedProcess.errorReduction * 100)}%</span></div>
+                        <div className="h-2 rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-emerald-300 to-cyan-300" style={{ width: `${Math.round(selectedProcess.errorReduction * 100)}%` }} /></div>
+                      </div>
+                    </div>
+                    <div className="mt-6 grid gap-3">
+                      {selectedProcess.deliverables.map((item) => (
+                        <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3 text-sm font-medium text-slate-100">
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                    <a href="#contacto" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-300 px-5 py-3 font-semibold text-slate-950 transition-all hover:-translate-y-0.5 hover:bg-cyan-100">
+                      Simular ahorro
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -442,6 +584,42 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                   })}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="planes" className="bg-[#06315f] px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionHeader
+              eyebrow="Ruta De Trabajo"
+              title="Tres formas concretas de empezar a trabajar con ArkoData."
+              description="El cliente no siempre sabe por donde partir. Le damos una ruta clara: diagnosticar, pilotear y escalar con medicion real de impacto."
+            />
+            <div className="grid gap-5 lg:grid-cols-3">
+              {implementationPlans.map((plan, index) => (
+                <motion.div
+                  key={plan.name}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                  className="group rounded-[2rem] border border-cyan-300/18 bg-[linear-gradient(145deg,#07396f,#05284f)] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.22)] transition-all hover:-translate-y-1 hover:border-cyan-200/55 hover:bg-[#084b86] hover:shadow-[0_28px_95px_rgba(34,211,238,0.18)]"
+                >
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100">0{index + 1}</span>
+                    <Sparkles className="h-5 w-5 text-cyan-200 transition-transform group-hover:rotate-12" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-white">{plan.name}</h3>
+                  <p className="mt-4 min-h-[72px] text-sm leading-7 text-slate-300">{plan.description}</p>
+                  <div className="mt-6 space-y-3">
+                    {plan.items.map((item) => (
+                      <div key={item} className="rounded-2xl border border-white/10 bg-slate-950/42 px-4 py-3 text-sm text-slate-100 transition-all group-hover:border-cyan-300/22 group-hover:bg-cyan-300/8">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
