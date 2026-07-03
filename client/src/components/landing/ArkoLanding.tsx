@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Bot, BrainCircuit, Cable, Database, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles } from 'lucide-react';
+import { ArrowRight, Bot, BrainCircuit, Cable, ChevronRight, Database, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles } from 'lucide-react';
 import AIOperatingSystem from './AIOperatingSystem';
 
 type ArkoLandingProps = {
