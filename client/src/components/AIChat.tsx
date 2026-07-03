@@ -12,10 +12,17 @@ interface AIChatProps {
 }
 
 export default function AIChat({ onClose }: AIChatProps) {
+  const quickPrompts = [
+    'Quiero estimar ahorro automatizando un proceso',
+    'Tengo muchos documentos manuales, que podria automatizar?',
+    'Como aplicarian IA en pagos y conciliacion?',
+    'Quiero un diagnostico para mi empresa',
+  ];
+
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: 'Hola, soy ArkoAsistente. Puedo ayudarte a explorar como ArkoData aplica IA a procesos empresariales complejos, automatizacion operacional, integracion de sistemas y plataformas corporativas.\n\nSi quieres, cuentame tu operacion o desafio y lo aterrizamos en una oportunidad concreta.',
+      content: 'Hola, soy ArkoAsistente. Te ayudo a detectar procesos automatizables, estimar impacto y ordenar una ruta concreta con IA.\n\nPuedes contarme tu proceso o partir con una de las opciones rápidas.',
       timestamp: new Date()
     }
   ]);
@@ -45,12 +52,13 @@ export default function AIChat({ onClose }: AIChatProps) {
     focusInput();
   }, []);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSend = async (overrideText?: string) => {
+    const text = (overrideText ?? input).trim();
+    if (!text || isLoading) return;
 
     const userMessage: Message = {
       role: 'user',
-      content: input.trim(),
+      content: text,
       timestamp: new Date()
     };
 
@@ -198,20 +206,35 @@ export default function AIChat({ onClose }: AIChatProps) {
 
         {/* Input */}
         <div className="p-6 border-t border-slate-700">
-          <div className="flex space-x-3">
+            {messages.length <= 1 && (
+              <div className="mb-4 grid gap-2 sm:grid-cols-2">
+                {quickPrompts.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => handleSend(prompt)}
+                    disabled={isLoading}
+                    className="rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-left text-xs leading-5 text-cyan-50 transition-all hover:-translate-y-0.5 hover:border-cyan-300/50 hover:bg-cyan-400/20 disabled:opacity-50"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className="flex space-x-3">
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Escribe tu mensaje..."
+              placeholder="Describe tu proceso, volumen o dolor operacional..."
               className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none transition-colors"
               disabled={isLoading}
               autoFocus
             />
             <button
-              onClick={handleSend}
+              onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
               className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 text-white p-3 rounded-xl transition-all duration-300 flex items-center justify-center"
             >

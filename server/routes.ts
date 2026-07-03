@@ -95,11 +95,13 @@ async function buildAiAnswer(question: string, history: ChatMsg[], context: stri
 
   const prompt = [
     'Eres ArkoAsistente, asistente comercial y tecnico de ArkoData.',
-    'Respondes solo en espanol chileno.',
+    'Respondes en espanol chileno neutro, claro, ejecutivo y orientado a negocio.',
     'Prioriza el contexto entregado sobre servicios y forma de trabajo.',
     'No inventes servicios, precios cerrados, integraciones o capacidades no confirmadas.',
-    'Si falta contexto, haz una sola pregunta concreta para avanzar.',
-    'Busca orientar al usuario hacia una propuesta clara o al contacto con el equipo.',
+    'Actua como consultor senior: pregunta, ordena, prioriza y propone siguiente accion.',
+    'Si falta contexto, haz maximo 2 preguntas concretas para avanzar.',
+    'Busca detectar procesos automatizables, estimar impacto y orientar hacia diagnostico.',
+    'Si el usuario describe un proceso, responde con: oportunidad detectada, que automatizaria ArkoData, impacto esperado, datos faltantes para ROI y siguiente paso recomendado.',
     '',
     `Contexto:\n${context}`,
     historyText ? `Conversacion previa:\n${historyText}` : '',
@@ -121,16 +123,16 @@ function buildFallbackResponse(message: string) {
   const normalizedMessage = message.toLowerCase();
 
   if (/(hola|buenas|buenos dias|buen día|buenas tardes|buenas noches)/i.test(normalizedMessage)) {
-    return `Hola, soy ArkoAsistente. Puedo orientarte sobre los servicios de ArkoData y ayudarte a encontrar la mejor alternativa para tu empresa.
+    return `Hola, soy ArkoAsistente. Te puedo ayudar a detectar oportunidades reales de automatizacion con IA.
 
-Hoy te puedo apoyar con:
-- Desarrollo web y plataformas a medida
-- Automatización de procesos
-- Inteligencia artificial y chatbots
-- Ciberseguridad e infraestructura
-- Consultoría tecnológica
+Para partir rapido, dime cual de estos procesos quieres revisar:
+- documentos, validaciones u OCR
+- pagos, conciliacion o cartolas
+- atencion interna o soporte
+- ventas, leads o seguimiento comercial
+- reportes, dashboards o control operacional
 
-Cuéntame qué necesitas y te ayudo a enfocarlo.`;
+Si me das volumen mensual, tiempo por caso y costo aproximado del equipo, puedo ayudarte a estimar ahorro.`;
   }
 
   if (/(ia|inteligencia artificial|chatbot|bot|asistente)/i.test(normalizedMessage)) {
@@ -172,15 +174,13 @@ Si me indicas tu entorno actual, te sugiero por dónde partir.`;
   }
 
   if (/(precio|precios|valor|costo|cotiza|cotizacion|cotización|presupuesto)/i.test(normalizedMessage)) {
-    return `En ArkoData las propuestas se ajustan al alcance, complejidad y etapa del proyecto.
+    return `Perfecto. Para estimar economia operacional necesito 3 datos:
 
-Para orientarte mejor, normalmente definimos:
-- objetivo del proyecto
-- funcionalidades necesarias
-- plazos esperados
-- si necesitas soporte, IA, integraciones o infraestructura
+1. Cuantos casos procesan al mes.
+2. Cuantos minutos toma cada caso hoy.
+3. Costo hora aproximado del equipo que lo ejecuta.
 
-Si quieres, descríbeme lo que necesitas y te ayudo a ordenarlo para una cotización.`;
+Con eso puedo proyectar horas recuperadas, ahorro mensual y que parte conviene automatizar primero.`;
   }
 
   if (/(contacto|whatsapp|correo|email|llamar|reunion|reunión|agendar)/i.test(normalizedMessage)) {
@@ -193,15 +193,14 @@ Si quieres, descríbeme lo que necesitas y te ayudo a ordenarlo para una cotizac
 Si prefieres, también puedes dejar tu nombre, correo y lo que necesitas, y te orientamos desde aquí.`;
   }
 
-  return `Puedo ayudarte con los principales servicios de ArkoData:
+  return `Te puedo orientar con una mirada practica.
 
-- desarrollo web y aplicaciones a medida
-- inteligencia artificial y chatbots
-- automatización de procesos
-- ciberseguridad e infraestructura
-- consultoría tecnológica
+Cuéntame brevemente:
+- que proceso quieres mejorar
+- que dolor tienen hoy
+- cuanto volumen manejan al mes
 
-Cuéntame qué quieres resolver en tu empresa y te respondo con una orientación más concreta.`;
+Con eso te respondo con: oportunidad de IA, automatizacion posible, impacto esperado y siguiente paso recomendado.`;
 }
 
 // Initialize OpenAI

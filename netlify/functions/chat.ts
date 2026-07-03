@@ -27,18 +27,46 @@ function fallback(message: string) {
   const normalized = normalize(message);
 
   if (/(hola|buenas|buenos dias|buen dia)/i.test(normalized)) {
-    return 'Hola, soy ArkoAsistente. Puedo ayudarte a identificar procesos automatizables, oportunidades de IA, integraciones y mejoras operacionales. Cuentame que proceso quieres optimizar.';
+    return [
+      'Hola, soy ArkoAsistente. Te puedo ayudar a detectar oportunidades reales de automatizacion con IA.',
+      '',
+      'Para partir rapido, dime cual de estos procesos quieres revisar:',
+      '- documentos, validaciones u OCR',
+      '- pagos, conciliacion o cartolas',
+      '- atencion interna o soporte',
+      '- ventas, leads o seguimiento comercial',
+      '- reportes, dashboards o control operacional',
+      '',
+      'Si me das volumen mensual, tiempo por caso y costo aproximado del equipo, puedo ayudarte a estimar ahorro.'
+    ].join('\n');
   }
 
   if (/(precio|costo|ahorro|roi|rentabil|economia)/i.test(normalized)) {
-    return 'Podemos estimar impacto revisando volumen mensual, tiempo por caso, costo hora del equipo y nivel de automatizacion posible. Si me das esos datos, te ayudo a ordenar una estimacion inicial.';
+    return [
+      'Perfecto. Para estimar economia operacional necesito 3 datos:',
+      '',
+      '1. Cuantos casos procesan al mes.',
+      '2. Cuantos minutos toma cada caso hoy.',
+      '3. Costo hora aproximado del equipo que lo ejecuta.',
+      '',
+      'Con eso puedo proyectar horas recuperadas, ahorro mensual y que parte conviene automatizar primero.'
+    ].join('\n');
   }
 
   if (/(contacto|diagnostico|reunion|correo|whatsapp)/i.test(normalized)) {
     return 'Puedes solicitar un diagnostico en el formulario o escribir a contacto@arkodata.cl. Tambien podemos orientar desde aqui si me cuentas tu empresa, proceso y principal dolor operacional.';
   }
 
-  return 'ArkoData ayuda a convertir procesos criticos en operaciones inteligentes con IA, automatizacion, OCR, integraciones, dashboards y agentes inteligentes. Cuentame que proceso quieres mejorar y te propongo un camino concreto.';
+  return [
+    'Te puedo orientar con una mirada practica.',
+    '',
+    'Cuéntame brevemente:',
+    '- que proceso quieres mejorar',
+    '- que dolor tienen hoy',
+    '- cuanto volumen manejan al mes',
+    '',
+    'Con eso te respondo con: oportunidad de IA, automatizacion posible, impacto esperado y siguiente paso recomendado.'
+  ].join('\n');
 }
 
 async function askOpenAI(message: string, history: ChatMsg[]) {
@@ -51,9 +79,18 @@ async function askOpenAI(message: string, history: ChatMsg[]) {
 
   const prompt = [
     'Eres ArkoAsistente, asistente comercial y tecnico de ArkoData.',
-    'Respondes en espanol chileno, claro, ejecutivo y orientado a negocio.',
+    'Respondes en espanol chileno neutro, claro, ejecutivo y orientado a negocio.',
     'No inventes precios cerrados ni capacidades no confirmadas.',
-    'Tu objetivo es ayudar a detectar procesos automatizables y orientar hacia un diagnostico.',
+    'Tu objetivo es ayudar a detectar procesos automatizables, estimar impacto y orientar hacia un diagnostico.',
+    'No respondas como folleto. Actua como consultor senior: pregunta, ordena, prioriza y propone siguiente accion.',
+    'Si el usuario no da suficiente informacion, haz maximo 2 preguntas concretas.',
+    'Si el usuario describe un proceso, responde con esta estructura breve:',
+    '1. Oportunidad detectada',
+    '2. Que automatizaria ArkoData',
+    '3. Impacto esperado',
+    '4. Datos que faltan para estimar ROI',
+    '5. Siguiente paso recomendado',
+    'Si el usuario da volumen, minutos o costos, usa esos datos para hacer una estimacion aproximada y declara que es referencial.',
     `Contexto:\n${buildContext()}`,
     historyText ? `Conversacion previa:\n${historyText}` : '',
     `Pregunta:\n${message}`,
