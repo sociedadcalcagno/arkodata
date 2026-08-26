@@ -8,6 +8,85 @@ import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
 
 type ChatMsg = { role: 'user' | 'assistant'; content: string };
+type OperationalFacts = { process?: string; volume?: number; minutes?: number; hourlyCost?: number; people?: number };
+
+function parseNumber(value: string) {
+  const parsed = Number(value.replace(/\./g, '').replace(/,/g, '.'));
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function extractOperationalFacts(text: string): OperationalFacts {
+  const normalized = text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+  const facts: OperationalFacts = {};
+
+  if (/(contabilidad|contable|factura|facturas|conciliacion|pago|pagos|cartola|honorario|finanza)/i.test(normalized)) facts.process = 'contabilidad y finanzas';
+  else if (/(documento|documental|ocr|validacion|contrato)/i.test(normalized)) facts.process = 'gestion documental';
+  else if (/(venta|ventas|lead|comercial|cliente|seguimiento)/i.test(normalized)) facts.process = 'ventas y seguimiento comercial';
+  else if (/(soporte|atencion|mesa de ayuda|preguntas|consultas)/i.test(normalized)) facts.process = 'atencion interna o soporte';
+
+  for (const pattern of [/(?:procesamos|revisamos|tenemos|son|manejamos|volumen|casos|documentos|facturas)\D{0,24}(\d[\d.,]*)/i, /(\d[\d.,]*)\s*(?:casos|documentos|facturas|movimientos|pagos|cartolas)(?:\s+al\s+mes|\s+mensuales)?/i]) {
+    const value = text.match(pattern)?.[1];
+    const parsed = value ? parseNumber(value) : undefined;
+    if (parsed) { facts.volume = parsed; break; }
+  }
+
+  for (const pattern of [/(\d[\d.,]*)\s*(?:min|mins|minutos)(?:\s+por\s+(?:caso|documento|factura|movimiento))?/i, /(?:toma|demora|tardan|demoran|tiempo)\D{0,24}(\d[\d.,]*)\s*(?:min|mins|minutos)/i]) {
+    const value = text.match(pattern)?.[1];
+    const parsed = value ? parseNumber(value) : undefined;
+    if (parsed) { facts.minutes = parsed; break; }
+  }
+
+  for (const pattern of [/(?:costo hora|hora cuesta|valor hora|costo por hora)\D{0,20}\$?\s*(\d[\d.,]*)/i, /\$\s*(\d[\d.,]*)\s*(?:por hora|\/h|hora)/i]) {
+    const value = text.match(pattern)?.[1];
+    const parsed = value ? parseNumber(value) : undefined;
+    if (parsed) { facts.hourlyCost = parsed; break; }
+  }
+
+  const people = text.match(/(\d[\d.,]*)\s*(?:personas|analistas|ejecutivos|trabajadores|usuarios)/i)?.[1];
+  const parsedPeople = people ? parseNumber(people) : undefined;
+  if (parsedPeople) facts.people = parsedPeople;
+
+  return facts;
+}
+
+function mergeFacts(...items: OperationalFacts[]) {
+  return items.reduce<OperationalFacts>((acc, item) => ({ ...acc, ...Object.fromEntries(Object.entries(item).filter(([, value]) => value !== undefined)) }), {});
+}
+
+function formatCurrency(value: number) {
+  return `$${new Intl.NumberFormat('es-CL').format(Math.round(value))}`;
+}
+
+function buildOperationalAnswer(facts: OperationalFacts) {
+  if (!facts.process) return null;
+  const automationRate = facts.process.includes('contabilidad') ? 0.62 : facts.process.includes('documental') ? 0.7 : 0.55;
+  const lines = [`Perfecto. Si hablamos de ${facts.process}, esto ya es un caso bien aterrizable para ArkoData.`, '', 'Oportunidad detectada:'];
+
+  if (facts.process.includes('contabilidad')) {
+    lines.push('- lectura y clasificacion de facturas, respaldos, cartolas y pagos', '- conciliacion contra reglas contables o financieras', '- deteccion de inconsistencias, pendientes y excepciones', '- trazabilidad para saber quien aprobo, que falta y donde esta el cuello de botella', '', 'Que implementaria ArkoData:', '- OCR/document intelligence para extraer datos de documentos', '- motor de reglas para validar montos, proveedores, fechas y estados', '- flujo de aprobacion y excepciones', '- dashboard financiero para control ejecutivo');
+  } else {
+    lines.push('- automatizar tareas repetitivas', '- reducir errores manuales', '- conectar datos, documentos y responsables', '- dejar trazabilidad completa del proceso', '', 'Que implementaria ArkoData:', '- agente IA o automatizacion de workflow', '- reglas de negocio', '- integraciones con sistemas existentes', '- dashboard operacional');
+  }
+
+  if (facts.volume && facts.minutes) {
+    const hourlyCost = facts.hourlyCost || 9500;
+    const monthlyHours = (facts.volume * facts.minutes) / 60;
+    const recoveredHours = monthlyHours * automationRate;
+    const monthlySavings = recoveredHours * hourlyCost;
+    lines.push('', 'Estimacion referencial con los datos entregados:', `- Volumen mensual: ${new Intl.NumberFormat('es-CL').format(facts.volume)} casos/documentos`, `- Tiempo actual: ${facts.minutes} min por caso`, `- Horas operativas actuales: ${Math.round(monthlyHours)} h/mes`, `- Potencial automatizable estimado: ${Math.round(automationRate * 100)}%`, `- Horas recuperables: ${Math.round(recoveredHours)} h/mes`, `- Ahorro mensual referencial: ${formatCurrency(monthlySavings)}${facts.hourlyCost ? '' : ' usando costo hora referencial de $9.500'}`, `- Ahorro anual referencial: ${formatCurrency(monthlySavings * 12)}`, '', 'Siguiente paso recomendado:', 'Tomar una muestra de 20 a 50 casos reales, clasificar tipos de documento/excepcion y armar un piloto medible de 2 a 4 semanas.');
+  } else {
+    const missing = [];
+    if (!facts.volume) missing.push('cuantos casos/documentos procesan al mes');
+    if (!facts.minutes) missing.push('cuantos minutos toma cada caso');
+    if (!facts.hourlyCost) missing.push('costo hora aproximado del equipo, si lo tienes');
+    lines.push('', 'Para convertir esto en ROI, no necesito mas teoria. Solo faltan estos datos:', ...missing.map((item) => `- ${item}`), '', 'Con eso te devuelvo una estimacion mensual/anual y una propuesta de piloto.');
+  }
+
+  return lines.join('\n');
+}
 
 function normalizeHelpText(value: unknown) {
   return String(value || '')
@@ -351,7 +430,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hits = searchHelpDocs(message);
       const context = [buildBaseHelpContext(), ...hits.map((hit) => `# ${hit.title} > ${hit.heading}\n${hit.snippet}`)].join('\n\n');
 
-      let response = await buildAiAnswer(message, history, context);
+      const historyText = history.map((entry) => entry.content).join('\n');
+      const facts = mergeFacts(extractOperationalFacts(historyText), extractOperationalFacts(message));
+      let response = buildOperationalAnswer(facts) || await buildAiAnswer(message, history, context);
       if (!response) {
         response = hits.length > 0 ? buildMockAnswer(message, hits) : buildFallbackResponse(message);
       }

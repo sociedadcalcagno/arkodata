@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Bot, BrainCircuit, Cable, ChevronRight, Database, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowUp, Bot, BrainCircuit, Cable, ChevronRight, Database, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles } from 'lucide-react';
+import { FaInstagram, FaLinkedinIn, FaTiktok, FaWhatsapp } from 'react-icons/fa6';
 import AIOperatingSystem from './AIOperatingSystem';
 
 type ArkoLandingProps = {
@@ -9,6 +10,13 @@ type ArkoLandingProps = {
 };
 
 const proofItems = ['Claro Chile', 'Entel', 'Pagos Honorarios Medicos Chile', 'Telecom', 'Salud', 'Logistica'];
+
+const clientLogos = [
+  { name: 'Claro Chile', src: '/clients/claro-chile.png', detail: 'Telecom y experiencia operacional a escala.' },
+  { name: 'Pagos Honorarios Medicos Chile', src: '/clients/pagos-honorarios-medicos.png', detail: 'Plataforma para calculo de pagos de honorarios medicos con IA, reglas de negocio, liquidaciones automatizadas y trazabilidad completa para procesos de alta complejidad.' },
+  { name: 'LegalEasy', src: '/clients/legaleasy.png', detail: 'Orientacion legal, aprendizaje guiado y decisiones mas eficaces para personas y empresas.' },
+  { name: '123congelados.cl', src: '/clients/123congelados.png', detail: 'Logistica, WMS y control operacional de inventario.' },
+];
 
 const operatingInputs = ['Documentos', 'Usuarios', 'Sistemas legacy', 'Reglas internas'];
 const operatingEngine = ['IA aplicada', 'OCR', 'APIs', 'Automatizacion', 'Reglas de negocio'];
@@ -161,6 +169,33 @@ const implementationPlans = [
   },
 ];
 
+const socialLinks = [
+  {
+    name: 'WhatsApp',
+    href: 'https://wa.me/56933553024',
+    label: 'Contactar por WhatsApp',
+    icon: FaWhatsapp,
+  },
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/sociedad_calcagno/',
+    label: 'ArkoData en Instagram',
+    icon: FaInstagram,
+  },
+  {
+    name: 'TikTok',
+    href: 'https://www.tiktok.com/@arkodata',
+    label: 'ArkoData en TikTok',
+    icon: FaTiktok,
+  },
+  {
+    name: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/guillermo-arcangelo-calcagno-vargas-1400ba50/',
+    label: 'ArkoData en LinkedIn',
+    icon: FaLinkedinIn,
+  },
+];
+
 function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
     <div className="mx-auto mb-12 max-w-4xl">
@@ -213,11 +248,12 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           </a>
 
           <nav className="hidden items-center gap-7 text-sm text-slate-400 lg:flex">
+            <a href="#clientes" className="transition-colors hover:text-white">Clientes</a>
             <a href="#procesos" className="transition-colors hover:text-white">Procesos</a>
             <a href="#modelo" className="transition-colors hover:text-white">Modelo</a>
             <a href="#modulos" className="transition-colors hover:text-white">Modulos</a>
             <a href="#impacto" className="transition-colors hover:text-white">Impacto</a>
-            <a href="#planes" className="transition-colors hover:text-white">Planes</a>
+            <a href="#ruta" className="transition-colors hover:text-white">Ruta</a>
             <a href="#contacto" className="transition-colors hover:text-white">Contacto</a>
           </nav>
 
@@ -290,6 +326,34 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 >
                   {item}
                 </motion.span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="clientes" className="bg-[#05284f] px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionHeader
+              eyebrow="Clientes"
+              title="Experiencia aplicada en negocios reales que ya operan con ArkoData."
+              description="No hablamos desde teoria. Estas marcas representan procesos, operaciones y contextos donde ya se ha trabajado automatizacion, control, integracion y soluciones aplicadas a negocio."
+            />
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+              {clientLogos.map((client, index) => (
+                <motion.div
+                  key={client.name}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.45, delay: index * 0.05 }}
+                  className="group rounded-[2rem] border border-cyan-300/18 bg-[linear-gradient(145deg,#07396f,#05284f)] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.18)] transition-all hover:-translate-y-1 hover:border-cyan-200/50 hover:bg-[#084b86] hover:shadow-[0_30px_90px_rgba(34,211,238,0.18)]"
+                >
+                  <div className="flex h-40 items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5 transition-all group-hover:border-cyan-300/28 group-hover:bg-slate-950/20">
+                    <img src={client.src} alt={client.name} className="max-h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]" />
+                  </div>
+                  <h3 className="mt-5 text-xl font-semibold text-white">{client.name}</h3>
+                  <p className="mt-2 text-sm leading-7 text-slate-300 [text-align:justify]">{client.detail}</p>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -588,7 +652,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           </div>
         </section>
 
-        <section id="planes" className="bg-[#06315f] px-4 py-20 sm:px-6 lg:px-8">
+        <section id="ruta" className="bg-[#06315f] px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Ruta De Trabajo"
@@ -725,20 +789,57 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
         </section>
       </main>
 
+      <a
+        href="https://wa.me/56933553024?text=Hola%20ArkoData%2C%20quiero%20conocer%20m%C3%A1s%20sobre%20sus%20soluciones."
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Contactar por WhatsApp"
+        className="fixed bottom-24 right-6 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 hover:scale-105 hover:shadow-[0_20px_60px_rgba(37,211,102,0.4)]"
+      >
+        <FaWhatsapp className="h-7 w-7" />
+      </a>
+
+      <a
+        href="#hero"
+        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-[#05284f]/90 px-4 py-3 text-sm font-semibold text-cyan-50 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-cyan-200/70 hover:bg-[#0a5cab] hover:shadow-[0_20px_60px_rgba(34,211,238,0.22)]"
+      >
+        <ArrowUp className="h-4 w-4" />
+        Volver arriba
+      </a>
+
       <footer className="border-t border-cyan-300/20 bg-[#041a36] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-slate-950 p-1.5 ring-1 ring-white/10">
-              <img src="/ArkoData.png" alt="ArkoData" className="h-11 w-11 rounded-full object-cover" />
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="rounded-full bg-slate-950 p-1.5 ring-1 ring-white/10">
+                <img src="/ArkoData.png" alt="ArkoData" className="h-11 w-11 rounded-full object-cover" />
+              </div>
+              <div>
+                <p className="text-xl font-semibold text-white">ArkoData</p>
+                <p className="text-sm text-slate-500">IA aplicada a procesos empresariales criticos</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xl font-semibold text-white">ArkoData</p>
-              <p className="text-sm text-slate-500">IA aplicada a procesos empresariales criticos</p>
+            <div className="mt-5 flex items-center gap-3">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-cyan-300/22 bg-white/[0.04] text-cyan-100 transition-all hover:-translate-y-1 hover:scale-105 hover:border-cyan-200/70 hover:bg-cyan-300/14 hover:text-white"
+                  >
+                    <Icon className="h-5 w-5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
           <div className="grid gap-3 text-sm text-slate-400 sm:grid-cols-2 lg:text-right">
             <a href="mailto:contacto@arkodata.cl" className="transition-colors hover:text-white">contacto@arkodata.cl</a>
-            <a href="https://wa.me/56933553024" className="transition-colors hover:text-white">+56 9 3355 3024</a>
+            <a href="https://wa.me/56933553024" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">+56 9 3355 3024</a>
             <a href="#hero" className="transition-colors hover:text-white">Inicio</a>
             <a href="#contacto" className="transition-colors hover:text-white">Solicitar diagnostico</a>
           </div>
