@@ -34,7 +34,7 @@ export default function HomePage() {
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(contactForm.email)) {
-        throw new Error('Por favor ingresa un email valido');
+        throw new Error('Por favor ingresa un email válido');
       }
 
       await createLead.mutateAsync({
@@ -89,8 +89,8 @@ export default function HomePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-2xl border border-cyan-400/30 bg-slate-900 p-8 shadow-2xl">
             <div className="mb-6 text-center">
-              <h3 className="mb-2 text-2xl font-bold text-white">Solicitar Diagnostico</h3>
-              <p className="text-slate-400">Cuentanos sobre tu operacion o proyecto</p>
+              <h3 className="mb-2 text-2xl font-bold text-white">Solicitar Diagnóstico</h3>
+              <p className="text-slate-400">Cuéntanos sobre tu operación o proyecto</p>
             </div>
 
             {contactForm.submitSuccess ? (
@@ -122,7 +122,7 @@ export default function HomePage() {
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="tel"
-                    placeholder="Telefono"
+                    placeholder="Teléfono"
                     value={contactForm.phone}
                     onChange={(e) => setContactForm((prev) => ({ ...prev, phone: e.target.value }))}
                     className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none"

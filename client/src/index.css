@@ -12,11 +12,24 @@ body {
     radial-gradient(circle at top, rgba(0, 195, 255, 0.18), transparent 26%),
     linear-gradient(180deg, #041a36 0%, #06315f 48%, #041a36 100%);
   color: #f8fafc;
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
   background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @keyframes gradient {

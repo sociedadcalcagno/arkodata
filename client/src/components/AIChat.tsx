@@ -14,9 +14,9 @@ interface AIChatProps {
 export default function AIChat({ onClose }: AIChatProps) {
   const quickPrompts = [
     'Quiero estimar ahorro automatizando un proceso',
-    'Tengo muchos documentos manuales, que podria automatizar?',
-    'Como aplicarian IA en pagos y conciliacion?',
-    'Quiero un diagnostico para mi empresa',
+    'Tengo muchos documentos manuales, ¿qué podría automatizar?',
+    '¿Cómo aplicarían IA en pagos y conciliación?',
+    'Quiero un diagnóstico para mi empresa',
   ];
 
   const [messages, setMessages] = useState<Message[]>([

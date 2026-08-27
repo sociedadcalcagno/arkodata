@@ -9,60 +9,60 @@ type ArkoLandingProps = {
   onOpenContact: () => void;
 };
 
-const proofItems = ['Claro Chile', 'Entel', 'Pagos Honorarios Medicos Chile', 'Telecom', 'Salud', 'Logistica'];
+const proofItems = ['Claro Chile', 'Entel', 'Pagos Honorarios Médicos Chile', 'Telecom', 'Salud', 'Logística'];
 
 const clientLogos = [
   { name: 'Claro Chile', src: '/clients/claro-chile.png', detail: 'Telecom y experiencia operacional a escala.' },
-  { name: 'Pagos Honorarios Medicos Chile', src: '/clients/pagos-honorarios-medicos.png', detail: 'Plataforma para calculo de pagos de honorarios medicos con IA, reglas de negocio, liquidaciones automatizadas y trazabilidad completa para procesos de alta complejidad.' },
-  { name: 'LegalEasy', src: '/clients/legaleasy.png', detail: 'Orientacion legal, aprendizaje guiado y decisiones mas eficaces para personas y empresas.' },
-  { name: '123congelados.cl', src: '/clients/123congelados.png', detail: 'Logistica, WMS y control operacional de inventario.' },
+  { name: 'Pagos Honorarios Médicos Chile', src: '/clients/pagos-honorarios-medicos.png', detail: 'Plataforma para cálculo de pagos de honorarios médicos con IA, reglas de negocio, liquidaciones automatizadas y trazabilidad completa para procesos de alta complejidad.' },
+  { name: 'LegalEasy', src: '/clients/legaleasy.png', detail: 'Orientación legal, aprendizaje guiado y decisiones más eficaces para personas y empresas.' },
+  { name: '123congelados.cl', src: '/clients/123congelados.png', detail: 'Logística, WMS y control operacional de inventario.' },
 ];
 
 const operatingInputs = ['Documentos', 'Usuarios', 'Sistemas legacy', 'Reglas internas'];
-const operatingEngine = ['IA aplicada', 'OCR', 'APIs', 'Automatizacion', 'Reglas de negocio'];
+const operatingEngine = ['IA aplicada', 'OCR', 'APIs', 'Automatización', 'Reglas de negocio'];
 const operatingOutputs = ['Decisiones', 'Dashboards', 'Trazabilidad', 'Ahorro operativo'];
 
 const modules = [
   {
     icon: Bot,
     title: 'AI Agents',
-    label: 'Interaccion inteligente',
+    label: 'Interacción inteligente',
     description: 'Asistentes conectados a datos, reglas y procesos reales para resolver consultas, ejecutar flujos y guiar usuarios.',
     impact: 'Menos dependencia de soporte manual.',
   },
   {
     icon: ScanSearch,
     title: 'Document Intelligence',
-    label: 'OCR + clasificacion',
-    description: 'Lectura, extraccion y validacion de informacion desde documentos masivos, contratos, respaldos y formularios.',
-    impact: 'Menos digitacion y reproceso.',
+    label: 'OCR + clasificación',
+    description: 'Lectura, extracción y validación de información desde documentos masivos, contratos, respaldos y formularios.',
+    impact: 'Menos digitación y reproceso.',
   },
   {
     icon: Sparkles,
     title: 'Workflow Automation',
     label: 'Procesos ejecutables',
     description: 'Flujos automatizados con estados, reglas, alertas, aprobaciones y trazabilidad de punta a punta.',
-    impact: 'Operacion mas rapida y controlada.',
+    impact: 'Operación más rápida y controlada.',
   },
   {
     icon: Cable,
     title: 'Enterprise Integrations',
     label: 'Sistemas conectados',
-    description: 'APIs, ERPs, CRMs, plataformas internas y sistemas externos trabajando como una sola operacion.',
+    description: 'APIs, ERPs, CRMs, plataformas internas y sistemas externos trabajando como una sola operación.',
     impact: 'Menos silos y doble trabajo.',
   },
   {
     icon: LineChart,
     title: 'Operational Dashboards',
     label: 'Control ejecutivo',
-    description: 'Metricas vivas para entender productividad, errores, tiempos, cuellos de botella y cumplimiento operacional.',
+    description: 'Métricas vivas para entender productividad, errores, tiempos, cuellos de botella y cumplimiento operacional.',
     impact: 'Mejores decisiones en menos tiempo.',
   },
   {
     icon: ServerCog,
     title: 'Digital Growth Layer',
     label: 'Software a medida',
-    description: 'Plataformas corporativas disenadas para procesos criticos, alto volumen y evolucion continua.',
+    description: 'Plataformas corporativas diseñadas para procesos críticos, alto volumen y evolución continua.',
     impact: 'Capacidad tecnologica propia.',
   },
 ];
@@ -70,35 +70,35 @@ const modules = [
 const cases = [
   {
     sector: 'Telecomunicaciones',
-    problem: 'Procesos documentales y comerciales con alto volumen, multiples validaciones y baja visibilidad operacional.',
-    intervention: 'Automatizacion de flujos, integracion de sistemas y paneles de control para seguimiento ejecutivo.',
-    result: 'Operacion mas trazable, menos tareas manuales y mayor velocidad de gestion.',
+    problem: 'Procesos documentales y comerciales con alto volumen, múltiples validaciones y baja visibilidad operacional.',
+    intervention: 'Automatización de flujos, integración de sistemas y paneles de control para seguimiento ejecutivo.',
+    result: 'Operación más trazable, menos tareas manuales y mayor velocidad de gestión.',
   },
   {
-    sector: 'Salud y Honorarios Medicos',
-    problem: 'Pagos, cartolas, reglas financieras y respaldos distribuidos en procesos complejos de conciliacion.',
-    intervention: 'Motor operacional para reglas, calculo, documentacion, aprobaciones y visibilidad del ciclo completo.',
-    result: 'Control financiero, reduccion de errores y procesos mas claros para equipos internos.',
+    sector: 'Salud y Honorarios Médicos',
+    problem: 'Pagos, cartolas, reglas de negocio y respaldos distribuidos en procesos complejos de conciliación.',
+    intervention: 'Motor operacional para reglas, cálculo, documentación, aprobaciones y visibilidad del ciclo completo.',
+    result: 'Mayor control del cálculo, reducción de errores y procesos más claros para equipos internos.',
   },
   {
-    sector: 'Logistica y WMS',
+    sector: 'Logística y WMS',
     problem: 'Inventario, ubicaciones, movimientos y criterios FIFO/FEFO sin una capa inteligente de control.',
-    intervention: 'Sistemas de gestion operacional con trazabilidad por ubicacion, reglas de movimiento y monitoreo.',
-    result: 'Mayor orden operativo y mejor capacidad de decision sobre stock y ejecucion.',
+    intervention: 'Sistemas de gestión operacional con trazabilidad por ubicación, reglas de movimiento y monitoreo.',
+    result: 'Mayor orden operativo y mejor capacidad de decisión sobre stock y ejecución.',
   },
   {
     sector: 'Firma Digital y Documentos',
-    problem: 'Ingreso masivo de archivos, validaciones manuales y procesos lentos para documentos criticos.',
-    intervention: 'OCR, clasificacion, firma digital, validaciones automaticas y seguimiento del estado documental.',
-    result: 'Menos friccion documental y tiempos de respuesta mas cortos.',
+    problem: 'Ingreso masivo de archivos, validaciones manuales y procesos lentos para documentos críticos.',
+    intervention: 'OCR, clasificación, firma digital, validaciones automáticas y seguimiento del estado documental.',
+    result: 'Menos fricción documental y tiempos de respuesta más cortos.',
   },
 ];
 
 const metrics = [
-  { value: '+1M', label: 'documentos procesados', detail: 'Lectura, clasificacion y validacion documental.' },
+  { value: '+1M', label: 'documentos procesados', detail: 'Lectura, clasificación y validación documental.' },
   { value: '+100K', label: 'decisiones automatizadas', detail: 'Reglas y flujos ejecutados con trazabilidad.' },
-  { value: 'x3', label: 'velocidad operacional', detail: 'Menos espera entre ingreso, revision y respuesta.' },
-  { value: '-67%', label: 'error manual estimado', detail: 'Reduccion de digitacion y reprocesos repetitivos.' },
+  { value: 'x3', label: 'velocidad operacional', detail: 'Menos espera entre ingreso, revisión y respuesta.' },
+  { value: '-67%', label: 'error manual estimado', detail: 'Reducción de digitación y reprocesos repetitivos.' },
 ];
 
 const methodology = ['Discovery', 'Architecture', 'Automation', 'AI Layer', 'Integration', 'Monitoring', 'Optimization'];
@@ -107,64 +107,64 @@ const techTags = ['OpenAI', 'Claude', 'Node.js', 'Python', 'PostgreSQL', 'Docker
 const processOptions = [
   {
     id: 'documents',
-    label: 'Gestion documental',
+    label: 'Gestión documental',
     automation: 0.72,
     errorReduction: 0.64,
-    description: 'OCR, clasificacion, validacion y trazabilidad de documentos.',
+    description: 'OCR, clasificación, validación y trazabilidad de documentos.',
     pain: 'Demasiado tiempo leyendo, ordenando y validando respaldos manualmente.',
     solution: 'Motor documental con OCR, reglas, alertas y dashboard ejecutivo.',
-    outcome: 'Menos digitacion, menos reproceso y mayor trazabilidad documental.',
-    deliverables: ['OCR + clasificacion', 'Validaciones automaticas', 'Repositorio trazable'],
+    outcome: 'Menos digitación, menos reproceso y mayor trazabilidad documental.',
+    deliverables: ['OCR + clasificación', 'Validaciones automáticas', 'Repositorio trazable'],
   },
   {
     id: 'payments',
-    label: 'Pagos y conciliacion',
+    label: 'Pagos y conciliación',
     automation: 0.68,
     errorReduction: 0.58,
     description: 'Reglas de negocio, aprobaciones, cartolas y control financiero.',
-    pain: 'Pagos, calculos y conciliaciones dependen de planillas o revision manual.',
-    solution: 'Motor de reglas financieras, aprobaciones, cartolas y control de excepciones.',
-    outcome: 'Ciclos de pago mas rapidos, menos errores y visibilidad financiera.',
+    pain: 'Pagos, cálculos y conciliaciones dependen de planillas o revisión manual.',
+    solution: 'Motor de reglas de negocio, aprobaciones, cartolas y control de excepciones.',
+    outcome: 'Ciclos de pago más rápidos, menos errores y mayor trazabilidad operacional.',
     deliverables: ['Motor de reglas', 'Control de aprobaciones', 'Dashboard financiero'],
   },
   {
     id: 'support',
-    label: 'Atencion interna',
+    label: 'Atención interna',
     automation: 0.54,
     errorReduction: 0.42,
     description: 'ArkoAsistente conectado a procesos, datos y preguntas frecuentes.',
-    pain: 'Equipos responden las mismas preguntas y pierden tiempo buscando informacion.',
+    pain: 'Equipos responden las mismas preguntas y pierden tiempo buscando información.',
     solution: 'Agente IA conectado a base documental, procesos internos y captura de leads.',
-    outcome: 'Respuestas mas rapidas, soporte escalable y mejor experiencia de usuario.',
+    outcome: 'Respuestas más rápidas, soporte escalable y mejor experiencia de usuario.',
     deliverables: ['ArkoAsistente', 'Base de conocimiento', 'Captura de oportunidades'],
   },
   {
     id: 'operations',
-    label: 'Operacion y workflow',
+    label: 'Operación y workflow',
     automation: 0.61,
     errorReduction: 0.5,
     description: 'Estados, alertas, integraciones y seguimiento operacional.',
     pain: 'Procesos cruzan areas sin control claro de estados, responsables ni SLA.',
     solution: 'Workflow operacional con estados, integraciones, alertas y trazabilidad.',
-    outcome: 'Operaciones mas visibles, responsables claros y menos cuellos de botella.',
+    outcome: 'Operaciones más visibles, responsables claros y menos cuellos de botella.',
     deliverables: ['Flujos automatizados', 'Integraciones API', 'Monitoreo operacional'],
   },
 ];
 
 const implementationPlans = [
   {
-    name: 'Diagnostico IA',
+    name: 'Diagnóstico IA',
     description: 'Mapeamos procesos, estimamos ahorro y definimos una ruta ejecutiva.',
-    items: ['Levantamiento operativo', 'Mapa de fricciones', 'Estimacion de impacto', 'Roadmap de automatizacion'],
+    items: ['Levantamiento operativo', 'Mapa de fricciones', 'Estimación de impacto', 'Roadmap de automatización'],
   },
   {
     name: 'Piloto Inteligente',
-    description: 'Implementamos un caso acotado para medir impacto real rapido.',
-    items: ['Un proceso priorizado', 'Agente IA o automatizacion', 'Dashboard inicial', 'Medicion de ahorro'],
+    description: 'Implementamos un caso acotado para medir impacto real rápido.',
+    items: ['Un proceso priorizado', 'Agente IA o automatización', 'Dashboard inicial', 'Medición de ahorro'],
   },
   {
-    name: 'Implementacion Enterprise',
-    description: 'Escalamos la solucion con integraciones, control y mejora continua.',
+    name: 'Implementación Enterprise',
+    description: 'Escalamos la solución con integraciones, control y mejora continua.',
     items: ['Integraciones corporativas', 'Motor de reglas', 'Trazabilidad completa', 'Soporte evolutivo'],
   },
 ];
@@ -243,15 +243,15 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             </div>
             <div>
               <p className="text-lg font-semibold tracking-tight text-white">ArkoData</p>
-              <p className="hidden text-xs text-slate-500 sm:block">Intelligence Control Layer</p>
+              <p className="hidden text-xs text-slate-400 sm:block">IA, integración y control operacional</p>
             </div>
           </a>
 
           <nav className="hidden items-center gap-7 text-sm text-slate-400 lg:flex">
-            <a href="#clientes" className="transition-colors hover:text-white">Clientes</a>
+            <a href="#experiencia" className="transition-colors hover:text-white">Experiencia</a>
             <a href="#procesos" className="transition-colors hover:text-white">Procesos</a>
             <a href="#modelo" className="transition-colors hover:text-white">Modelo</a>
-            <a href="#modulos" className="transition-colors hover:text-white">Modulos</a>
+            <a href="#modulos" className="transition-colors hover:text-white">Módulos</a>
             <a href="#impacto" className="transition-colors hover:text-white">Impacto</a>
             <a href="#ruta" className="transition-colors hover:text-white">Ruta</a>
             <a href="#contacto" className="transition-colors hover:text-white">Contacto</a>
@@ -261,7 +261,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             onClick={onOpenContact}
             className="inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/12 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.16)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/20"
           >
-            Diagnostico
+            Diagnóstico
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
@@ -271,17 +271,20 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
         <section id="hero" className="relative px-4 pb-20 pt-14 sm:px-6 lg:px-8 lg:pb-28 lg:pt-20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(0,195,255,0.28),transparent_32%),radial-gradient(circle_at_86%_18%,rgba(0,102,255,0.28),transparent_30%),radial-gradient(circle_at_55%_78%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#041a36_0%,#06315f_48%,#084b86_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(125,211,252,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.055)_1px,transparent_1px)] bg-[size:72px_72px] opacity-50" />
-          <div className="relative mx-auto max-w-7xl space-y-14">
+          <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
             <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, ease: 'easeOut' }}>
               <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-cyan-200/35 bg-cyan-300/[0.14] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-50 shadow-[0_0_34px_rgba(34,211,238,0.18)]">
                 <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.8)]" />
                 Enterprise AI Operations
               </div>
-              <h1 className="max-w-5xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl">
-                Automatiza procesos, reduce costos y convierte tu operacion en una plataforma inteligente.
+              <h1 className="hero-title max-w-5xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl">
+                Automatiza procesos, reduce costos y convierte tu operación en una plataforma inteligente.
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                Implementamos IA, agentes inteligentes, automatizacion documental, integraciones y dashboards para que empresas operen con menos friccion, menos error y mayor control.
+              <p className="hero-subtitle mt-7 max-w-2xl text-base leading-8 text-slate-100 sm:text-lg">
+                Implementamos IA, agentes inteligentes, automatización documental, integraciones y dashboards para que empresas operen con menos fricción, menos error y mayor control.
+              </p>
+              <p className="mt-6 max-w-3xl rounded-[1.6rem] border border-cyan-300/18 bg-cyan-300/[0.08] px-5 py-4 text-sm font-medium leading-7 text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.08)] sm:text-base">
+                Convertimos procesos manuales y dispersos en operaciones trazables, automatizadas y medibles, integrándonos con los sistemas que la empresa ya utiliza.
               </p>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
                 <button
@@ -331,12 +334,12 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           </div>
         </section>
 
-        <section id="clientes" className="bg-[#05284f] px-4 py-20 sm:px-6 lg:px-8">
+        <section id="experiencia" className="bg-[#05284f] px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionHeader
-              eyebrow="Clientes"
-              title="Experiencia aplicada en negocios reales que ya operan con ArkoData."
-              description="No hablamos desde teoria. Estas marcas representan procesos, operaciones y contextos donde ya se ha trabajado automatizacion, control, integracion y soluciones aplicadas a negocio."
+              eyebrow="Experiencia"
+              title="Experiencia aplicada en proyectos y operaciones reales."
+              description="Estas marcas y soluciones representan proyectos, procesos y contextos operacionales en los que ArkoData o sus profesionales han aportado experiencia en automatización, integración, control y desarrollo tecnológico."
             />
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
               {clientLogos.map((client, index) => (
@@ -364,8 +367,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="relative mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Elige Tu Proceso"
-              title="Muestra al cliente donde puede ganar tiempo, plata y control con IA."
-              description="Cada empresa tiene fricciones distintas. ArkoData parte identificando el proceso correcto, estimando impacto y transformandolo en una automatizacion medible."
+              title="Muestra al cliente dónde puede ganar tiempo, ahorro y control con IA."
+              description="Cada empresa tiene fricciones distintas. ArkoData parte identificando el proceso correcto, estimando impacto y transformándolo en una automatización medible."
             />
             <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
               <div className="grid gap-3">
@@ -403,7 +406,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                         <p className="mt-2 text-sm leading-7 text-slate-200">{selectedProcess.pain}</p>
                       </div>
                       <div className="rounded-2xl border border-cyan-300/22 bg-cyan-300/10 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Como lo resolvemos</p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Cómo lo resolvemos</p>
                         <p className="mt-2 text-sm leading-7 text-cyan-50">{selectedProcess.solution}</p>
                       </div>
                       <div className="rounded-2xl border border-emerald-300/22 bg-emerald-300/10 p-4">
@@ -420,7 +423,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                         <div className="h-2 rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-blue-400" style={{ width: `${Math.round(selectedProcess.automation * 100)}%` }} /></div>
                       </div>
                       <div>
-                        <div className="mb-2 flex justify-between text-sm text-slate-300"><span>Reduccion de error</span><span>-{Math.round(selectedProcess.errorReduction * 100)}%</span></div>
+                        <div className="mb-2 flex justify-between text-sm text-slate-300"><span>Reducción de error</span><span>-{Math.round(selectedProcess.errorReduction * 100)}%</span></div>
                         <div className="h-2 rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-emerald-300 to-cyan-300" style={{ width: `${Math.round(selectedProcess.errorReduction * 100)}%` }} /></div>
                       </div>
                     </div>
@@ -447,8 +450,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="relative mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Operating Model"
-              title="No construimos software aislado. Disenamos sistemas operacionales inteligentes."
-              description="ArkoData funciona como una capa de orquestacion sobre procesos existentes: captura entradas, ejecuta reglas, conecta sistemas y entrega decisiones visibles."
+              title="No construimos software aislado. Diseñamos sistemas operacionales inteligentes."
+              description="ArkoData funciona como una capa de orquestación sobre procesos existentes: captura entradas, ejecuta reglas, conecta sistemas y entrega decisiones visibles."
             />
             <div className="grid gap-5 lg:grid-cols-[1fr_1.1fr_1fr] lg:items-stretch">
               <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-6">
@@ -464,7 +467,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                     </div>
                     <div>
                       <p className="text-sm font-bold uppercase tracking-[0.24em] text-cyan-200">Motor ArkoData</p>
-                      <p className="text-xl font-semibold text-white">IA + reglas + integracion</p>
+                      <p className="text-xl font-semibold text-white">IA + reglas + integración</p>
                     </div>
                   </div>
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -484,8 +487,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Intelligence Modules"
-              title="Servicios presentados como modulos de plataforma."
-              description="Cada capacidad existe para resolver una friccion operacional concreta: interaccion, documentos, flujos, integraciones, visibilidad y crecimiento digital."
+              title="Servicios presentados como módulos de plataforma."
+              description="Cada capacidad existe para resolver una fricción operacional concreta: interacción, documentos, flujos, integraciones, visibilidad y crecimiento digital."
             />
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {modules.map((module, index) => {
@@ -519,8 +522,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Impact Cases"
-              title="Experiencia donde escala, trazabilidad y velocidad no admiten improvisacion."
-              description="La propuesta no es IA como adorno. Es tecnologia aplicada a operaciones con volumen, reglas, usuarios, documentos e integraciones reales."
+              title="Experiencia donde escala, trazabilidad y velocidad no admiten improvisación."
+              description="La propuesta no es IA como adorno. Es tecnología aplicada a operaciones con volumen, reglas, usuarios, documentos e integraciones reales."
             />
             <div className="grid gap-5 lg:grid-cols-2">
               {cases.map((item, index) => (
@@ -547,7 +550,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                       transition={{ duration: 0.16 }}
                       className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition-all group-hover:border-sky-300/28 group-hover:bg-sky-300/[0.07] hover:border-sky-200/55 hover:bg-sky-300/12 hover:shadow-[0_0_28px_rgba(56,189,248,0.16)]"
                     >
-                      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 transition-colors group-hover:text-sky-200">Intervencion ArkoData</p>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 transition-colors group-hover:text-sky-200">Intervención ArkoData</p>
                       <p className="text-sm leading-7 text-slate-300 transition-colors group-hover:text-slate-100">{item.intervention}</p>
                     </motion.div>
                     <motion.div
@@ -572,7 +575,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 <p className="mb-4 text-xs font-semibold uppercase tracking-[0.36em] text-cyan-300/90">Metrics Layer</p>
                 <h2 className="max-w-3xl text-3xl font-semibold tracking-[-0.025em] text-white sm:text-4xl">Impacto medible visto como dashboard operacional.</h2>
               </div>
-              <p className="max-w-md text-sm leading-7 text-slate-400">Los numeros deben contar control, no decoracion: volumen procesado, decisiones automatizadas, velocidad y reduccion de error.</p>
+              <p className="max-w-md text-sm leading-7 text-slate-300">Los números deben contar control, no decoración: volumen procesado, decisiones automatizadas, velocidad y reducción de error.</p>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {metrics.map((metric) => (
@@ -583,6 +586,9 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 </div>
               ))}
             </div>
+            <p className="mt-5 text-sm leading-7 text-slate-300">
+              Resultados acumulados y estimaciones obtenidas a partir de proyectos, procesos implementados y escenarios operacionales analizados.
+            </p>
           </div>
         </section>
 
@@ -590,8 +596,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Technology Mesh"
-              title="Arquitectura tecnica pensada para integrarse, escalar y evolucionar."
-              description="El stack se selecciona por capacidad real de integracion, rendimiento, trazabilidad, seguridad y mantenimiento en escenarios empresariales."
+              title="Arquitectura técnica pensada para integrarse, escalar y evolucionar."
+              description="El stack se selecciona por capacidad real de integración, rendimiento, trazabilidad, seguridad y mantenimiento en escenarios empresariales."
             />
             <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <div className="rounded-[2rem] border border-cyan-300/20 bg-[linear-gradient(180deg,rgba(7,57,111,0.72),rgba(4,26,54,0.85))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.24)] transition-all duration-300 hover:border-cyan-200/45 hover:shadow-[0_28px_90px_rgba(34,211,238,0.12)]">
@@ -657,7 +663,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             <SectionHeader
               eyebrow="Ruta De Trabajo"
               title="Tres formas concretas de empezar a trabajar con ArkoData."
-              description="El cliente no siempre sabe por donde partir. Le damos una ruta clara: diagnosticar, pilotear y escalar con medicion real de impacto."
+              description="El cliente no siempre sabe por dónde partir. Le damos una ruta clara: diagnosticar, pilotear y escalar con medición real de impacto."
             />
             <div className="grid gap-5 lg:grid-cols-3">
               {implementationPlans.map((plan, index) => (
@@ -692,14 +698,14 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2.2rem] border border-cyan-200/30 bg-[linear-gradient(135deg,#05284f,#07396f_55%,#0a5cab)] shadow-[0_35px_120px_rgba(34,211,238,0.18)] lg:grid-cols-[0.9fr_1.1fr]">
             <div className="p-8 sm:p-12">
               <p className="text-xs font-semibold uppercase tracking-[0.36em] text-cyan-300/90">Next Step</p>
-              <h2 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.025em] text-white sm:text-5xl">Calcula cuanto podria recuperar tu operacion al optimizar un proceso.</h2>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300">Elige un proceso, ajusta volumen, tiempo y costo operativo. El simulador estima en linea horas recuperadas, ahorro mensual y potencial de automatizacion con ArkoData.</p>
+              <h2 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.025em] text-white sm:text-5xl">Calcula cuánto podría recuperar tu operación al optimizar un proceso.</h2>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-slate-200">Elige un proceso, ajusta volumen, tiempo y costo operativo. El simulador estima en línea horas recuperadas, ahorro mensual y potencial de automatización con ArkoData.</p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <button
                   onClick={onOpenContact}
                   className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 px-7 py-4 text-base font-semibold text-slate-950 shadow-[0_20px_70px_rgba(34,211,238,0.32)] transition-all hover:-translate-y-0.5"
                 >
-                  Solicitar diagnostico
+                  Solicitar diagnóstico
                   <ArrowRight className="h-5 w-5" />
                 </button>
                 <button
@@ -716,7 +722,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 <div className="mb-5 flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">Simulador ROI</p>
-                    <h3 className="mt-2 text-2xl font-semibold text-white">Economia operacional estimada</h3>
+                    <h3 className="mt-2 text-2xl font-semibold text-white">Economía operacional estimada</h3>
                   </div>
                   <LineChart className="h-6 w-6 text-cyan-200" />
                 </div>
@@ -816,7 +822,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
               </div>
               <div>
                 <p className="text-xl font-semibold text-white">ArkoData</p>
-                <p className="text-sm text-slate-500">IA aplicada a procesos empresariales criticos</p>
+                <p className="text-sm text-slate-400">IA aplicada a procesos empresariales críticos</p>
               </div>
             </div>
             <div className="mt-5 flex items-center gap-3">
@@ -841,7 +847,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             <a href="mailto:contacto@arkodata.cl" className="transition-colors hover:text-white">contacto@arkodata.cl</a>
             <a href="https://wa.me/56933553024" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">+56 9 3355 3024</a>
             <a href="#hero" className="transition-colors hover:text-white">Inicio</a>
-            <a href="#contacto" className="transition-colors hover:text-white">Solicitar diagnostico</a>
+            <a href="#contacto" className="transition-colors hover:text-white">Solicitar diagnóstico</a>
           </div>
         </div>
       </footer>
