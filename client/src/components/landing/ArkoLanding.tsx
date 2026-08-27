@@ -63,7 +63,7 @@ const modules = [
     title: 'Digital Growth Layer',
     label: 'Software a medida',
     description: 'Plataformas corporativas diseñadas para procesos críticos, alto volumen y evolución continua.',
-    impact: 'Capacidad tecnologica propia.',
+    impact: 'Capacidad tecnológica propia.',
   },
 ];
 
@@ -268,25 +268,25 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
       </header>
 
       <main>
-        <section id="hero" className="relative px-4 pb-20 pt-14 sm:px-6 lg:px-8 lg:pb-28 lg:pt-20">
+        <section id="hero" className="relative px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-18 lg:pt-14">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(0,195,255,0.28),transparent_32%),radial-gradient(circle_at_86%_18%,rgba(0,102,255,0.28),transparent_30%),radial-gradient(circle_at_55%_78%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#041a36_0%,#06315f_48%,#084b86_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(125,211,252,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.055)_1px,transparent_1px)] bg-[size:72px_72px] opacity-50" />
-          <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+          <div className="relative mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
             <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, ease: 'easeOut' }}>
-              <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-cyan-200/35 bg-cyan-300/[0.14] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-50 shadow-[0_0_34px_rgba(34,211,238,0.18)]">
+              <div className="mb-4 inline-flex items-center gap-3 rounded-full border border-cyan-200/35 bg-cyan-300/[0.14] px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-50 shadow-[0_0_34px_rgba(34,211,238,0.18)]">
                 <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.8)]" />
                 Enterprise AI Operations
               </div>
-              <h1 className="hero-title max-w-5xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl">
+              <h1 className="hero-title max-w-5xl text-4xl font-semibold leading-[1] tracking-[-0.03em] text-white sm:text-5xl lg:text-[5.8rem]">
                 Automatiza procesos, reduce costos y convierte tu operación en una plataforma inteligente.
               </h1>
-              <p className="hero-subtitle mt-7 max-w-2xl text-base leading-8 text-slate-100 sm:text-lg">
+              <p className="hero-subtitle mt-5 max-w-2xl text-base leading-7 text-slate-100 sm:text-lg">
                 Implementamos IA, agentes inteligentes, automatización documental, integraciones y dashboards para que empresas operen con menos fricción, menos error y mayor control.
               </p>
-              <p className="mt-6 max-w-3xl rounded-[1.6rem] border border-cyan-300/18 bg-cyan-300/[0.08] px-5 py-4 text-sm font-medium leading-7 text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.08)] sm:text-base">
+              <p className="mt-4 max-w-3xl rounded-[1.6rem] border border-cyan-300/18 bg-cyan-300/[0.08] px-5 py-3.5 text-sm font-medium leading-6 text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.08)] sm:text-base">
                 Convertimos procesos manuales y dispersos en operaciones trazables, automatizadas y medibles, integrándonos con los sistemas que la empresa ya utiliza.
               </p>
-              <div className="mt-9 flex flex-col gap-4 sm:flex-row">
+              <div className="mt-6 flex flex-col gap-4 sm:flex-row">
                 <button
                   onClick={onOpenContact}
                   className="inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 px-7 py-4 text-base font-semibold text-slate-950 shadow-[0_22px_75px_rgba(34,211,238,0.35)] transition-all hover:-translate-y-0.5 hover:shadow-[0_28px_90px_rgba(34,211,238,0.48)]"
@@ -302,7 +302,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                   Hablar con ArkoAsistente
                 </button>
               </div>
-              <div className="mt-10 grid max-w-2xl gap-3 sm:grid-cols-3">
+              <div className="mt-7 grid max-w-2xl gap-3 sm:grid-cols-3">
                 {['Ahorro medible', 'IA aplicada', 'Control operacional'].map((item) => (
                   <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm font-semibold text-slate-200">
                     {item}
@@ -366,7 +366,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(34,211,238,0.12),transparent_30%),radial-gradient(circle_at_85%_20%,rgba(59,130,246,0.12),transparent_28%)]" />
           <div className="relative mx-auto max-w-7xl">
             <SectionHeader
-              eyebrow="Elige Tu Proceso"
+              eyebrow="Elige tu proceso"
               title="Muestra al cliente dónde puede ganar tiempo, ahorro y control con IA."
               description="Cada empresa tiene fricciones distintas. ArkoData parte identificando el proceso correcto, estimando impacto y transformándolo en una automatización medible."
             />
@@ -661,7 +661,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
         <section id="ruta" className="bg-[#06315f] px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionHeader
-              eyebrow="Ruta De Trabajo"
+              eyebrow="Ruta de trabajo"
               title="Tres formas concretas de empezar a trabajar con ArkoData."
               description="El cliente no siempre sabe por dónde partir. Le damos una ruta clara: diagnosticar, pilotear y escalar con medición real de impacto."
             />
@@ -766,7 +766,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                   </div>
 
                   <div className="rounded-[1.5rem] border border-cyan-200/18 bg-[linear-gradient(180deg,rgba(34,211,238,0.13),rgba(2,8,23,0.48))] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100/70">Resultado en linea</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100/70">Resultado en línea</p>
                     <p className="mt-3 text-4xl font-semibold tracking-tight text-white">{formatCurrency(monthlySavings)}</p>
                     <p className="mt-1 text-sm text-slate-300">ahorro mensual estimado</p>
                     <div className="mt-5 grid grid-cols-2 gap-3">

@@ -59,15 +59,15 @@ export default function AIOperatingSystem() {
       initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
       animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="relative mx-auto w-full max-w-[760px]"
+      className="relative mx-auto w-full max-w-[720px]"
     >
       <div className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-[radial-gradient(circle_at_70%_25%,rgba(34,211,238,0.16),transparent_42%)] blur-3xl" />
 
-      <div className="relative overflow-hidden rounded-[2.2rem] border border-cyan-300/22 bg-[linear-gradient(145deg,rgba(7,57,111,0.92),rgba(4,26,54,0.96))] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6">
+        <div className="relative overflow-hidden rounded-[2rem] border border-cyan-300/22 bg-[linear-gradient(145deg,rgba(7,57,111,0.92),rgba(4,26,54,0.96))] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.26)] backdrop-blur-xl sm:p-5">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(125,211,252,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.04)_1px,transparent_1px)] bg-[size:42px_42px] opacity-55" />
 
-        <div className="relative flex flex-col gap-5">
-          <div className="flex flex-col gap-4 rounded-[1.7rem] border border-white/10 bg-slate-950/30 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative flex flex-col gap-4">
+          <div className="flex flex-col gap-3 rounded-[1.55rem] border border-white/10 bg-slate-950/30 p-3.5 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-cyan-200/70">ArkoData Flow</p>
               <p className="mt-1 text-base font-semibold text-white">Orquestación operacional con IA</p>
@@ -85,15 +85,15 @@ export default function AIOperatingSystem() {
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
             {demoMetrics.map((metric) => (
               <MetricCard key={metric.label} {...metric} />
             ))}
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
-            <div className="rounded-[1.8rem] border border-cyan-300/16 bg-[#041a36]/70 p-4 sm:p-5">
-              <div className="grid gap-3">
+          <div className="grid gap-3 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
+            <div className="rounded-[1.65rem] border border-cyan-300/16 bg-[#041a36]/70 p-3.5 sm:p-4">
+              <div className="grid gap-2.5">
                 {flowSteps.map((step, index) => {
                   const Icon = step.icon;
                   return (
@@ -102,27 +102,27 @@ export default function AIOperatingSystem() {
                         initial={prefersReducedMotion ? false : { opacity: 0, x: -10 }}
                         animate={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
                         transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : index * 0.08 }}
-                        className="group rounded-[1.5rem] border border-white/10 bg-slate-950/50 p-4 transition-all hover:border-cyan-300/40 hover:bg-cyan-300/[0.08]"
+                        className="group rounded-[1.35rem] border border-white/10 bg-slate-950/50 p-3.5 transition-all hover:border-cyan-300/40 hover:bg-cyan-300/[0.08]"
                       >
                         <div className="flex items-start gap-3">
-                          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-cyan-300/28 bg-cyan-300/10 text-cyan-100">
+                          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl border border-cyan-300/28 bg-cyan-300/10 text-cyan-100">
                             <Icon className="h-5 w-5" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                              <h3 className="text-base font-semibold text-white">{step.title}</h3>
+                              <h3 className="text-[15px] font-semibold text-white">{step.title}</h3>
                               <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-cyan-100">
                                 {step.status}
                               </span>
                             </div>
-                            <p className="mt-2 text-sm leading-6 text-slate-200">{step.description}</p>
+                            <p className="mt-1.5 text-sm leading-5 text-slate-200">{step.description}</p>
                           </div>
                         </div>
                       </motion.div>
 
                       {index < flowSteps.length - 1 && (
-                        <div className="flex justify-center py-2">
-                          <div className="relative h-8 w-px bg-gradient-to-b from-cyan-300/70 to-cyan-300/10">
+                        <div className="flex justify-center py-1.5">
+                          <div className="relative h-6 w-px bg-gradient-to-b from-cyan-300/70 to-cyan-300/10">
                             <motion.span
                               animate={prefersReducedMotion ? undefined : { y: [0, 20, 0], opacity: [0.3, 1, 0.3] }}
                               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: index * 0.1 }}
@@ -137,7 +137,7 @@ export default function AIOperatingSystem() {
               </div>
             </div>
 
-            <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/38 p-4 sm:p-5">
+            <div className="rounded-[1.65rem] border border-white/10 bg-slate-950/38 p-3.5 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-cyan-200/70">Control ejecutivo</p>
@@ -148,19 +148,19 @@ export default function AIOperatingSystem() {
                 </div>
               </div>
 
-              <div className="mt-5 space-y-3">
+              <div className="mt-4 space-y-2.5">
                 {[
                   { label: 'Documentos recibidos', value: 'Entrada masiva detectada', width: '84%' },
                   { label: 'Validación de IA', value: 'Extracción y consistencia', width: '71%' },
                   { label: 'Regla de negocio', value: 'Aprobación automática', width: '93%' },
                   { label: 'Control ejecutivo', value: 'Dashboard y excepciones', width: '68%' },
                 ].map((item, index) => (
-                  <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-3.5">
+                  <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
                     <div className="flex items-center justify-between gap-3 text-sm">
                       <span className="font-medium text-slate-100">{item.label}</span>
                       <span className="text-xs text-cyan-100">{item.value}</span>
                     </div>
-                    <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-white/10">
                       <motion.div
                         initial={prefersReducedMotion ? false : { width: 0 }}
                         animate={prefersReducedMotion ? undefined : { width: item.width }}
@@ -173,7 +173,7 @@ export default function AIOperatingSystem() {
                 ))}
               </div>
 
-              <p className="mt-5 text-xs leading-6 text-slate-300">
+              <p className="mt-4 text-xs leading-5 text-slate-300">
                 Flujo demostrativo de cómo ArkoData convierte una entrada documental en una operación trazable, automatizada y medible.
               </p>
             </div>
