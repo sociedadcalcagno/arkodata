@@ -371,7 +371,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                 Enterprise AI Operations
               </div>
               <h1 className="hero-title max-w-5xl text-4xl font-semibold leading-[1] tracking-[-0.03em] text-white sm:text-5xl lg:text-[5.8rem]">
-                Automatiza procesos, reduce costos y convierte tu operación en una plataforma inteligente.
+                Automatiza procesos, reduce costos y controla tu operación con IA.
               </h1>
               <p className="hero-subtitle mt-5 max-w-2xl text-base leading-7 text-slate-100 sm:text-lg">
                 Implementamos IA, agentes inteligentes, automatización documental, integraciones y dashboards para que empresas operen con menos fricción, menos error y mayor control.
