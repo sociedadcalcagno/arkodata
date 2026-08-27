@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUp, Bot, BrainCircuit, Cable, ChevronRight, Database, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowUp, Bot, BrainCircuit, Cable, ChevronRight, Database, Menu, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles, X } from 'lucide-react';
 import { FaInstagram, FaLinkedinIn, FaTiktok, FaWhatsapp } from 'react-icons/fa6';
 import AIOperatingSystem from './AIOperatingSystem';
 
@@ -196,6 +196,17 @@ const socialLinks = [
   },
 ];
 
+const mobileNavLinks = [
+  { label: 'Experiencia', href: '#experiencia' },
+  { label: 'Procesos', href: '#procesos' },
+  { label: 'Modelo', href: '#modelo' },
+  { label: 'Módulos', href: '#modulos' },
+  { label: 'Impacto', href: '#impacto' },
+  { label: 'Ruta', href: '#ruta' },
+  { label: 'Contacto', href: '#contacto' },
+  { label: 'Diagnóstico', href: '#contacto' },
+];
+
 function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
     <div className="mx-auto mb-12 max-w-4xl">
@@ -220,10 +231,12 @@ function MiniNode({ label, active = false }: { label: string; active?: boolean }
 
 
 export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProcess, setSelectedProcess] = useState(processOptions[0]);
   const [monthlyVolume, setMonthlyVolume] = useState(4200);
   const [minutesPerCase, setMinutesPerCase] = useState(8);
   const [costPerHour, setCostPerHour] = useState(9500);
+  const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   const monthlyHours = Math.round((monthlyVolume * minutesPerCase) / 60);
   const recoveredHours = Math.round(monthlyHours * selectedProcess.automation);
@@ -232,6 +245,28 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
   const errorImpact = Math.round(selectedProcess.errorReduction * 100);
   const automationImpact = Math.round(selectedProcess.automation * 100);
   const formatCurrency = (value: number) => `$${new Intl.NumberFormat('es-CL').format(value)}`;
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    window.setTimeout(() => firstMobileLinkRef.current?.focus(), 0);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMobileMenuOpen]);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#041a36] text-white">
@@ -247,7 +282,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             </div>
           </a>
 
-          <nav className="hidden items-center gap-7 text-sm text-slate-400 lg:flex">
+          <nav className="hidden items-center gap-7 text-sm text-slate-400 md:flex">
             <a href="#experiencia" className="transition-colors hover:text-white">Experiencia</a>
             <a href="#procesos" className="transition-colors hover:text-white">Procesos</a>
             <a href="#modelo" className="transition-colors hover:text-white">Modelo</a>
@@ -259,13 +294,71 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
 
           <button
             onClick={onOpenContact}
-            className="inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/12 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.16)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/20"
+            className="hidden items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/12 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.16)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/20 md:inline-flex"
           >
             Diagnóstico
             <ArrowRight className="h-4 w-4" />
           </button>
+
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+            aria-label={isMobileMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+            aria-expanded={isMobileMenuOpen}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-300/30 bg-cyan-300/10 text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.12)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/18 md:hidden"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </header>
+
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-[#041a36]/85 backdrop-blur-md md:hidden" onClick={closeMobileMenu}>
+          <div
+            className="absolute inset-x-4 top-20 rounded-[2rem] border border-cyan-300/22 bg-[linear-gradient(180deg,rgba(7,57,111,0.98),rgba(4,26,54,0.98))] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.36)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3">
+              <div>
+                <p className="text-sm font-semibold text-white">Navegación</p>
+                <p className="text-xs text-slate-300">Accesos rápidos a ArkoData</p>
+              </div>
+              <button
+                type="button"
+                onClick={closeMobileMenu}
+                aria-label="Cerrar menú de navegación"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-100"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <nav className="grid gap-2">
+              {mobileNavLinks.map((item, index) => (
+                <a
+                  key={`${item.label}-${item.href}`}
+                  ref={index === 0 ? firstMobileLinkRef : undefined}
+                  href={item.href}
+                  onClick={closeMobileMenu}
+                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-base font-medium text-slate-50 transition-all hover:border-cyan-200/60 hover:bg-cyan-300/14 focus:outline-none focus:ring-2 focus:ring-cyan-300/60"
+                >
+                  {item.label}
+                </a>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu();
+                  onOpenContact();
+                }}
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 px-4 py-3.5 text-base font-semibold text-slate-950"
+              >
+                Solicitar diagnóstico
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
 
       <main>
         <section id="hero" className="relative px-4 pb-14 pt-12 sm:px-6 lg:px-8 lg:pb-18 lg:pt-14">
@@ -800,14 +893,14 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
-        className="fixed bottom-24 right-6 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 hover:scale-105 hover:shadow-[0_20px_60px_rgba(37,211,102,0.4)]"
+        className={`fixed bottom-24 right-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-1 hover:scale-105 hover:shadow-[0_20px_60px_rgba(37,211,102,0.4)] sm:right-6 ${isMobileMenuOpen ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
       >
         <FaWhatsapp className="h-7 w-7" />
       </a>
 
       <a
         href="#hero"
-        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-[#05284f]/90 px-4 py-3 text-sm font-semibold text-cyan-50 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-cyan-200/70 hover:bg-[#0a5cab] hover:shadow-[0_20px_60px_rgba(34,211,238,0.22)]"
+        className={`fixed bottom-5 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-[#05284f]/90 px-4 py-3 text-sm font-semibold text-cyan-50 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-cyan-200/70 hover:bg-[#0a5cab] hover:shadow-[0_20px_60px_rgba(34,211,238,0.22)] sm:bottom-6 sm:right-6 ${isMobileMenuOpen ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
       >
         <ArrowUp className="h-4 w-4" />
         Volver arriba
