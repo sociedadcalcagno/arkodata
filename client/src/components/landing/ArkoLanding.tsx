@@ -14,6 +14,7 @@ const proofItems = ['Claro Chile', 'Entel', 'Pagos Honorarios Médicos Chile', '
 const clientLogos = [
   { name: 'Claro Chile', src: '/clients/claro-chile.png', detail: 'Telecom y experiencia operacional a escala.' },
   { name: 'Pagos Honorarios Médicos Chile', src: '/clients/pagos-honorarios-medicos.png', detail: 'Plataforma para cálculo de pagos de honorarios médicos con IA, reglas de negocio, liquidaciones automatizadas y trazabilidad completa para procesos de alta complejidad.' },
+  { name: 'Oncovida', src: '/clients/oncovida.png', detail: 'Experiencia aplicada en operaciones y contextos del ámbito salud.' },
   { name: 'LegalEasy', src: '/clients/legaleasy.png', detail: 'Orientación legal, aprendizaje guiado y decisiones más eficaces para personas y empresas.' },
   { name: '123congelados.cl', src: '/clients/123congelados.png', detail: 'Logística, WMS y control operacional de inventario.' },
 ];
@@ -444,8 +445,8 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                   transition={{ duration: 0.45, delay: index * 0.05 }}
                   className="group rounded-[2rem] border border-cyan-300/18 bg-[linear-gradient(145deg,#07396f,#05284f)] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.18)] transition-all hover:-translate-y-1 hover:border-cyan-200/50 hover:bg-[#084b86] hover:shadow-[0_30px_90px_rgba(34,211,238,0.18)]"
                 >
-                  <div className="flex h-40 items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5 transition-all group-hover:border-cyan-300/28 group-hover:bg-slate-950/20">
-                    <img src={client.src} alt={client.name} className="max-h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]" />
+                  <div className={`flex h-40 items-center justify-center overflow-hidden rounded-[1.5rem] border p-5 transition-all group-hover:border-cyan-300/28 ${client.name === 'Oncovida' ? 'border-white/14 bg-slate-950/70 ring-1 ring-white/8' : 'border-white/10 bg-slate-950/35 group-hover:bg-slate-950/20'}`}>
+                    <img src={client.src} alt={client.name} className={`max-h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03] ${client.name === 'Oncovida' ? 'drop-shadow-[0_0_12px_rgba(255,255,255,0.08)]' : ''}`} />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold text-white">{client.name}</h3>
                   <p className="mt-2 text-sm leading-7 text-slate-300 [text-align:justify]">{client.detail}</p>
