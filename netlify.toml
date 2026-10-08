@@ -17,6 +17,21 @@
   status = 200
 
 [[redirects]]
+  from = "/api/academy/catalog"
+  to = "/.netlify/functions/academy-catalog"
+  status = 200
+
+[[redirects]]
+  from = "/api/academy/checkout"
+  to = "/.netlify/functions/academy-checkout"
+  status = 200
+
+[[redirects]]
+  from = "/api/academy/paid-content"
+  to = "/.netlify/functions/academy-content"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

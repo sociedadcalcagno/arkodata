@@ -6,6 +6,7 @@ import { ARKO_HELP_DOCS } from "@shared/arko-help";
 import { z } from "zod";
 import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
+import { AcademyPaymentError, createAcademyCheckout, getAcademyCatalog, getPaidAcademyContent } from './academy-payments';
 
 type ChatMsg = { role: 'user' | 'assistant'; content: string };
 type OperationalFacts = { process?: string; volume?: number; minutes?: number; hourlyCost?: number; people?: number };
@@ -312,6 +313,43 @@ const openai = process.env.OPENAI_API_KEY
   : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.get('/api/academy/catalog', (_req, res) => {
+    res.json(getAcademyCatalog());
+  });
+
+  app.post('/api/academy/checkout', async (req, res) => {
+    try {
+      const { courseSlug, email } = req.body || {};
+      if (typeof courseSlug !== 'string' || typeof email !== 'string') {
+        res.status(400).json({ message: 'Curso y correo electrónico son requeridos.' });
+        return;
+      }
+      res.json(await createAcademyCheckout(courseSlug, email));
+    } catch (error) {
+      if (error instanceof AcademyPaymentError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error iniciando pago de Academia:', error);
+      res.status(500).json({ message: 'No se pudo iniciar el pago.' });
+    }
+  });
+
+  app.get('/api/academy/paid-content', async (req, res) => {
+    try {
+      const courseSlug = typeof req.query.course === 'string' ? req.query.course : '';
+      const paymentId = typeof req.query.payment_id === 'string' ? req.query.payment_id : '';
+      res.json(await getPaidAcademyContent(courseSlug, paymentId));
+    } catch (error) {
+      if (error instanceof AcademyPaymentError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error verificando pago de Academia:', error);
+      res.status(500).json({ message: 'No se pudo verificar el pago.' });
+    }
+  });
+
   // Lead routes
   app.post("/api/leads", async (req, res) => {
     try {

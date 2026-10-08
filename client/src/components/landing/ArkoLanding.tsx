@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUp, Bot, BrainCircuit, Cable, ChevronRight, Database, Menu, ChartLine as LineChart, MessageCircle, ScanSearch, ServerCog, Sparkles, X } from 'lucide-react';
 import { FaInstagram, FaLinkedinIn, FaTiktok, FaWhatsapp } from 'react-icons/fa6';
 import AIOperatingSystem from './AIOperatingSystem';
+import academyImage from '../../../../img/Academia ArkoData_ Tecnología e IA.png';
 
 type ArkoLandingProps = {
   onOpenChat: () => void;
@@ -107,33 +108,33 @@ const techTags = ['OpenAI', 'Claude', 'Node.js', 'Python', 'PostgreSQL', 'Docker
 
 const processOptions = [
   {
-    id: 'documents',
-    label: 'Gestión documental',
+    id: 'information',
+    label: 'Gestión de información',
     automation: 0.72,
     errorReduction: 0.64,
-    description: 'OCR, clasificación, validación y trazabilidad de documentos.',
-    pain: 'Demasiado tiempo leyendo, ordenando y validando respaldos manualmente.',
-    solution: 'Motor documental con OCR, reglas, alertas y dashboard ejecutivo.',
-    outcome: 'Menos digitación, menos reproceso y mayor trazabilidad documental.',
-    deliverables: ['OCR + clasificación', 'Validaciones automáticas', 'Repositorio trazable'],
+    description: 'Información, validaciones y tareas que pasan entre personas y sistemas.',
+    pain: 'La información se revisa o transfiere manualmente entre etapas y equipos.',
+    solution: 'Flujos conectados con reglas, validaciones y seguimiento de excepciones.',
+    outcome: 'Menos tareas repetidas, menos reproceso y mayor trazabilidad de punta a punta.',
+    deliverables: ['Flujos de información', 'Reglas y validaciones', 'Trazabilidad operacional'],
   },
   {
     id: 'payments',
-    label: 'Pagos y conciliación',
+    label: 'Decisiones y control',
     automation: 0.68,
     errorReduction: 0.58,
-    description: 'Reglas de negocio, aprobaciones, cartolas y control financiero.',
-    pain: 'Pagos, cálculos y conciliaciones dependen de planillas o revisión manual.',
-    solution: 'Motor de reglas de negocio, aprobaciones, cartolas y control de excepciones.',
-    outcome: 'Ciclos de pago más rápidos, menos errores y mayor trazabilidad operacional.',
-    deliverables: ['Motor de reglas', 'Control de aprobaciones', 'Dashboard financiero'],
+    description: 'Criterios, aprobaciones y excepciones en procesos de negocio.',
+    pain: 'Las decisiones dependen de revisiones manuales y criterios dispersos.',
+    solution: 'Reglas de negocio, rutas de aprobación y control de excepciones.',
+    outcome: 'Decisiones más consistentes, menos errores y mejor control del proceso.',
+    deliverables: ['Reglas de negocio', 'Rutas de aprobación', 'Panel de control'],
   },
   {
     id: 'support',
-    label: 'Atención interna',
+    label: 'Atención y soporte',
     automation: 0.54,
     errorReduction: 0.42,
-    description: 'ArkoAsistente conectado a procesos, datos y preguntas frecuentes.',
+    description: 'Consultas de clientes o equipos conectadas a datos y procesos.',
     pain: 'Equipos responden las mismas preguntas y pierden tiempo buscando información.',
     solution: 'Agente IA conectado a base documental, procesos internos y captura de leads.',
     outcome: 'Respuestas más rápidas, soporte escalable y mejor experiencia de usuario.',
@@ -141,7 +142,7 @@ const processOptions = [
   },
   {
     id: 'operations',
-    label: 'Operación y workflow',
+    label: 'Flujos operacionales',
     automation: 0.61,
     errorReduction: 0.5,
     description: 'Estados, alertas, integraciones y seguimiento operacional.',
@@ -202,6 +203,7 @@ const mobileNavLinks = [
   { label: 'Procesos', href: '#procesos' },
   { label: 'Modelo', href: '#modelo' },
   { label: 'Módulos', href: '#modulos' },
+  { label: 'Academia', href: '/academia' },
   { label: 'Impacto', href: '#impacto' },
   { label: 'Ruta', href: '#ruta' },
   { label: 'Contacto', href: '#contacto' },
@@ -283,11 +285,12 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             </div>
           </a>
 
-          <nav className="hidden items-center gap-7 text-sm text-slate-400 md:flex">
+          <nav className="hidden items-center gap-5 text-sm text-slate-400 xl:flex">
             <a href="#experiencia" className="transition-colors hover:text-white">Experiencia</a>
             <a href="#procesos" className="transition-colors hover:text-white">Procesos</a>
             <a href="#modelo" className="transition-colors hover:text-white">Modelo</a>
             <a href="#modulos" className="transition-colors hover:text-white">Módulos</a>
+            <a href="/academia" className="transition-colors hover:text-white">Academia</a>
             <a href="#impacto" className="transition-colors hover:text-white">Impacto</a>
             <a href="#ruta" className="transition-colors hover:text-white">Ruta</a>
             <a href="#contacto" className="transition-colors hover:text-white">Contacto</a>
@@ -295,7 +298,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
 
           <button
             onClick={onOpenContact}
-            className="hidden items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/12 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.16)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/20 md:inline-flex"
+            className="hidden items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/12 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.16)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/20 xl:inline-flex"
           >
             Diagnóstico
             <ArrowRight className="h-4 w-4" />
@@ -306,7 +309,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             onClick={() => setIsMobileMenuOpen((current) => !current)}
             aria-label={isMobileMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
             aria-expanded={isMobileMenuOpen}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-300/30 bg-cyan-300/10 text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.12)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/18 md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-300/30 bg-cyan-300/10 text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.12)] transition-all hover:border-cyan-200/70 hover:bg-cyan-300/18 xl:hidden"
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -612,6 +615,32 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
           </div>
         </section>
 
+        <section id="academia" className="scroll-mt-24 bg-[#041a36] px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.36em] text-cyan-300/90">Aprende · Aplica · Transforma</p>
+              <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.025em] text-white sm:text-4xl lg:text-5xl">Conocimiento práctico para transformar tu operación.</h2>
+              <p className="mt-5 text-base leading-8 text-slate-300">La Academia ArkoData acerca tecnología e inteligencia artificial a los desafíos reales de las organizaciones, con clases, cursos y programas aplicados a procesos, datos y automatización.</p>
+              <p className="mt-4 text-sm leading-7 text-slate-400">Clases en vivo y grabadas, cursos específicos y formación personalizada para personas y equipos.</p>
+              <a
+                href="/academia"
+                className="mt-8 inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 px-7 py-4 text-base font-semibold text-slate-950 shadow-[0_20px_70px_rgba(34,211,238,0.26)] transition-all hover:-translate-y-0.5"
+              >
+                Explorar la Academia
+                <ArrowRight className="h-5 w-5" />
+              </a>
+            </div>
+            <div className="overflow-hidden rounded-[1.75rem] border border-cyan-200/20 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+              <img
+                src={academyImage}
+                alt="Academia ArkoData: formación práctica en tecnología e inteligencia artificial, con clases y cursos para aplicar en organizaciones."
+                className="block h-auto w-full"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </section>
+
         <section id="impacto" className="bg-[#041a36] px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <SectionHeader
@@ -834,17 +863,17 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
                   ))}
                 </div>
 
-                <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_0.9fr]">
+                <div className="mt-6 grid gap-4 xl:grid-cols-[1fr_0.9fr]">
                   <div className="space-y-4 rounded-[1.5rem] border border-white/10 bg-slate-950/48 p-4">
                     {[
-                      { label: 'Casos al mes', value: monthlyVolume, min: 500, max: 20000, step: 100, setter: setMonthlyVolume, suffix: '' },
-                      { label: 'Minutos por caso', value: minutesPerCase, min: 2, max: 45, step: 1, setter: setMinutesPerCase, suffix: ' min' },
+                      { label: 'Operaciones al mes', value: monthlyVolume, min: 500, max: 20000, step: 100, setter: setMonthlyVolume, suffix: '' },
+                      { label: 'Minutos por operación', value: minutesPerCase, min: 2, max: 45, step: 1, setter: setMinutesPerCase, suffix: ' min' },
                       { label: 'Costo hora equipo', value: costPerHour, min: 4000, max: 35000, step: 500, setter: setCostPerHour, suffix: '/h' },
                     ].map((control) => (
                       <div key={control.label}>
-                        <div className="mb-2 flex items-center justify-between gap-3 text-sm">
+                        <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm">
                           <span className="font-medium text-slate-300">{control.label}</span>
-                          <span className="font-semibold text-cyan-100">{control.label === 'Costo hora equipo' ? formatCurrency(control.value) : new Intl.NumberFormat('es-CL').format(control.value)}{control.suffix}</span>
+                          <span className="min-w-0 text-right font-semibold tabular-nums text-cyan-100">{control.label === 'Costo hora equipo' ? formatCurrency(control.value) : new Intl.NumberFormat('es-CL').format(control.value)}{control.suffix}</span>
                         </div>
                         <input
                           type="range"
@@ -861,24 +890,24 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
 
                   <div className="rounded-[1.5rem] border border-cyan-200/18 bg-[linear-gradient(180deg,rgba(34,211,238,0.13),rgba(2,8,23,0.48))] p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-100/70">Resultado en línea</p>
-                    <p className="mt-3 text-4xl font-semibold tracking-tight text-white">{formatCurrency(monthlySavings)}</p>
+                    <p className="mt-3 break-words text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-tight tracking-tight tabular-nums text-white [overflow-wrap:anywhere]">{formatCurrency(monthlySavings)}</p>
                     <p className="mt-1 text-sm text-slate-300">ahorro mensual estimado</p>
                     <div className="mt-5 grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                      <div className="min-w-0 rounded-2xl border border-white/10 bg-slate-950/50 p-3">
                         <p className="text-xs text-slate-400">Horas recuperadas</p>
-                        <p className="mt-1 text-xl font-semibold text-white">{new Intl.NumberFormat('es-CL').format(recoveredHours)}</p>
+                        <p className="mt-1 break-words text-[clamp(1rem,1.5vw,1.25rem)] font-semibold leading-tight tabular-nums text-white [overflow-wrap:anywhere]">{new Intl.NumberFormat('es-CL').format(recoveredHours)}</p>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                      <div className="min-w-0 rounded-2xl border border-white/10 bg-slate-950/50 p-3">
                         <p className="text-xs text-slate-400">Ahorro anual</p>
-                        <p className="mt-1 text-xl font-semibold text-white">{formatCurrency(annualSavings)}</p>
+                        <p className="mt-1 break-words text-[clamp(1rem,1.5vw,1.25rem)] font-semibold leading-tight tabular-nums text-white [overflow-wrap:anywhere]">{formatCurrency(annualSavings)}</p>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                      <div className="min-w-0 rounded-2xl border border-white/10 bg-slate-950/50 p-3">
                         <p className="text-xs text-slate-400">Automatizable</p>
-                        <p className="mt-1 text-xl font-semibold text-cyan-100">{automationImpact}%</p>
+                        <p className="mt-1 text-lg font-semibold tabular-nums text-cyan-100 sm:text-xl">{automationImpact}%</p>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                      <div className="min-w-0 rounded-2xl border border-white/10 bg-slate-950/50 p-3">
                         <p className="text-xs text-slate-400">Menos error</p>
-                        <p className="mt-1 text-xl font-semibold text-emerald-200">-{errorImpact}%</p>
+                        <p className="mt-1 text-lg font-semibold tabular-nums text-emerald-200 sm:text-xl">-{errorImpact}%</p>
                       </div>
                     </div>
                   </div>
