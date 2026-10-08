@@ -22,6 +22,16 @@
   status = 200
 
 [[redirects]]
+  from = "/api/academy/profile"
+  to = "/.netlify/functions/academy-profile"
+  status = 200
+
+[[redirects]]
+  from = "/api/academy/enrollments"
+  to = "/.netlify/functions/academy-enroll"
+  status = 200
+
+[[redirects]]
   from = "/api/academy/checkout"
   to = "/.netlify/functions/academy-checkout"
   status = 200

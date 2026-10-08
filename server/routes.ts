@@ -1,12 +1,15 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { and, eq } from 'drizzle-orm';
 import { storage } from "./storage";
-import { insertLeadSchema, insertChatSessionSchema } from "@shared/schema";
+import { academyCourses, academyEnrollments, insertLeadSchema, insertChatSessionSchema } from "@shared/schema";
 import { ARKO_HELP_DOCS } from "@shared/arko-help";
 import { z } from "zod";
 import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
 import { AcademyPaymentError, createAcademyCheckout, getAcademyCatalog, getPaidAcademyContent } from './academy-payments';
+import { AcademyAuthError, getAcademyIdentity } from './academy-auth';
+import { db } from './db';
 
 type ChatMsg = { role: 'user' | 'assistant'; content: string };
 type OperationalFacts = { process?: string; volume?: number; minutes?: number; hourlyCost?: number; people?: number };
@@ -313,8 +316,63 @@ const openai = process.env.OPENAI_API_KEY
   : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  app.get('/api/academy/catalog', (_req, res) => {
-    res.json(getAcademyCatalog());
+  app.get('/api/academy/profile', async (req, res) => {
+    try {
+      res.json(await getAcademyIdentity(req.headers.authorization));
+    } catch (error) {
+      if (error instanceof AcademyAuthError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error validando perfil de Academia:', error);
+      res.status(500).json({ message: 'No se pudo validar el perfil.' });
+    }
+  });
+
+  app.post('/api/academy/enrollments', async (req, res) => {
+    try {
+      const identity = await getAcademyIdentity(req.headers.authorization);
+      const slug = typeof req.body?.courseSlug === 'string' ? req.body.courseSlug : '';
+      if (!slug || !db) {
+        res.status(400).json({ message: 'El curso solicitado no es válido.' });
+        return;
+      }
+      const [course] = await db.select().from(academyCourses).where(eq(academyCourses.slug, slug)).limit(1);
+      if (!course || course.status !== 'published') {
+        res.status(404).json({ message: 'Este curso aún no está disponible para inscripción.' });
+        return;
+      }
+      await db.insert(academyEnrollments).values({
+        studentId: identity.studentId,
+        courseId: course.id,
+        status: 'active',
+        accessType: course.isFree ? 'free' : 'preview',
+      }).onConflictDoNothing({ target: [academyEnrollments.studentId, academyEnrollments.courseId] });
+      const [enrollment] = await db.select().from(academyEnrollments)
+        .where(and(eq(academyEnrollments.studentId, identity.studentId), eq(academyEnrollments.courseId, course.id)))
+        .limit(1);
+      res.json(enrollment);
+    } catch (error) {
+      if (error instanceof AcademyAuthError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error inscribiendo alumno en Academia:', error);
+      res.status(500).json({ message: 'No se pudo guardar la inscripción.' });
+    }
+  });
+
+  app.get('/api/academy/catalog', async (_req, res) => {
+    try {
+      res.json(await getAcademyCatalog());
+    } catch (error) {
+      if (error instanceof AcademyPaymentError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error consultando catálogo de Academia:', error);
+      res.status(500).json({ message: 'No se pudo consultar el catálogo.' });
+    }
   });
 
   app.post('/api/academy/checkout', async (req, res) => {

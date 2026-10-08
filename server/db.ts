@@ -9,7 +9,12 @@ if (!hasDatabase) {
 }
 
 export const pool = hasDatabase
-  ? new Pool({ connectionString: process.env.DATABASE_URL })
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: Number(process.env.PG_POOL_MAX) || 1,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 5000,
+    })
   : null;
 
 export const db = pool
