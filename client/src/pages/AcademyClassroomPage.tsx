@@ -3,11 +3,15 @@ import { useRoute } from 'wouter';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, CirclePlay, Clock3, CreditCard, LockKeyhole, Pause, Play, ShieldCheck } from 'lucide-react';
 import { academyCourses } from './AcademyPage';
-import { useCreateLead } from '../lib/api';
+import { enrollInAcademyCourse, supabase } from '../lib/academyAuth';
 
 type Student = { name: string; email: string };
-type PaidLesson = { title: string; content: string; exercise: string };
-type CoursePrice = { slug: string; title: string; priceCLP: number | null };
+type PaidLesson = { title: string; content: string; exercise?: string };
+type CoursePrice = { slug: string; title: string; status: string; priceCLP: number | null };
+type PreviewData = {
+  course: { title: string; description: string; estimatedMinutes: number | null };
+  lessons: Array<{ title: string; description: string; content: string; videoUrl: string | null; materials: Array<{ title: string; url: string; type: string }> }>;
+};
 
 const courseVisualSteps: Record<string, [string, string, string]> = {
   'inteligencia-artificial': ['Caso de uso', 'Inteligencia artificial', 'Piloto medible'],
@@ -66,21 +70,19 @@ function AnimatedCoursePreview({ course }: { course: typeof academyCourses[numbe
   );
 }
 
-function readStudent(slug: string): Student | null {
-  try {
-    const student = window.localStorage.getItem(`academy-enrollment:${slug}`);
-    return student ? JSON.parse(student) as Student : null;
-  } catch {
-    return null;
-  }
-}
-
 export default function AcademyClassroomPage() {
   const [, params] = useRoute('/academia/aula/:slug');
   const course = academyCourses.find((item) => item.slug === params?.slug);
-  const [student, setStudent] = useState<Student | null>(() => course ? readStudent(course.slug) : null);
-  const [studentName, setStudentName] = useState(student?.name || '');
-  const [studentEmail, setStudentEmail] = useState(student?.email || '');
+  const [student, setStudent] = useState<Student | null>(null);
+  const [studentName, setStudentName] = useState('');
+  const [studentEmail, setStudentEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [authMode, setAuthMode] = useState<'signup' | 'signin'>('signup');
+  const [accessToken, setAccessToken] = useState('');
+  const [isCoursePublished, setIsCoursePublished] = useState(false);
+  const [previewData, setPreviewData] = useState<PreviewData | null>(null);
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+  const [previewError, setPreviewError] = useState('');
   const [price, setPrice] = useState<number | null>(null);
   const [hasPriceConfig, setHasPriceConfig] = useState(false);
   const [paidLessons, setPaidLessons] = useState<PaidLesson[]>([]);
@@ -91,18 +93,40 @@ export default function AcademyClassroomPage() {
   const [message, setMessage] = useState('');
   const [enrollmentComplete, setEnrollmentComplete] = useState(false);
   const [freeLessonComplete, setFreeLessonComplete] = useState(false);
-  const createLead = useCreateLead();
+
+  useEffect(() => {
+    if (!supabase) return;
+    let cancelled = false;
+    supabase.auth.getSession().then(({ data }) => {
+      const session = data.session;
+      if (cancelled || !session?.user.email) return;
+      setAccessToken(session.access_token);
+      setStudent({ name: String(session.user.user_metadata?.full_name || session.user.email.split('@')[0]), email: session.user.email });
+      setStudentEmail(session.user.email);
+      fetch('/api/academy/profile', { headers: { Authorization: `Bearer ${session.access_token}` } });
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user.email) {
+        setStudent(null);
+        setAccessToken('');
+        return;
+      }
+      setAccessToken(session.access_token);
+      setStudent({ name: String(session.user.user_metadata?.full_name || session.user.email.split('@')[0]), email: session.user.email });
+      setStudentEmail(session.user.email);
+    });
+    return () => { cancelled = true; subscription.unsubscribe(); };
+  }, []);
 
   useEffect(() => {
     if (!course) return;
     const paymentId = new URLSearchParams(window.location.search).get('payment_id')
-      || new URLSearchParams(window.location.search).get('collection_id')
-      || window.localStorage.getItem(`academy-payment:${course.slug}`);
-    if (!paymentId) return;
+      || new URLSearchParams(window.location.search).get('collection_id');
+    if (!paymentId || !accessToken) return;
 
     let cancelled = false;
     setIsVerifying(true);
-    fetch(`/api/academy/paid-content?course=${encodeURIComponent(course.slug)}&payment_id=${encodeURIComponent(paymentId)}`)
+    fetch(`/api/academy/paid-content?course=${encodeURIComponent(course.slug)}&payment_id=${encodeURIComponent(paymentId)}`, { headers: { Authorization: `Bearer ${accessToken}` } })
       .then(async (response) => {
         const result = await response.json();
         if (!response.ok) throw new Error(result.message || 'No fue posible validar el pago.');
@@ -111,7 +135,6 @@ export default function AcademyClassroomPage() {
       .then((result) => {
         if (cancelled) return;
         setPaidLessons(result.lessons);
-        window.localStorage.setItem(`academy-payment:${course.slug}`, paymentId);
         window.history.replaceState({}, '', window.location.pathname);
       })
       .catch((error: unknown) => {
@@ -124,7 +147,7 @@ export default function AcademyClassroomPage() {
       });
 
     return () => { cancelled = true; };
-  }, [course]);
+  }, [course, accessToken]);
 
   useEffect(() => {
     if (!course) return;
@@ -134,6 +157,7 @@ export default function AcademyClassroomPage() {
       .then((catalog) => {
         if (cancelled) return;
         const configured = catalog.find((item) => item.slug === course.slug)?.priceCLP;
+        setIsCoursePublished(catalog.find((item) => item.slug === course.slug)?.status === 'published');
         setHasPriceConfig(typeof configured === 'number' && configured > 0);
         setPrice(typeof configured === 'number' ? configured : null);
       })
@@ -143,9 +167,41 @@ export default function AcademyClassroomPage() {
     return () => { cancelled = true; };
   }, [course]);
 
+  useEffect(() => {
+    if (!course || !isCoursePublished) return;
+    let cancelled = false;
+    setIsLoadingPreview(true);
+    fetch(`/api/academy/preview?course=${encodeURIComponent(course.slug)}`)
+      .then(async (response) => {
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'La clase de muestra aún no está disponible.');
+        return result as PreviewData;
+      })
+      .then((result) => { if (!cancelled) setPreviewData(result); })
+      .catch((error: unknown) => { if (!cancelled) setPreviewError(error instanceof Error ? error.message : 'La clase de muestra aún no está disponible.'); })
+      .finally(() => { if (!cancelled) setIsLoadingPreview(false); });
+    return () => { cancelled = true; };
+  }, [course, isCoursePublished]);
+
+  useEffect(() => {
+    if (!course || !isCoursePublished || !accessToken) return;
+    let cancelled = false;
+    enrollInAcademyCourse(course.slug, accessToken)
+      .then(() => { if (!cancelled) setEnrollmentComplete(true); })
+      .catch((error: unknown) => { if (!cancelled) setMessage(error instanceof Error ? error.message : 'No se pudo cargar tu inscripción.'); });
+    return () => { cancelled = true; };
+  }, [course, isCoursePublished, accessToken]);
+
   if (!course) {
     return <main className="flex min-h-screen items-center justify-center bg-[#041a36] px-6 text-white"><div className="text-center"><h1 className="text-3xl font-semibold">No encontramos esta aula</h1><a className="mt-6 inline-flex items-center gap-2 text-cyan-200" href="/academia"><ArrowLeft className="h-4 w-4" />Volver a la Academia</a></div></main>;
   }
+
+  if (!isCoursePublished) {
+    return <main className="flex min-h-screen items-center justify-center bg-[#041a36] px-6 text-white"><div className="max-w-lg text-center"><p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">Academia ArkoData</p><h1 className="mt-4 text-3xl font-semibold">{course.title}</h1><p className="mt-4 leading-7 text-slate-300">Este curso está en preparación. Próximamente publicaremos su aula, clase de muestra y contenidos aprobados.</p><a href="/academia#cursos" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-5 py-3 font-semibold text-slate-950"><ArrowLeft className="h-4 w-4" />Volver al catálogo</a></div></main>;
+  }
+
+  if (isLoadingPreview) return <main className="flex min-h-screen items-center justify-center bg-[#041a36] text-cyan-100">Cargando el aula virtual…</main>;
+  if (!previewData) return <main className="flex min-h-screen items-center justify-center bg-[#041a36] px-6 text-white"><div className="max-w-lg text-center"><h1 className="text-2xl font-semibold">{course.title}</h1><p className="mt-4 leading-7 text-slate-300">{previewError || 'La clase gratuita aún no está publicada.'}</p><a href="/academia#cursos" className="mt-6 inline-flex items-center gap-2 text-cyan-200"><ArrowLeft className="h-4 w-4" />Volver al catálogo</a></div></main>;
 
   const submitEnrollment = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -153,19 +209,22 @@ export default function AcademyClassroomPage() {
     setIsEnrolling(true);
     const nextStudent = { name: studentName.trim(), email: studentEmail.trim() };
     try {
-      await createLead.mutateAsync({
-        name: nextStudent.name,
-        email: nextStudent.email,
-        company: null,
-        phone: null,
-        interest: `Inscripción gratuita y aula virtual: ${course.title}`,
-        source: 'Academia ArkoData — enrolamiento',
-      });
-      window.localStorage.setItem(`academy-enrollment:${course.slug}`, JSON.stringify(nextStudent));
+      if (!supabase) throw new Error('La autenticación de Academia aún no está configurada.');
+      const authResult = authMode === 'signup'
+        ? await supabase.auth.signUp({ email: nextStudent.email, password, options: { data: { full_name: nextStudent.name } } })
+        : await supabase.auth.signInWithPassword({ email: nextStudent.email, password });
+      if (authResult.error) throw authResult.error;
+      const session = authResult.data.session;
+      if (!session) {
+        setMessage('Revisa tu correo para confirmar la cuenta y luego vuelve a iniciar sesión.');
+        return;
+      }
+      await enrollInAcademyCourse(course.slug, session.access_token);
+      setAccessToken(session.access_token);
       setStudent(nextStudent);
       setEnrollmentComplete(true);
-    } catch {
-      setMessage('No pudimos guardar tu inscripción. Revisa los datos e inténtalo nuevamente.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'No pudimos guardar tu inscripción. Revisa los datos e inténtalo nuevamente.');
     } finally {
       setIsEnrolling(false);
     }
@@ -182,8 +241,8 @@ export default function AcademyClassroomPage() {
     try {
       const response = await fetch('/api/academy/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courseSlug: course.slug, email: student.email }),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ courseSlug: course.slug }),
       });
       const result = await response.json() as { checkoutUrl?: string; message?: string };
       if (!response.ok || !result.checkoutUrl) throw new Error(result.message || 'No pudimos iniciar el pago.');
@@ -199,7 +258,7 @@ export default function AcademyClassroomPage() {
       <header className="sticky top-0 z-30 border-b border-white/10 bg-[#041a36]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <a href="/academia" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-100 hover:text-white"><ArrowLeft className="h-4 w-4" />Academia ArkoData</a>
-          <span className="hidden text-sm text-slate-400 sm:inline">Aula virtual · {course.title}</span>
+          <span className="hidden text-sm text-slate-400 sm:inline">Aula virtual · {previewData.course.title}</span>
           <a href="/academia#cursos" className="text-sm text-slate-300 transition hover:text-cyan-100">Ver otros cursos</a>
         </div>
       </header>
@@ -208,34 +267,28 @@ export default function AcademyClassroomPage() {
         <div>
           <div className="overflow-hidden rounded-[1.75rem] border border-cyan-200/15 bg-[radial-gradient(ellipse_at_top_right,rgba(14,116,220,0.3),transparent_55%),linear-gradient(135deg,#07396f,#041a36)] p-6 sm:p-9">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">Aula virtual · Clase de prueba gratuita</p>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{course.title}</h1>
-            <p className="mt-4 max-w-3xl leading-7 text-slate-200">{course.description}</p>
-            <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-300"><span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-cyan-200" />Lección abierta</span><span className="inline-flex items-center gap-2"><Clock3 className="h-4 w-4 text-cyan-200" />A tu ritmo</span></div>
+            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{previewData.course.title}</h1>
+            <p className="mt-4 max-w-3xl leading-7 text-slate-200">{previewData.course.description}</p>
+            <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-300"><span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-cyan-200" />{previewData.lessons.length} lección{previewData.lessons.length === 1 ? '' : 'es'} de muestra</span>{previewData.course.estimatedMinutes && <span className="inline-flex items-center gap-2"><Clock3 className="h-4 w-4 text-cyan-200" />{previewData.course.estimatedMinutes} minutos</span>}</div>
           </div>
 
           <section className="mt-7 rounded-[1.6rem] border border-cyan-200/20 bg-[#071d3b] p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">Muestra gratuita</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">{course.freeClass}</h2>
+                <h2 className="mt-3 text-2xl font-semibold text-white">{previewData.lessons[0]?.title}</h2>
               </div>
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-200/10 px-3 py-1.5 text-xs font-semibold text-emerald-100"><CirclePlay className="h-4 w-4" />Clase abierta</span>
             </div>
-            <AnimatedCoursePreview course={course} />
-            <div className="mt-6 rounded-2xl border border-white/10 bg-[#041a36]/70 p-5 sm:p-6">
-              <p className="leading-8 text-slate-200">{course.description} En esta lección introductoria vamos a identificar una oportunidad concreta, observar qué información necesitamos y convertir el problema en un primer paso que se pueda probar y medir.</p>
-              <div className="mt-5 rounded-xl border-l-2 border-cyan-200 bg-cyan-200/[0.06] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">Idea clave</p>
-                <p className="mt-2 text-sm leading-7 text-slate-200">Antes de elegir una herramienta, define el resultado que quieres mejorar y cómo sabrás que mejoró. Un buen piloto empieza pequeño, usa ejemplos reales y deja claras las excepciones que requieren criterio humano.</p>
-              </div>
-              <div className="mt-5">
-                <p className="text-sm font-semibold text-white">Prueba rápida</p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">Elige una tarea de tu día a día relacionada con {course.topics[0]?.toLowerCase()}. Anota cuántas veces se repite, cuánto demora y qué paso genera más dudas o retrabajo.</p>
-              </div>
-            </div>
-            <button onClick={() => setFreeLessonComplete((current) => !current)} className={`mt-5 inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition ${freeLessonComplete ? 'border-emerald-200/30 bg-emerald-200/10 text-emerald-100' : 'border-white/12 text-slate-200 hover:border-cyan-200/40 hover:text-white'}`}>
-              <CheckCircle2 className="h-4 w-4" />{freeLessonComplete ? 'Clase de prueba completada' : 'Marcar clase de prueba como completada'}
-            </button>
+            {previewData.lessons.map((lesson) => (
+              <article key={lesson.title} className="mt-6 rounded-2xl border border-white/10 bg-[#041a36]/70 p-5 sm:p-6">
+                <h3 className="text-lg font-semibold text-white">{lesson.title}</h3>
+                {lesson.description && <p className="mt-2 text-sm leading-6 text-slate-300">{lesson.description}</p>}
+                {lesson.videoUrl && <video controls preload="metadata" src={lesson.videoUrl} className="mt-5 w-full rounded-xl bg-black" />}
+                {lesson.content && <div className="mt-5 whitespace-pre-wrap leading-8 text-slate-200">{lesson.content}</div>}
+                {lesson.materials.length > 0 && <ul className="mt-5 space-y-2">{lesson.materials.map((material) => <li key={material.url}><a href={material.url} target="_blank" rel="noreferrer" className="text-sm text-cyan-100 underline underline-offset-4">Descargar: {material.title}</a></li>)}</ul>}
+              </article>
+            ))}
           </section>
 
           <section className="mt-7 rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 sm:p-8">
@@ -251,7 +304,7 @@ export default function AcademyClassroomPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Contenido del curso</p>
                   <h3 className="mt-3 text-xl font-semibold">{paidLessons[activePaidLesson]?.title}</h3>
                   <p className="mt-4 leading-8 text-slate-200">{paidLessons[activePaidLesson]?.content}</p>
-                  <div className="mt-6 rounded-xl border border-cyan-200/15 bg-cyan-200/[0.06] p-4"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">Ejercicio práctico</p><p className="mt-2 text-sm leading-7 text-slate-200">{paidLessons[activePaidLesson]?.exercise}</p></div>
+                  {paidLessons[activePaidLesson]?.exercise && <div className="mt-6 rounded-xl border border-cyan-200/15 bg-cyan-200/[0.06] p-4"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">Ejercicio práctico</p><p className="mt-2 text-sm leading-7 text-slate-200">{paidLessons[activePaidLesson].exercise}</p></div>}
                 </article>
               </div>
             ) : (
@@ -282,7 +335,11 @@ export default function AcademyClassroomPage() {
                 <label className="block text-xs font-medium text-slate-300">Correo electrónico
                   <input required type="email" value={studentEmail} onChange={(event) => setStudentEmail(event.target.value)} autoComplete="email" className="mt-1.5 w-full rounded-xl border border-white/10 bg-[#041a36] px-3.5 py-3 text-sm text-white outline-none focus:border-cyan-200/50" />
                 </label>
-                <button disabled={isEnrolling} type="submit" className="w-full rounded-xl bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:opacity-60">{isEnrolling ? 'Inscribiendo…' : 'Inscribirme gratis'}</button>
+                <label className="block text-xs font-medium text-slate-300">Contraseña
+                  <input required type="password" minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'} className="mt-1.5 w-full rounded-xl border border-white/10 bg-[#041a36] px-3.5 py-3 text-sm text-white outline-none focus:border-cyan-200/50" />
+                </label>
+                <button disabled={isEnrolling} type="submit" className="w-full rounded-xl bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:opacity-60">{isEnrolling ? 'Procesando…' : authMode === 'signup' ? 'Crear cuenta e inscribirme' : 'Iniciar sesión e inscribirme'}</button>
+                <button type="button" onClick={() => setAuthMode((mode) => mode === 'signup' ? 'signin' : 'signup')} className="w-full text-xs text-cyan-100 underline underline-offset-4">{authMode === 'signup' ? 'Ya tengo una cuenta' : 'Crear una cuenta nueva'}</button>
               </form>
             )}
 

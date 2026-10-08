@@ -7,7 +7,7 @@ import { ARKO_HELP_DOCS } from "@shared/arko-help";
 import { z } from "zod";
 import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
-import { AcademyPaymentError, createAcademyCheckout, getAcademyCatalog, getPaidAcademyContent } from './academy-payments';
+import { AcademyPaymentError, createAcademyCheckout, getAcademyCatalog, getAcademyPreview, getPaidAcademyContent } from './academy-payments';
 import { AcademyAuthError, getAcademyIdentity } from './academy-auth';
 import { db } from './db';
 
@@ -375,15 +375,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/academy/preview', async (req, res) => {
+    const slug = typeof req.query.course === 'string' ? req.query.course : '';
+    try {
+      res.json(await getAcademyPreview(slug));
+    } catch (error) {
+      if (error instanceof AcademyPaymentError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error consultando la clase de muestra:', error);
+      res.status(500).json({ message: 'No se pudo cargar la clase de muestra.' });
+    }
+  });
+
   app.post('/api/academy/checkout', async (req, res) => {
     try {
-      const { courseSlug, email } = req.body || {};
-      if (typeof courseSlug !== 'string' || typeof email !== 'string') {
+      const identity = await getAcademyIdentity(req.headers.authorization);
+      const { courseSlug } = req.body || {};
+      if (typeof courseSlug !== 'string') {
         res.status(400).json({ message: 'Curso y correo electrónico son requeridos.' });
         return;
       }
-      res.json(await createAcademyCheckout(courseSlug, email));
+      res.json(await createAcademyCheckout(courseSlug, identity));
     } catch (error) {
+      if (error instanceof AcademyAuthError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
       if (error instanceof AcademyPaymentError) {
         res.status(error.statusCode).json({ message: error.message });
         return;
@@ -395,10 +414,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/academy/paid-content', async (req, res) => {
     try {
+      const identity = await getAcademyIdentity(req.headers.authorization);
       const courseSlug = typeof req.query.course === 'string' ? req.query.course : '';
       const paymentId = typeof req.query.payment_id === 'string' ? req.query.payment_id : '';
-      res.json(await getPaidAcademyContent(courseSlug, paymentId));
+      res.json(await getPaidAcademyContent(courseSlug, paymentId, identity));
     } catch (error) {
+      if (error instanceof AcademyAuthError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
       if (error instanceof AcademyPaymentError) {
         res.status(error.statusCode).json({ message: error.message });
         return;

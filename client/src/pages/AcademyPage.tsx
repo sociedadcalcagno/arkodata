@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, BrainCircuit, CheckCircle2, ChevronDown, Clock3, Cloud, Code2, Database, FileText, GraduationCap, Layers3, Search, Users, Workflow, X } from 'lucide-react';
 import academyImage from '../../../img/Academia ArkoData_ Tecnología e IA.png';
 import { useCreateLead } from '../lib/api';
@@ -111,6 +111,7 @@ const academyImageLinks = [
 
 export default function AcademyPage() {
   const [activeCategory, setActiveCategory] = useState('Todos');
+  const [publishedSlugs, setPublishedSlugs] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourse, setSelectedCourse] = useState<AcademyCourse | null>(null);
   const [showInterestForm, setShowInterestForm] = useState(false);
@@ -120,6 +121,17 @@ export default function AcademyPage() {
   const [email, setEmail] = useState('');
   const createLead = useCreateLead();
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/academy/catalog')
+      .then(async (response) => response.ok ? response.json() as Promise<Array<{ slug: string; status: string }>> : [])
+      .then((catalog) => {
+        if (!cancelled) setPublishedSlugs(new Set(catalog.filter((course) => course.status === 'published').map((course) => course.slug)));
+      })
+      .catch(() => { if (!cancelled) setPublishedSlugs(new Set()); });
+    return () => { cancelled = true; };
+  }, []);
+
   const visibleCourses = useMemo(() => academyCourses.filter((course) => {
     const matchesCategory = activeCategory === 'Todos' || course.category === activeCategory;
     const query = searchTerm.trim().toLocaleLowerCase('es');
@@ -128,6 +140,7 @@ export default function AcademyPage() {
   }), [activeCategory, searchTerm]);
 
   const openCourse = (course: AcademyCourse) => {
+    if (!publishedSlugs.has(course.slug)) return;
     setSelectedCourse(course);
     setShowInterestForm(false);
     setRequestSent(false);
@@ -207,8 +220,9 @@ export default function AcademyPage() {
                   key={item.label}
                   type="button"
                   onClick={() => openCourse(course)}
-                  aria-label={`Explorar curso: ${item.label}`}
-                  title={`Explorar ${item.label}`}
+                      aria-label={`Explorar curso: ${item.label}`}
+                      title={`Explorar ${item.label}`}
+                  disabled={!publishedSlugs.has(course.slug)}
                   style={{ left: item.left, width: item.width, top: '55.8%', height: '19.3%' }}
                   className="group/hotspot absolute z-10 rounded-xl border border-transparent transition duration-200 hover:border-cyan-200/90 hover:bg-cyan-300/20 hover:shadow-[0_0_28px_rgba(34,211,238,0.5)] focus:border-cyan-100 focus:bg-cyan-300/20 focus:outline-none focus:ring-2 focus:ring-cyan-100"
                 >
@@ -260,12 +274,12 @@ export default function AcademyPage() {
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200/20 bg-cyan-200/10 text-cyan-100"><Icon className="h-6 w-6" /></div>
                       <span className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-1.5 text-xs text-slate-300">{course.category}</span>
                     </div>
-                    <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">{course.format}</p>
+                    <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">{publishedSlugs.has(course.slug) ? course.format : 'Próximamente'}</p>
                     <h3 className="mt-3 text-xl font-semibold leading-snug text-white">{course.title}</h3>
-                    <p className="mt-3 flex-1 text-sm leading-7 text-slate-300">{course.description}</p>
-                    <div className="mt-5 flex items-center gap-2 text-xs text-slate-400"><Clock3 className="h-4 w-4 text-cyan-200" />{course.duration}</div>
-                    <button onClick={() => openCourse(course)} className="mt-6 inline-flex w-full items-center justify-between rounded-xl border border-cyan-200/20 bg-cyan-200/[0.06] px-4 py-3 text-sm font-semibold text-cyan-50 transition hover:border-cyan-200/55 hover:bg-cyan-200/10">
-                      Explorar este tema <ChevronDown className="h-4 w-4 -rotate-90" />
+                    <p className="mt-3 flex-1 text-sm leading-7 text-slate-300">{publishedSlugs.has(course.slug) ? course.description : 'Estamos preparando el contenido de este curso. Pronto podrás conocer el temario y acceder al aula de muestra.'}</p>
+                    {publishedSlugs.has(course.slug) && <div className="mt-5 flex items-center gap-2 text-xs text-slate-400"><Clock3 className="h-4 w-4 text-cyan-200" />{course.duration}</div>}
+                    <button onClick={() => openCourse(course)} disabled={!publishedSlugs.has(course.slug)} className="mt-6 inline-flex w-full items-center justify-between rounded-xl border border-cyan-200/20 bg-cyan-200/[0.06] px-4 py-3 text-sm font-semibold text-cyan-50 transition enabled:hover:border-cyan-200/55 enabled:hover:bg-cyan-200/10 disabled:cursor-not-allowed disabled:text-slate-400">
+                      {publishedSlugs.has(course.slug) ? <>Explorar este tema <ChevronDown className="h-4 w-4 -rotate-90" /></> : 'Próximamente'}
                     </button>
                   </article>
                 );
