@@ -243,3 +243,19 @@ INSERT INTO "academy_courses" (
 	('gestion-documental', 'Gestión Documental / OCR / IA', 'Negocio y operaciones', 'coming_soon', false, 39900, 24900, false, 'CLP', 'pending_review'),
 	('tecnologia-salud', 'Salud / Gestión de Honorarios Médicos', 'Negocio y operaciones', 'coming_soon', false, 49900, 29900, false, 'CLP', 'pending_review')
 ON CONFLICT ("slug") DO NOTHING;
+--> statement-breakpoint
+ALTER TABLE "academy_assessment_attempts" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_assessments" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_certificates" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_companies" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_company_seats" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_coupons" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_courses" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_enrollments" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_lessons" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_modules" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_payments" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_progress" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_students" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_support_requests" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "academy_tutor_usage" ENABLE ROW LEVEL SECURITY;
