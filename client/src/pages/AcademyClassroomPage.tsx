@@ -19,6 +19,7 @@ function spanishAuthError(error: unknown) {
   const message = error instanceof Error ? error.message : String(error || '');
   const cooldown = message.match(/you can only request this after\s+(\d+)\s+seconds?/i);
   if (cooldown) return `Por seguridad, espera ${cooldown[1]} segundos antes de volver a solicitar el correo de confirmación.`;
+  if (/error sending confirmation email/i.test(message)) return 'Supabase no pudo enviar el correo de confirmación. Revisa el SMTP de Brevo y los registros de Auth para conocer el motivo; luego vuelve a intentarlo.';
   if (/email rate limit exceeded/i.test(message)) return 'Se alcanzó el límite de correos de confirmación. Espera un momento e inténtalo nuevamente.';
   if (/user already registered/i.test(message)) return 'Ya existe una cuenta con ese correo. Inicia sesión para continuar.';
   if (/invalid login credentials/i.test(message)) return 'El correo o la contraseña no son correctos.';
