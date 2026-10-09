@@ -11,7 +11,9 @@ type CoursePrice = { slug: string; title: string; status: string; priceCLP: numb
 type PreviewData = {
   course: { title: string; description: string; estimatedMinutes: number | null };
   lessons: Array<{ title: string; description: string; content: string; videoUrl: string | null; materials: Array<{ title: string; url: string; type: string }> }>;
+  assessment: { id: number; title: string; passingPercent: number; questions: Array<{ prompt: string; options: string[] }> } | null;
 };
+type AssessmentResult = { scorePercent: number; passed: boolean; passingPercent: number; review: Array<{ prompt: string; correct: boolean; explanation: string }> };
 
 const courseVisualSteps: Record<string, [string, string, string]> = {
   'inteligencia-artificial': ['Caso de uso', 'Inteligencia artificial', 'Piloto medible'],
@@ -83,6 +85,9 @@ export default function AcademyClassroomPage() {
   const [previewData, setPreviewData] = useState<PreviewData | null>(null);
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [previewError, setPreviewError] = useState('');
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
+  const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
   const [price, setPrice] = useState<number | null>(null);
   const [hasPriceConfig, setHasPriceConfig] = useState(false);
   const [paidLessons, setPaidLessons] = useState<PaidLesson[]>([]);
@@ -157,7 +162,8 @@ export default function AcademyClassroomPage() {
       .then((catalog) => {
         if (cancelled) return;
         const configured = catalog.find((item) => item.slug === course.slug)?.priceCLP;
-        setIsCoursePublished(catalog.find((item) => item.slug === course.slug)?.status === 'published');
+        const status = catalog.find((item) => item.slug === course.slug)?.status;
+        setIsCoursePublished(status === 'preview' || status === 'published');
         setHasPriceConfig(typeof configured === 'number' && configured > 0);
         setPrice(typeof configured === 'number' ? configured : null);
       })
@@ -168,10 +174,10 @@ export default function AcademyClassroomPage() {
   }, [course]);
 
   useEffect(() => {
-    if (!course || !isCoursePublished) return;
+    if (!course || !isCoursePublished || !accessToken || !enrollmentComplete) return;
     let cancelled = false;
     setIsLoadingPreview(true);
-    fetch(`/api/academy/preview?course=${encodeURIComponent(course.slug)}`)
+    fetch(`/api/academy/preview?course=${encodeURIComponent(course.slug)}`, { headers: { Authorization: `Bearer ${accessToken}` } })
       .then(async (response) => {
         const result = await response.json();
         if (!response.ok) throw new Error(result.message || 'La clase de muestra aún no está disponible.');
@@ -181,7 +187,7 @@ export default function AcademyClassroomPage() {
       .catch((error: unknown) => { if (!cancelled) setPreviewError(error instanceof Error ? error.message : 'La clase de muestra aún no está disponible.'); })
       .finally(() => { if (!cancelled) setIsLoadingPreview(false); });
     return () => { cancelled = true; };
-  }, [course, isCoursePublished]);
+  }, [course, isCoursePublished, accessToken, enrollmentComplete]);
 
   useEffect(() => {
     if (!course || !isCoursePublished || !accessToken) return;
@@ -201,7 +207,6 @@ export default function AcademyClassroomPage() {
   }
 
   if (isLoadingPreview) return <main className="flex min-h-screen items-center justify-center bg-[#041a36] text-cyan-100">Cargando el aula virtual…</main>;
-  if (!previewData) return <main className="flex min-h-screen items-center justify-center bg-[#041a36] px-6 text-white"><div className="max-w-lg text-center"><h1 className="text-2xl font-semibold">{course.title}</h1><p className="mt-4 leading-7 text-slate-300">{previewError || 'La clase gratuita aún no está publicada.'}</p><a href="/academia#cursos" className="mt-6 inline-flex items-center gap-2 text-cyan-200"><ArrowLeft className="h-4 w-4" />Volver al catálogo</a></div></main>;
 
   const submitEnrollment = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -253,12 +258,37 @@ export default function AcademyClassroomPage() {
     }
   };
 
+  const submitAssessment = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!previewData?.assessment || !accessToken) return;
+    if (answers.length !== previewData.assessment.questions.length || answers.some((answer) => !Number.isInteger(answer))) {
+      setMessage('Responde todas las preguntas antes de enviar la evaluación.');
+      return;
+    }
+    setIsSubmittingAssessment(true);
+    setMessage('');
+    try {
+      const response = await fetch('/api/academy/assessments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ courseSlug: course.slug, assessmentId: previewData.assessment.id, answers }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'No se pudo corregir la evaluación.');
+      setAssessmentResult(result as AssessmentResult);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'No se pudo corregir la evaluación.');
+    } finally {
+      setIsSubmittingAssessment(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#041a36] text-white">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-[#041a36]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <a href="/academia" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-100 hover:text-white"><ArrowLeft className="h-4 w-4" />Academia ArkoData</a>
-          <span className="hidden text-sm text-slate-400 sm:inline">Aula virtual · {previewData.course.title}</span>
+          <span className="hidden text-sm text-slate-400 sm:inline">Aula virtual · {previewData?.course.title || course.title}</span>
           <a href="/academia#cursos" className="text-sm text-slate-300 transition hover:text-cyan-100">Ver otros cursos</a>
         </div>
       </header>
@@ -267,12 +297,12 @@ export default function AcademyClassroomPage() {
         <div>
           <div className="overflow-hidden rounded-[1.75rem] border border-cyan-200/15 bg-[radial-gradient(ellipse_at_top_right,rgba(14,116,220,0.3),transparent_55%),linear-gradient(135deg,#07396f,#041a36)] p-6 sm:p-9">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">Aula virtual · Clase de prueba gratuita</p>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{previewData.course.title}</h1>
-            <p className="mt-4 max-w-3xl leading-7 text-slate-200">{previewData.course.description}</p>
-            <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-300"><span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-cyan-200" />{previewData.lessons.length} lección{previewData.lessons.length === 1 ? '' : 'es'} de muestra</span>{previewData.course.estimatedMinutes && <span className="inline-flex items-center gap-2"><Clock3 className="h-4 w-4 text-cyan-200" />{previewData.course.estimatedMinutes} minutos</span>}</div>
+            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{previewData?.course.title || course.title}</h1>
+            <p className="mt-4 max-w-3xl leading-7 text-slate-200">{previewData?.course.description || 'Crea una cuenta gratuita e inscríbete para entrar a la clase de muestra.'}</p>
+            {previewData && <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-300"><span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-cyan-200" />{previewData.lessons.length} lección{previewData.lessons.length === 1 ? '' : 'es'} de muestra</span>{previewData.course.estimatedMinutes && <span className="inline-flex items-center gap-2"><Clock3 className="h-4 w-4 text-cyan-200" />{previewData.course.estimatedMinutes} minutos</span>}</div>}
           </div>
 
-          <section className="mt-7 rounded-[1.6rem] border border-cyan-200/20 bg-[#071d3b] p-6 sm:p-8">
+          {previewData ? <section className="mt-7 rounded-[1.6rem] border border-cyan-200/20 bg-[#071d3b] p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">Muestra gratuita</p>
@@ -289,7 +319,26 @@ export default function AcademyClassroomPage() {
                 {lesson.materials.length > 0 && <ul className="mt-5 space-y-2">{lesson.materials.map((material) => <li key={material.url}><a href={material.url} target="_blank" rel="noreferrer" className="text-sm text-cyan-100 underline underline-offset-4">Descargar: {material.title}</a></li>)}</ul>}
               </article>
             ))}
-          </section>
+          </section> : <section className="mt-7 rounded-[1.6rem] border border-cyan-200/20 bg-[#071d3b] p-6 text-sm leading-7 text-slate-300 sm:p-8">La clase gratuita se abrirá aquí después de iniciar sesión e inscribirte.{previewError && <p className="mt-3 text-amber-100">{previewError}</p>}</section>}
+
+          {previewData?.assessment && <section className="mt-7 rounded-[1.6rem] border border-cyan-200/20 bg-[#071d3b] p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Evaluación automática</p>
+            <h2 className="mt-3 text-2xl font-semibold">{previewData.assessment.title}</h2>
+            <p className="mt-2 text-sm text-slate-400">Necesitas {previewData.assessment.passingPercent}% para aprobar.</p>
+            {!assessmentResult ? <form onSubmit={submitAssessment} className="mt-6 space-y-6">
+              {previewData.assessment.questions.map((question, questionIndex) => <fieldset key={question.prompt} className="rounded-xl border border-white/10 bg-[#041a36]/70 p-4">
+                <legend className="px-2 font-medium text-white">{questionIndex + 1}. {question.prompt}</legend>
+                <div className="mt-3 space-y-2">{question.options.map((option, optionIndex) => <label key={option} className="flex cursor-pointer items-start gap-3 rounded-lg p-2 text-sm text-slate-300 hover:bg-white/[0.04]">
+                  <input required type="radio" name={`question-${questionIndex}`} checked={answers[questionIndex] === optionIndex} onChange={() => setAnswers((current) => { const next = [...current]; next[questionIndex] = optionIndex; return next; })} className="mt-0.5 accent-cyan-300" />{option}
+                </label>)}</div>
+              </fieldset>)}
+              <button disabled={isSubmittingAssessment} className="rounded-xl bg-cyan-300 px-5 py-3 font-semibold text-slate-950 disabled:opacity-60">{isSubmittingAssessment ? 'Corrigiendo…' : 'Enviar evaluación'}</button>
+            </form> : <div className="mt-6 rounded-xl border border-cyan-200/15 bg-[#041a36]/70 p-5">
+              <p className={`text-lg font-semibold ${assessmentResult.passed ? 'text-emerald-200' : 'text-amber-200'}`}>{assessmentResult.passed ? '¡Aprobada!' : 'Sigue practicando'} · {assessmentResult.scorePercent}%</p>
+              <ul className="mt-4 space-y-3">{assessmentResult.review.map((item, index) => <li key={item.prompt} className="text-sm leading-6 text-slate-300"><span className={item.correct ? 'text-emerald-200' : 'text-amber-200'}>{item.correct ? 'Correcta' : 'Revisa'}</span> — {item.explanation || item.prompt}</li>)}</ul>
+              {!assessmentResult.passed && <button onClick={() => setAssessmentResult(null)} className="mt-5 text-sm font-semibold text-cyan-100 underline underline-offset-4">Intentar nuevamente</button>}
+            </div>}
+          </section>}
 
           <section className="mt-7 rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 sm:p-8">
             <div className="flex items-center gap-3"><LockKeyhole className="h-5 w-5 text-cyan-200" /><h2 className="text-xl font-semibold">Curso completo</h2></div>

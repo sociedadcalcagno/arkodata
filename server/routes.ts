@@ -7,7 +7,7 @@ import { ARKO_HELP_DOCS } from "@shared/arko-help";
 import { z } from "zod";
 import OpenAI from 'openai';
 import { sendEmail, generateConfirmationEmail, generateNotificationEmail } from './email';
-import { AcademyPaymentError, createAcademyCheckout, getAcademyCatalog, getAcademyPreview, getPaidAcademyContent } from './academy-payments';
+import { AcademyPaymentError, createAcademyCheckout, getAcademyCatalog, getAcademyPreview, getPaidAcademyContent, submitAcademyAssessment } from './academy-payments';
 import { AcademyAuthError, getAcademyIdentity } from './academy-auth';
 import { db } from './db';
 
@@ -338,7 +338,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return;
       }
       const [course] = await db.select().from(academyCourses).where(eq(academyCourses.slug, slug)).limit(1);
-      if (!course || course.status !== 'published') {
+      if (!course || (course.status !== 'preview' && course.status !== 'published')) {
         res.status(404).json({ message: 'Este curso aún no está disponible para inscripción.' });
         return;
       }
@@ -362,6 +362,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/academy/assessments', async (req, res) => {
+    try {
+      const identity = await getAcademyIdentity(req.headers.authorization);
+      const { courseSlug, assessmentId, answers } = req.body || {};
+      if (typeof courseSlug !== 'string' || !Number.isInteger(assessmentId) || !Array.isArray(answers) || !answers.every(Number.isInteger)) {
+        res.status(400).json({ message: 'La evaluación y las respuestas no son válidas.' });
+        return;
+      }
+      res.json(await submitAcademyAssessment(courseSlug, identity.studentId, assessmentId, answers));
+    } catch (error) {
+      if (error instanceof AcademyAuthError || error instanceof AcademyPaymentError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      console.error('Error corrigiendo evaluación de Academia:', error);
+      res.status(500).json({ message: 'No se pudo corregir la evaluación.' });
+    }
+  });
+
   app.get('/api/academy/catalog', async (_req, res) => {
     try {
       res.json(await getAcademyCatalog());
@@ -378,8 +397,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/academy/preview', async (req, res) => {
     const slug = typeof req.query.course === 'string' ? req.query.course : '';
     try {
-      res.json(await getAcademyPreview(slug));
+      const identity = await getAcademyIdentity(req.headers.authorization);
+      res.json(await getAcademyPreview(slug, identity.studentId));
     } catch (error) {
+      if (error instanceof AcademyAuthError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
       if (error instanceof AcademyPaymentError) {
         res.status(error.statusCode).json({ message: error.message });
         return;

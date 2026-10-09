@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
-import { academyCourses, academyEnrollments, academyLessons, academyModules, academyPayments } from '../shared/schema';
+import { academyAssessmentAttempts, academyAssessments, academyCourses, academyEnrollments, academyLessons, academyModules, academyPayments } from '../shared/schema';
 import { db } from './db';
 
 export class AcademyPaymentError extends Error {
@@ -47,6 +47,7 @@ export async function getAcademyCatalog() {
   const courses = await requireDatabase().select().from(academyCourses);
   const now = new Date();
   return courses.map((course) => {
+    const publiclyAvailable = course.status === 'preview' || course.status === 'published';
     const published = course.status === 'published';
     const promoActive = Boolean(
       published && course.promotionEnabled && course.launchPriceClp !== null && course.promotionStartsAt && course.promotionEndsAt &&
@@ -65,16 +66,23 @@ export async function getAcademyCatalog() {
       launchPriceCLP: promoActive ? course.launchPriceClp : null,
       priceCLP: published ? getEffectivePrice(course, now) : null,
       promotionActive: promoActive,
+      hasPreview: publiclyAvailable,
       estimatedMinutes: course.estimatedMinutes,
       prerequisites: course.prerequisites,
     };
   });
 }
 
-export async function getAcademyPreview(courseSlug: string) {
+export async function getAcademyPreview(courseSlug: string, studentId: number) {
   const course = await getCourseBySlug(courseSlug);
-  if (course.status !== 'published') throw new AcademyPaymentError('Este curso aún está en preparación.', 404);
-  const lessons = await requireDatabase().select({
+  if (course.status !== 'preview' && course.status !== 'published') throw new AcademyPaymentError('Este curso aún está en preparación.', 404);
+  const database = requireDatabase();
+  const [enrollment] = await database.select().from(academyEnrollments)
+    .where(and(eq(academyEnrollments.studentId, studentId), eq(academyEnrollments.courseId, course.id), eq(academyEnrollments.status, 'active')))
+    .limit(1);
+  if (!enrollment) throw new AcademyPaymentError('Inscríbete gratis para acceder a la clase de muestra.', 403);
+
+  const lessons = await database.select({
     title: academyLessons.title,
     description: academyLessons.description,
     content: academyLessons.content,
@@ -90,7 +98,71 @@ export async function getAcademyPreview(courseSlug: string) {
     ))
     .orderBy(academyModules.position, academyLessons.position);
   if (lessons.length === 0) throw new AcademyPaymentError('La clase de muestra aún no está publicada.', 404);
-  return { course, lessons };
+
+  const [assessment] = await database.select({
+    id: academyAssessments.id,
+    title: academyAssessments.title,
+    passingPercent: academyAssessments.passingPercent,
+    questions: academyAssessments.questions,
+  }).from(academyAssessments)
+    .innerJoin(academyModules, eq(academyAssessments.moduleId, academyModules.id))
+    .where(and(
+      eq(academyModules.courseId, course.id),
+      eq(academyModules.published, true),
+      eq(academyAssessments.published, true),
+    ))
+    .limit(1);
+
+  return {
+    course,
+    lessons,
+    assessment: assessment ? {
+      id: assessment.id,
+      title: assessment.title,
+      passingPercent: assessment.passingPercent,
+      questions: assessment.questions.map(({ prompt, options }) => ({ prompt, options })),
+    } : null,
+  };
+}
+
+export async function submitAcademyAssessment(courseSlug: string, studentId: number, assessmentId: number, answers: number[]) {
+  const database = requireDatabase();
+  const course = await getCourseBySlug(courseSlug);
+  if (course.status !== 'preview' && course.status !== 'published') throw new AcademyPaymentError('Este curso aún no está disponible.', 404);
+  const [enrollment] = await database.select().from(academyEnrollments)
+    .where(and(eq(academyEnrollments.studentId, studentId), eq(academyEnrollments.courseId, course.id), eq(academyEnrollments.status, 'active')))
+    .limit(1);
+  if (!enrollment) throw new AcademyPaymentError('Inscríbete al curso antes de rendir la evaluación.', 403);
+
+  const [assessment] = await database.select({ assessment: academyAssessments })
+    .from(academyAssessments)
+    .innerJoin(academyModules, eq(academyAssessments.moduleId, academyModules.id))
+    .where(and(
+      eq(academyAssessments.id, assessmentId),
+      eq(academyAssessments.published, true),
+      eq(academyModules.courseId, course.id),
+      eq(academyModules.published, true),
+    ))
+    .limit(1);
+  if (!assessment) throw new AcademyPaymentError('La evaluación solicitada no está disponible.', 404);
+  const questions = assessment.assessment.questions;
+  if (answers.length !== questions.length || answers.some((answer, index) => !Number.isInteger(answer) || answer < 0 || answer >= questions[index].options.length)) {
+    throw new AcademyPaymentError('Las respuestas no coinciden con esta evaluación.', 400);
+  }
+  const correct = answers.reduce((count, answer, index) => count + (answer === questions[index].correctOption ? 1 : 0), 0);
+  const scorePercent = Math.round((correct / questions.length) * 100);
+  const passed = scorePercent >= assessment.assessment.passingPercent;
+  await database.insert(academyAssessmentAttempts).values({ assessmentId, studentId, answers, scorePercent, passed });
+  return {
+    scorePercent,
+    passed,
+    passingPercent: assessment.assessment.passingPercent,
+    review: questions.map((question, index) => ({
+      prompt: question.prompt,
+      correct: answers[index] === question.correctOption,
+      explanation: question.explanation || '',
+    })),
+  };
 }
 
 export async function createAcademyCheckout(courseSlug: string, student: { studentId: number; email: string }) {

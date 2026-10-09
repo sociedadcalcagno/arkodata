@@ -11,7 +11,7 @@ export async function handler(event: { httpMethod: string; headers?: Record<stri
     const payload = JSON.parse(event.body || '{}') as { courseSlug?: unknown };
     if (typeof payload.courseSlug !== 'string' || !db) return json(400, { message: 'El curso solicitado no es válido.' });
     const [course] = await db.select().from(academyCourses).where(eq(academyCourses.slug, payload.courseSlug)).limit(1);
-    if (!course || course.status !== 'published') return json(404, { message: 'Este curso aún no está disponible para inscripción.' });
+    if (!course || (course.status !== 'preview' && course.status !== 'published')) return json(404, { message: 'Este curso aún no está disponible para inscripción.' });
 
     await db.insert(academyEnrollments).values({
       studentId: identity.studentId,

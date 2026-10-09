@@ -1,5 +1,5 @@
 [build]
-  command = "npm run db:migrate && npm run build"
+  command = "npm run db:migrate && npm run academy:seed && npm run build"
   publish = "dist/public"
 
 [functions]
@@ -29,6 +29,11 @@
 [[redirects]]
   from = "/api/academy/enrollments"
   to = "/.netlify/functions/academy-enroll"
+  status = 200
+
+[[redirects]]
+  from = "/api/academy/assessments"
+  to = "/.netlify/functions/academy-assessment"
   status = 200
 
 [[redirects]]

@@ -124,9 +124,9 @@ export default function AcademyPage() {
   useEffect(() => {
     let cancelled = false;
     fetch('/api/academy/catalog')
-      .then(async (response) => response.ok ? response.json() as Promise<Array<{ slug: string; status: string }>> : [])
+      .then(async (response) => response.ok ? response.json() as Promise<Array<{ slug: string; status: string; hasPreview?: boolean }>> : [])
       .then((catalog) => {
-        if (!cancelled) setPublishedSlugs(new Set(catalog.filter((course) => course.status === 'published').map((course) => course.slug)));
+        if (!cancelled) setPublishedSlugs(new Set(catalog.filter((course) => course.status === 'published' || course.hasPreview).map((course) => course.slug)));
       })
       .catch(() => { if (!cancelled) setPublishedSlugs(new Set()); });
     return () => { cancelled = true; };
@@ -141,10 +141,7 @@ export default function AcademyPage() {
 
   const openCourse = (course: AcademyCourse) => {
     if (!publishedSlugs.has(course.slug)) return;
-    setSelectedCourse(course);
-    setShowInterestForm(false);
-    setRequestSent(false);
-    setRequestError('');
+    window.location.assign(`/academia/aula/${course.slug}`);
   };
 
   const exploreCourses = () => {
@@ -274,12 +271,12 @@ export default function AcademyPage() {
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200/20 bg-cyan-200/10 text-cyan-100"><Icon className="h-6 w-6" /></div>
                       <span className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-1.5 text-xs text-slate-300">{course.category}</span>
                     </div>
-                    <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">{publishedSlugs.has(course.slug) ? course.format : 'Próximamente'}</p>
+                    <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">{publishedSlugs.has(course.slug) ? 'Clase gratuita disponible' : 'Próximamente'}</p>
                     <h3 className="mt-3 text-xl font-semibold leading-snug text-white">{course.title}</h3>
                     <p className="mt-3 flex-1 text-sm leading-7 text-slate-300">{publishedSlugs.has(course.slug) ? course.description : 'Estamos preparando el contenido de este curso. Pronto podrás conocer el temario y acceder al aula de muestra.'}</p>
                     {publishedSlugs.has(course.slug) && <div className="mt-5 flex items-center gap-2 text-xs text-slate-400"><Clock3 className="h-4 w-4 text-cyan-200" />{course.duration}</div>}
                     <button onClick={() => openCourse(course)} disabled={!publishedSlugs.has(course.slug)} className="mt-6 inline-flex w-full items-center justify-between rounded-xl border border-cyan-200/20 bg-cyan-200/[0.06] px-4 py-3 text-sm font-semibold text-cyan-50 transition enabled:hover:border-cyan-200/55 enabled:hover:bg-cyan-200/10 disabled:cursor-not-allowed disabled:text-slate-400">
-                      {publishedSlugs.has(course.slug) ? <>Explorar este tema <ChevronDown className="h-4 w-4 -rotate-90" /></> : 'Próximamente'}
+                      {publishedSlugs.has(course.slug) ? <>Tomar la clase gratuita <ArrowRight className="h-4 w-4" /></> : 'Próximamente'}
                     </button>
                   </article>
                 );
