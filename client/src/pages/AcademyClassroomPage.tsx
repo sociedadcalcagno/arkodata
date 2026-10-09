@@ -15,6 +15,16 @@ type PreviewData = {
 };
 type AssessmentResult = { scorePercent: number; passed: boolean; passingPercent: number; review: Array<{ prompt: string; correct: boolean; explanation: string }> };
 
+function spanishAuthError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error || '');
+  const cooldown = message.match(/you can only request this after\s+(\d+)\s+seconds?/i);
+  if (cooldown) return `Por seguridad, espera ${cooldown[1]} segundos antes de volver a solicitar el correo de confirmación.`;
+  if (/email rate limit exceeded/i.test(message)) return 'Se alcanzó el límite de correos de confirmación. Espera un momento e inténtalo nuevamente.';
+  if (/user already registered/i.test(message)) return 'Ya existe una cuenta con ese correo. Inicia sesión para continuar.';
+  if (/invalid login credentials/i.test(message)) return 'El correo o la contraseña no son correctos.';
+  return message || 'No pudimos completar la solicitud. Inténtalo nuevamente.';
+}
+
 const courseVisualSteps: Record<string, [string, string, string]> = {
   'inteligencia-artificial': ['Caso de uso', 'Inteligencia artificial', 'Piloto medible'],
   'automatizacion-workflows': ['Proceso', 'Reglas y flujos', 'Menos reproceso'],
@@ -229,7 +239,7 @@ export default function AcademyClassroomPage() {
       setStudent(nextStudent);
       setEnrollmentComplete(true);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'No pudimos guardar tu inscripción. Revisa los datos e inténtalo nuevamente.');
+      setMessage(spanishAuthError(error));
     } finally {
       setIsEnrolling(false);
     }
