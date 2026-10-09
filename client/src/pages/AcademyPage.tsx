@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent, type MouseEvent } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, BrainCircuit, CheckCircle2, ChevronDown, Clock3, Cloud, Code2, Database, FileText, GraduationCap, Layers3, Search, Users, Workflow, X } from 'lucide-react';
 import academyImage from '../../../img/Academia ArkoData_ Tecnología e IA.png';
 import { useCreateLead } from '../lib/api';
@@ -112,6 +112,8 @@ const academyImageLinks = [
 export default function AcademyPage() {
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [publishedSlugs, setPublishedSlugs] = useState<Set<string>>(new Set());
+  const academyImageRef = useRef<HTMLDivElement | null>(null);
+  const [magnifier, setMagnifier] = useState<{ x: number; y: number; backgroundSize: string; backgroundPosition: string } | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourse, setSelectedCourse] = useState<AcademyCourse | null>(null);
   const [showInterestForm, setShowInterestForm] = useState(false);
@@ -140,8 +142,21 @@ export default function AcademyPage() {
   }), [activeCategory, searchTerm]);
 
   const openCourse = (course: AcademyCourse) => {
-    if (!publishedSlugs.has(course.slug)) return;
     window.location.assign(`/academia/aula/${course.slug}`);
+  };
+
+  const moveMagnifier = (event: MouseEvent<HTMLDivElement>) => {
+    const bounds = academyImageRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const x = event.clientX - bounds.left;
+    const y = event.clientY - bounds.top;
+    const lensSize = 176;
+    setMagnifier({
+      x,
+      y,
+      backgroundSize: `${bounds.width * 2}px ${bounds.height * 2}px`,
+      backgroundPosition: `${lensSize / 2 - x * 2}px ${lensSize / 2 - y * 2}px`,
+    });
   };
 
   const exploreCourses = () => {
@@ -207,8 +222,15 @@ export default function AcademyPage() {
               <span className="inline-flex items-center gap-2"><GraduationCap className="h-4 w-4 text-cyan-200" /> Formación para equipos</span>
             </div>
           </div>
-          <div className="group/image relative overflow-hidden rounded-[1.75rem] border border-white/15 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
+          <div
+            ref={academyImageRef}
+            onMouseMove={moveMagnifier}
+            onMouseLeave={() => setMagnifier(null)}
+            className="group/image relative overflow-hidden rounded-[1.75rem] border border-cyan-200/30 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.35)] ring-1 ring-cyan-200/10 transition hover:border-cyan-100/70 hover:shadow-[0_30px_100px_rgba(34,211,238,0.24)]"
+          >
             <img src={academyImage} alt="Explora los cursos de Academia ArkoData: bases de datos, desarrollo, cloud, inteligencia artificial, automatización, gestión documental y salud." className="block h-auto w-full" fetchPriority="high" />
+            <span className="pointer-events-none absolute left-3 top-3 z-30 rounded-full border border-cyan-100/30 bg-[#041a36]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-cyan-100 shadow-lg backdrop-blur-sm sm:left-4 sm:top-4 sm:text-xs">Explora cada especialidad</span>
+            {magnifier && <div aria-hidden="true" className="pointer-events-none absolute z-20 hidden h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-cyan-100 bg-white shadow-[0_0_0_5px_rgba(4,26,54,.6),0_0_36px_rgba(34,211,238,.65)] md:block" style={{ left: magnifier.x, top: magnifier.y, backgroundImage: `url("${academyImage}")`, backgroundRepeat: 'no-repeat', backgroundSize: magnifier.backgroundSize, backgroundPosition: magnifier.backgroundPosition }} />}
             {academyImageLinks.map((item) => {
               const course = academyCourses.find((candidate) => candidate.title === item.courseTitle);
               if (!course) return null;
@@ -219,11 +241,10 @@ export default function AcademyPage() {
                   onClick={() => openCourse(course)}
                       aria-label={`Explorar curso: ${item.label}`}
                       title={`Explorar ${item.label}`}
-                  disabled={!publishedSlugs.has(course.slug)}
                   style={{ left: item.left, width: item.width, top: '55.8%', height: '19.3%' }}
-                  className="group/hotspot absolute z-10 rounded-xl border border-transparent transition duration-200 hover:border-cyan-200/90 hover:bg-cyan-300/20 hover:shadow-[0_0_28px_rgba(34,211,238,0.5)] focus:border-cyan-100 focus:bg-cyan-300/20 focus:outline-none focus:ring-2 focus:ring-cyan-100"
+                  className="group/hotspot absolute z-10 cursor-pointer rounded-xl border border-transparent transition duration-200 hover:border-cyan-200/90 hover:bg-cyan-300/25 hover:shadow-[0_0_28px_rgba(34,211,238,0.5)] focus:border-cyan-100 focus:bg-cyan-300/25 focus:outline-none focus:ring-2 focus:ring-cyan-100"
                 >
-                  <span className="pointer-events-none absolute inset-x-1 bottom-2 translate-y-1 rounded-lg bg-[#041a36]/95 px-1 py-1.5 text-center text-[clamp(0.48rem,0.9vw,0.8rem)] font-semibold leading-tight text-white opacity-0 shadow-lg transition duration-200 group-hover/hotspot:translate-y-0 group-hover/hotspot:opacity-100 group-focus/hotspot:translate-y-0 group-focus/hotspot:opacity-100">Explorar {item.label}</span>
+                  <span className="pointer-events-none absolute inset-x-1 bottom-2 translate-y-1 rounded-lg bg-[#041a36]/95 px-1 py-1.5 text-center text-[clamp(0.48rem,0.9vw,0.8rem)] font-semibold leading-tight text-white opacity-0 shadow-lg transition duration-200 group-hover/hotspot:translate-y-0 group-hover/hotspot:opacity-100 group-focus/hotspot:translate-y-0 group-focus/hotspot:opacity-100">{publishedSlugs.has(course.slug) ? `Entrar a ${item.label}` : `${item.label} · Próximamente`}</span>
                 </button>
               );
             })}
