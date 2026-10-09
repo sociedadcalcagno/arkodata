@@ -216,7 +216,7 @@ export default function AcademyClassroomPage() {
     try {
       if (!supabase) throw new Error('La autenticación de Academia aún no está configurada.');
       const authResult = authMode === 'signup'
-        ? await supabase.auth.signUp({ email: nextStudent.email, password, options: { data: { full_name: nextStudent.name } } })
+        ? await supabase.auth.signUp({ email: nextStudent.email, password, options: { data: { full_name: nextStudent.name }, emailRedirectTo: `${window.location.origin}/academia/aula/${course.slug}` } })
         : await supabase.auth.signInWithPassword({ email: nextStudent.email, password });
       if (authResult.error) throw authResult.error;
       const session = authResult.data.session;
