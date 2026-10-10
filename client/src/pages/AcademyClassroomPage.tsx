@@ -28,6 +28,14 @@ function spanishAuthError(error: unknown) {
   return message || 'No pudimos completar la solicitud. Inténtalo nuevamente.';
 }
 
+function academyConfirmationUrl(courseSlug: string) {
+  const hostname = window.location.hostname.toLowerCase();
+  const origin = hostname === 'localhost' || hostname === '127.0.0.1'
+    ? 'https://arkodata.cl'
+    : window.location.origin;
+  return new URL(`/academia/aula/${encodeURIComponent(courseSlug)}`, origin).toString();
+}
+
 const courseVisualSteps: Record<string, [string, string, string]> = {
   'inteligencia-artificial': ['Caso de uso', 'Inteligencia artificial', 'Piloto medible'],
   'automatizacion-workflows': ['Proceso', 'Reglas y flujos', 'Menos reproceso'],
@@ -241,7 +249,7 @@ export default function AcademyClassroomPage() {
     try {
       if (!supabase) throw new Error('La autenticación de Academia aún no está configurada.');
       const authResult = authMode === 'signup'
-        ? await supabase.auth.signUp({ email: nextStudent.email, password, options: { data: { full_name: nextStudent.name }, emailRedirectTo: `${window.location.origin}/academia/aula/${course.slug}` } })
+        ? await supabase.auth.signUp({ email: nextStudent.email, password, options: { data: { full_name: nextStudent.name }, emailRedirectTo: academyConfirmationUrl(course.slug) } })
         : await supabase.auth.signInWithPassword({ email: nextStudent.email, password });
       if (authResult.error) throw authResult.error;
       const session = authResult.data.session;
@@ -274,7 +282,7 @@ export default function AcademyClassroomPage() {
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: studentEmail.trim(),
-        options: { emailRedirectTo: `${window.location.origin}/academia/aula/${course.slug}` },
+        options: { emailRedirectTo: academyConfirmationUrl(course.slug) },
       });
       if (error) throw error;
       setConfirmationPending(true);
