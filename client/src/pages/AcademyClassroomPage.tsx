@@ -117,6 +117,7 @@ export default function AcademyClassroomPage() {
   const [activePaidLesson, setActivePaidLesson] = useState(0);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
   const [message, setMessage] = useState('');
   const [enrollmentComplete, setEnrollmentComplete] = useState(false);
@@ -342,13 +343,36 @@ export default function AcademyClassroomPage() {
     }
   };
 
+  const signOutStudent = async () => {
+    if (!supabase) return;
+    setIsSigningOut(true);
+    const { error } = await supabase.auth.signOut();
+    setIsSigningOut(false);
+    if (error) {
+      setMessage('No se pudo cerrar la sesión. Inténtalo otra vez.');
+      return;
+    }
+    setStudent(null);
+    setAccessToken('');
+    setEnrollmentComplete(false);
+    setPreviewData(null);
+    setPaidLessons([]);
+    setAssessmentResult(null);
+    setAnswers([]);
+    setAuthMode('signin');
+    setMessage('Sesión cerrada.');
+  };
+
   return (
     <main className="min-h-screen bg-[#041a36] text-white">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-[#041a36]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <a href="/academia" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-100 hover:text-white"><ArrowLeft className="h-4 w-4" />Academia ArkoData</a>
           <span className="hidden text-sm text-slate-400 sm:inline">Aula virtual · {previewData?.course.title || course.title}</span>
-          <a href="/academia#cursos" className="text-sm text-slate-300 transition hover:text-cyan-100">Ver otros cursos</a>
+          <div className="flex items-center gap-4">
+            {student && <button type="button" onClick={signOutStudent} disabled={isSigningOut} className="text-sm text-amber-100 transition hover:text-white disabled:opacity-50">{isSigningOut ? 'Cerrando…' : 'Cerrar sesión'}</button>}
+            <a href="/academia#cursos" className="text-sm text-slate-300 transition hover:text-cyan-100">Ver otros cursos</a>
+          </div>
         </div>
       </header>
 
