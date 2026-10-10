@@ -22,6 +22,8 @@ function spanishAuthError(error: unknown) {
   if (/error sending confirmation email/i.test(message)) return 'Supabase no pudo enviar el correo de confirmación. Revisa el SMTP de Brevo y los registros de Auth para conocer el motivo; luego vuelve a intentarlo.';
   if (/email rate limit exceeded/i.test(message)) return 'Se alcanzó el límite de correos de confirmación. Espera un momento e inténtalo nuevamente.';
   if (/user already registered/i.test(message)) return 'Ya existe una cuenta con ese correo. Inicia sesión para continuar.';
+  if (/email link is invalid|otp_expired|has expired/i.test(message)) return 'Este enlace ya venció o fue utilizado. Ingresa tu correo y solicita uno nuevo.';
+  if (/email not confirmed/i.test(message)) return 'Tu cuenta aún no está confirmada. Solicita que te reenviemos el enlace.';
   if (/invalid login credentials/i.test(message)) return 'El correo o la contraseña no son correctos.';
   return message || 'No pudimos completar la solicitud. Inténtalo nuevamente.';
 }
@@ -91,6 +93,8 @@ export default function AcademyClassroomPage() {
   const [studentEmail, setStudentEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authMode, setAuthMode] = useState<'signup' | 'signin'>('signup');
+  const [confirmationPending, setConfirmationPending] = useState(false);
+  const [isResendingConfirmation, setIsResendingConfirmation] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [isCoursePublished, setIsCoursePublished] = useState(false);
   const [previewData, setPreviewData] = useState<PreviewData | null>(null);
@@ -109,6 +113,16 @@ export default function AcademyClassroomPage() {
   const [message, setMessage] = useState('');
   const [enrollmentComplete, setEnrollmentComplete] = useState(false);
   const [freeLessonComplete, setFreeLessonComplete] = useState(false);
+
+  useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    if (hashParams.get('error_code') === 'otp_expired') {
+      setAuthMode('signin');
+      setConfirmationPending(true);
+      setMessage(spanishAuthError(hashParams.get('error_description') || 'otp_expired'));
+      window.history.replaceState({}, '', `${window.location.pathname}${window.location.search}`);
+    }
+  }, []);
 
   useEffect(() => {
     if (!supabase) return;
@@ -232,6 +246,7 @@ export default function AcademyClassroomPage() {
       if (authResult.error) throw authResult.error;
       const session = authResult.data.session;
       if (!session) {
+        setConfirmationPending(true);
         setMessage('Revisa tu correo para confirmar la cuenta y luego vuelve a iniciar sesión.');
         return;
       }
@@ -240,9 +255,34 @@ export default function AcademyClassroomPage() {
       setStudent(nextStudent);
       setEnrollmentComplete(true);
     } catch (error) {
-      setMessage(spanishAuthError(error));
+      const errorMessage = spanishAuthError(error);
+      if (/confirm|venci|utilizado/i.test(errorMessage)) setConfirmationPending(true);
+      setMessage(errorMessage);
     } finally {
       setIsEnrolling(false);
+    }
+  };
+
+  const resendConfirmation = async () => {
+    if (!supabase || !course || !studentEmail.trim()) {
+      setMessage('Escribe el correo con el que creaste tu cuenta.');
+      return;
+    }
+    setIsResendingConfirmation(true);
+    setMessage('');
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: studentEmail.trim(),
+        options: { emailRedirectTo: `${window.location.origin}/academia/aula/${course.slug}` },
+      });
+      if (error) throw error;
+      setConfirmationPending(true);
+      setMessage('Solicitamos un nuevo enlace. Usa el correo más reciente y ábrelo una sola vez.');
+    } catch (error) {
+      setMessage(spanishAuthError(error));
+    } finally {
+      setIsResendingConfirmation(false);
     }
   };
 
@@ -400,6 +440,7 @@ export default function AcademyClassroomPage() {
                 </label>
                 <button disabled={isEnrolling} type="submit" className="w-full rounded-xl bg-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 disabled:opacity-60">{isEnrolling ? 'Procesando…' : authMode === 'signup' ? 'Crear cuenta e inscribirme' : 'Iniciar sesión e inscribirme'}</button>
                 <button type="button" onClick={() => setAuthMode((mode) => mode === 'signup' ? 'signin' : 'signup')} className="w-full text-xs text-cyan-100 underline underline-offset-4">{authMode === 'signup' ? 'Ya tengo una cuenta' : 'Crear una cuenta nueva'}</button>
+                {confirmationPending && <button type="button" disabled={isResendingConfirmation} onClick={resendConfirmation} className="w-full text-xs font-semibold text-amber-100 underline underline-offset-4 disabled:opacity-50">{isResendingConfirmation ? 'Enviando…' : 'Reenviar correo de confirmación'}</button>}
               </form>
             )}
 
