@@ -204,6 +204,7 @@ const mobileNavLinks = [
   { label: 'Modelo', href: '#modelo' },
   { label: 'Módulos', href: '#modulos' },
   { label: 'Academia', href: '/academia' },
+  { label: 'Webinar gratuito', href: '/webinar-ia' },
   { label: 'Impacto', href: '#impacto' },
   { label: 'Ruta', href: '#ruta' },
   { label: 'Contacto', href: '#contacto' },
@@ -291,6 +292,7 @@ export default function ArkoLanding({ onOpenChat, onOpenContact }: ArkoLandingPr
             <a href="#modelo" className="transition-colors hover:text-white">Modelo</a>
             <a href="#modulos" className="transition-colors hover:text-white">Módulos</a>
             <a href="/academia" className="transition-colors hover:text-white">Academia</a>
+            <a href="/webinar-ia" className="font-medium text-cyan-200 transition-colors hover:text-white">Webinar</a>
             <a href="#impacto" className="transition-colors hover:text-white">Impacto</a>
             <a href="#ruta" className="transition-colors hover:text-white">Ruta</a>
             <a href="#contacto" className="transition-colors hover:text-white">Contacto</a>

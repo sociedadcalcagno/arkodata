@@ -3,12 +3,14 @@ import HomePage from './pages/HomePage';
 import AcademyPage from './pages/AcademyPage';
 import AcademyClassroomPage from './pages/AcademyClassroomPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import WebinarPage from './pages/WebinarPage';
 
 function App() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/academia" component={AcademyPage} />
+      <Route path="/webinar-ia" component={WebinarPage} />
       <Route path="/academia/aula/:slug" component={AcademyClassroomPage} />
       <Route path="/arko-admin-secure-dashboard-2024" component={AdminDashboardPage} />
       <Route>

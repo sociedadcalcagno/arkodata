@@ -196,12 +196,18 @@ export default function AcademyPage() {
           </a>
           <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex" aria-label="Navegación de la academia">
             <a className="transition-colors hover:text-cyan-200" href="#cursos">Explorar cursos</a>
+            <a className="font-semibold text-cyan-200 transition-colors hover:text-white" href="/webinar-ia">Webinar gratuito</a>
             <a className="transition-colors hover:text-cyan-200" href="#experiencia">Cómo funciona</a>
             <a className="transition-colors hover:text-cyan-200" href="/#academia">ArkoData</a>
           </nav>
-          <a href="#cursos" className="inline-flex items-center gap-2 rounded-full bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200">
-            Ver cursos <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="flex items-center gap-2">
+            <a href="/webinar-ia" className="inline-flex items-center gap-2 rounded-full border border-cyan-200/30 bg-cyan-200/10 px-3 py-2.5 text-xs font-semibold text-cyan-50 transition hover:bg-cyan-200/20 sm:px-4 sm:text-sm">
+              Webinar gratis <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="#cursos" className="hidden items-center gap-2 rounded-full bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200 sm:inline-flex">
+              Ver cursos <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </header>
 
@@ -216,6 +222,9 @@ export default function AcademyPage() {
             <p className="mt-6 max-w-xl text-base leading-8 text-slate-200 sm:text-lg">Explora clases y cursos de IA, datos, desarrollo y automatización. Empieza con una clase abierta y profundiza con formación práctica para ti o tu equipo.</p>
             <a href="#cursos" className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-300 to-blue-400 px-6 py-4 font-semibold text-slate-950 shadow-lg shadow-cyan-950/30 transition hover:-translate-y-0.5">
               Explorar temas y cursos <ArrowRight className="h-5 w-5" />
+            </a>
+            <a href="/webinar-ia" className="mt-3 inline-flex items-center gap-3 rounded-2xl border border-cyan-100/25 bg-cyan-100/[0.06] px-6 py-4 font-semibold text-cyan-50 transition hover:border-cyan-100/50 hover:bg-cyan-100/10">
+              Ver webinar gratuito de IA <ArrowRight className="h-5 w-5" />
             </a>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-cyan-50/80">
               <span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-cyan-200" /> Clases abiertas y cursos</span>
