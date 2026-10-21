@@ -4,60 +4,60 @@ import { ArrowLeft, ArrowRight, BarChart3, BrainCircuit, BriefcaseBusiness, Chec
 
 const slides = [
   {
-    label: 'Bienvenida',
-    title: 'Encuentra una oportunidad real para aplicar IA',
-    subtitle: 'Un método práctico para pasar de “queremos usar IA” a una mejora concreta, medible y segura.',
-    points: ['Duración aproximada: 8 minutos', 'Sin requisitos técnicos', 'Incluye una plantilla para tu primer piloto'],
-    narration: 'Bienvenida y bienvenido. En este webinar breve vamos a encontrar una oportunidad real para aplicar inteligencia artificial en una organización. No partiremos por elegir una herramienta. Partiremos por un trabajo concreto, por las personas que lo hacen y por el resultado que queremos mejorar. Al final tendrás una ficha sencilla para evaluar una idea de piloto.',
+    label: 'INTRODUCCIÓN',
+    title: 'La oportunidad no empieza con una herramienta',
+    subtitle: 'Empieza con un problema real. En 3 minutos, conviértelo en un piloto medible.',
+    points: ['3 minutos · a tu ritmo', 'Incluye una ficha de oportunidad'],
+    narration: 'Bienvenido al webinar de ArkoData. En pocos minutos veremos cómo reconocer una oportunidad concreta para aplicar IA, estimar su valor y diseñar un primer piloto con controles claros. No necesitas conocimientos técnicos.',
   },
   {
-    label: '01 · El punto de partida',
-    title: 'No empieces por la herramienta',
-    subtitle: 'Empieza por una tarea que hoy consuma tiempo, genere errores o produzca esperas.',
-    points: ['¿Quién hace el trabajo?', '¿Qué información recibe y consulta?', '¿Qué resultado debe entregar?', '¿Dónde se atasca o se repite?'],
-    narration: 'Cuando una empresa explora IA, es tentador empezar preguntando qué herramienta comprar. Para encontrar valor, conviene empezar con el trabajo. Observa quién realiza la tarea, qué información necesita, qué pasos sigue y qué resultado entrega. Busca fricciones observables: esperas, doble digitación, búsquedas manuales, errores de clasificación o tareas repetidas.',
+    label: '01 · OBSERVA',
+    title: 'Mira el trabajo, no la tecnología',
+    subtitle: 'Una oportunidad aparece donde el proceso se repite, se demora o falla.',
+    points: ['¿Quién realiza la tarea?', '¿Dónde se pierde tiempo o calidad?'],
+    narration: 'Es tentador empezar eligiendo una herramienta. Mejor observa el trabajo: quién lo hace, qué pasos sigue y qué resultado entrega. Busca esperas, doble digitación, búsquedas manuales y errores repetidos.',
   },
   {
-    label: '02 · Encuentra candidatas',
-    title: 'Busca tareas repetitivas con información disponible',
-    subtitle: 'La IA suele ayudar a preparar una propuesta; las reglas y las personas siguen siendo parte del proceso.',
-    points: ['Leer y clasificar solicitudes o documentos', 'Resumir información extensa', 'Extraer datos para una revisión', 'Preparar borradores de respuesta'],
-    narration: 'Algunas tareas candidatas son leer y clasificar solicitudes, resumir información extensa, extraer datos para revisión o preparar borradores. Esto no significa que la IA deba decidir por sí sola. Una arquitectura práctica separa la preparación de una sugerencia, la comprobación contra reglas o fuentes autorizadas y la decisión final cuando corresponde.',
+    label: '02 · IDENTIFICA',
+    title: 'La IA prepara. El equipo decide.',
+    subtitle: 'Prioriza tareas repetitivas donde leer, resumir o clasificar consume tiempo.',
+    points: ['Leer y ordenar información', 'Preparar una respuesta para revisión'],
+    narration: 'La IA puede ayudar a leer, resumir, clasificar o preparar borradores. Su aporte es proponer; el equipo conserva las reglas, valida la información y decide los casos importantes.',
   },
   {
-    label: '03 · Evalúa la oportunidad',
-    title: 'Pasa la idea por cuatro preguntas',
-    subtitle: 'Si no puedes responderlas todavía, ya encontraste qué necesitas investigar antes de construir.',
-    points: ['Frecuencia: ¿cuántas veces ocurre?', 'Tiempo: ¿cuánto tarda cada caso?', 'Datos: ¿tenemos ejemplos permitidos y representativos?', 'Riesgo: ¿quién revisa errores y excepciones?'],
-    narration: 'Evalúa la oportunidad con cuatro preguntas. Primero, frecuencia: cuántas veces ocurre. Segundo, tiempo: cuánto demora cada caso. Tercero, datos: si existen ejemplos representativos que se puedan usar de forma autorizada. Y cuarto, riesgo: qué podría salir mal y quién revisa las excepciones. No hace falta tener todas las respuestas hoy; sí hace falta saber cuáles faltan.',
+    label: '03 · PRIORIZA',
+    title: 'Cuatro señales de una buena candidata',
+    subtitle: 'Volumen, tiempo, datos disponibles y riesgo controlable.',
+    points: ['¿Ocurre con frecuencia?', '¿Podemos medir y revisar el resultado?'],
+    narration: 'Antes de construir, estima cuántas veces ocurre la tarea y cuánto demora. Confirma que puedes usar datos adecuados y define quién revisará los errores y las excepciones.',
   },
   {
-    label: '04 · Ejemplo práctico',
-    title: 'De correos desordenados a solicitudes priorizadas',
-    subtitle: 'Ejemplo ficticio: un equipo recibe consultas por correo y necesita derivarlas a la persona correcta.',
-    points: ['La IA sugiere una categoría y resume el motivo', 'Una regla valida campos obligatorios', 'El equipo confirma la derivación', 'Los casos dudosos van a una bandeja de revisión'],
-    narration: 'Imagina un equipo que recibe solicitudes por correo. Hoy una persona abre cada mensaje, identifica el tema, busca datos faltantes y decide a quién derivarlo. Un piloto podría resumir el mensaje y sugerir una categoría. Una regla detectaría campos obligatorios faltantes. El equipo confirmaría la derivación y revisaría los casos dudosos. Es un ejemplo didáctico: los resultados reales se deben medir en cada organización.',
+    label: '04 · EJEMPLO',
+    title: 'De una bandeja de entrada a un flujo claro',
+    subtitle: 'La IA clasifica solicitudes; las reglas y el equipo mantienen el control.',
+    points: ['Clasificar y resumir', 'Validar datos y derivar para aprobación'],
+    narration: 'Imagina un equipo que recibe solicitudes por correo. La IA resume el mensaje y sugiere una categoría. Una regla revisa los datos obligatorios y una persona confirma la derivación. Los casos dudosos pasan a revisión.',
   },
   {
-    label: '05 · Mide antes y después',
-    title: 'Define una línea base antes del piloto',
-    subtitle: 'Una prueba útil compara el proceso actual con el proceso asistido, usando casos equivalentes.',
-    points: ['Minutos de trabajo por solicitud', 'Porcentaje de derivaciones corregidas', 'Tiempo hasta la primera respuesta', 'Casos que requieren revisión humana'],
-    narration: 'Antes de probar, registra cómo funciona el proceso actual. Puedes medir minutos por solicitud, porcentaje de derivaciones corregidas, tiempo hasta la primera respuesta y cuántos casos requieren revisión humana. Compara casos equivalentes y acuerda de antemano qué mejora sería valiosa. No declares éxito solo porque una demostración se vea convincente.',
+    label: '05 · MIDE',
+    title: 'El impacto se demuestra con datos',
+    subtitle: 'Compara el proceso actual con el piloto usando los mismos indicadores.',
+    points: ['Tiempo por caso', 'Errores y excepciones'],
+    narration: 'Registra el punto de partida antes de probar. Mide el tiempo por caso, los errores y cuántas excepciones requieren atención. Compara resultados equivalentes y acuerda qué mejora justificaría continuar.',
   },
   {
-    label: '06 · Diseña un piloto seguro',
-    title: 'Acota el alcance y conserva el control',
-    subtitle: 'Empieza pequeño, usa información autorizada y deja claro cuándo interviene una persona.',
-    points: ['Prueba con un conjunto reducido de casos', 'Excluye datos sensibles que no sean necesarios', 'Registra sugerencias, correcciones y excepciones', 'Detén o ajusta el piloto si aumenta el riesgo'],
-    narration: 'Diseña el piloto con límites claros. Usa un conjunto pequeño de casos y solo información autorizada. Evita incluir datos sensibles que no sean necesarios. Registra las sugerencias, las correcciones y las excepciones. Define quién puede detener la prueba y qué condiciones obligan a cambiar el diseño. La supervisión no es un detalle posterior: es parte de la solución.',
+    label: '06 · PROTEGE',
+    title: 'Empieza pequeño. Mantén el control.',
+    subtitle: 'Un piloto seguro usa datos autorizados y tiene una persona responsable.',
+    points: ['Prueba acotada y reversible', 'Revisión humana en excepciones'],
+    narration: 'Empieza con pocos casos y datos autorizados. Registra sugerencias, correcciones y excepciones. Define quién supervisa el piloto y cuándo se debe detener o ajustar.',
   },
   {
-    label: '07 · Tu siguiente paso',
-    title: 'Completa esta ficha de oportunidad',
-    subtitle: 'Una buena oportunidad se puede explicar en pocas líneas y tiene una medida verificable.',
-    points: ['Persona o equipo + tarea concreta', 'Volumen mensual + tiempo actual', 'Información disponible y autorizada', 'Propuesta de IA + revisión humana', 'Indicador del piloto + responsable'],
-    narration: 'Para cerrar, completa esta ficha: qué persona o equipo realiza qué tarea; cuántos casos procesa y cuánto tarda hoy; qué información autorizada existe; qué propuesta podría preparar la IA y qué revisará una persona; y qué indicador usarás en el piloto, con quién será responsable. Si puedes responder eso, ya tienes una conversación concreta para evaluar el siguiente paso. Gracias por participar en este webinar de ArkoData.',
+    label: '07 · ACCIÓN',
+    title: 'Tu próximo paso cabe en una página',
+    subtitle: 'Define la tarea, el impacto esperado, los controles y quién lo medirá.',
+    points: ['Elige un proceso real', 'Agenda una evaluación del piloto'],
+    narration: 'Resume la oportunidad en una página: tarea, volumen, tiempo actual, datos autorizados, propuesta de IA, responsable de revisión e indicador. Con eso puedes evaluar un piloto real. Gracias por participar.',
   },
 ];
 
@@ -76,25 +76,29 @@ function WebinarIllustration({ slideIndex, reduceMotion }: { slideIndex: number;
   const artwork = slideArtworks[slideIndex];
 
   return (
-    <div className="relative mb-7 overflow-hidden rounded-2xl border border-cyan-100/15 bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,211,238,.12),transparent_65%),rgba(2,12,30,.48)] p-4 sm:p-5">
+    <div className="relative mb-5 overflow-hidden rounded-2xl border border-cyan-100/15 bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,211,238,.18),transparent_65%),rgba(2,12,30,.55)] p-4 sm:mb-6 sm:p-5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-[10px] font-bold tracking-[0.18em] text-cyan-200 sm:text-xs">{artwork.eyebrow}</p>
-        <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,.8)]" />
+        <motion.span animate={reduceMotion ? { opacity: 1 } : { opacity: [0.55, 1, 0.55], scale: [0.85, 1.15, 0.85] }} transition={reduceMotion ? { duration: 0 } : { duration: 1.8, repeat: Infinity }} className="h-2 w-2 shrink-0 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,.8)]" />
       </div>
       <div className="relative mt-5 grid grid-cols-3 gap-2 sm:gap-3">
-        <div aria-hidden="true" className="absolute left-[16%] right-[16%] top-7 h-px bg-cyan-100/15" />
-        <motion.div aria-hidden="true" className="absolute top-[calc(1.75rem-2px)] z-10 h-1 w-1 rounded-full bg-cyan-100 shadow-[0_0_10px_3px_rgba(103,232,249,.7)]" animate={reduceMotion ? { left: '50%' } : { left: ['16%', '50%', '84%'] }} transition={reduceMotion ? { duration: 0 } : { duration: 3, repeat: Infinity, ease: 'linear' }} />
+        <div aria-hidden="true" className="absolute left-[12%] right-[12%] top-8 h-px bg-gradient-to-r from-transparent via-cyan-100/40 to-transparent" />
+        {!reduceMotion && <motion.div aria-hidden="true" className="absolute left-[12%] right-[12%] top-[calc(2rem-1px)] h-px origin-left bg-gradient-to-r from-cyan-300 via-blue-400 to-transparent shadow-[0_0_10px_rgba(34,211,238,.8)]" animate={{ scaleX: [0.12, 0.5, 0.92, 0.12] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }} />}
+        <motion.div aria-hidden="true" className="absolute top-[calc(2rem-3px)] z-10 h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_12px_4px_rgba(103,232,249,.85)]" animate={reduceMotion ? { left: '50%' } : { left: ['12%', '50%', '88%'] }} transition={reduceMotion ? { duration: 0 } : { duration: 2.5, repeat: Infinity, ease: 'easeInOut' }} />
         {artwork.nodes.map((node, index) => {
           const Icon = node.icon;
           return (
-            <motion.div key={`${slideIndex}-${node.label}`} animate={reduceMotion ? { y: 0 } : { y: [0, -4, 0] }} transition={reduceMotion ? { duration: 0 } : { duration: 2.4, repeat: Infinity, delay: index * 0.32, ease: 'easeInOut' }} className="relative z-[1] flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border border-cyan-100/15 bg-[#061b37]/90 p-2 text-center shadow-lg sm:min-h-[96px] sm:rounded-2xl">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-100/20 bg-cyan-200/10 text-cyan-100"><Icon className="h-5 w-5" /></span>
+            <motion.div key={`${slideIndex}-${node.label}`} animate={reduceMotion ? { y: 0, scale: 1, borderColor: 'rgba(165,243,252,.15)' } : { y: [0, -6, 0], scale: [1, index === 1 ? 1.07 : 1.025, 1], borderColor: ['rgba(165,243,252,.15)', 'rgba(103,232,249,.55)', 'rgba(165,243,252,.15)'] }} transition={reduceMotion ? { duration: 0 } : { duration: 2.5, repeat: Infinity, delay: index * 0.45, ease: 'easeInOut' }} className="relative z-[1] flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border bg-[#061b37]/95 p-2 text-center shadow-[0_12px_30px_rgba(0,0,0,.24)] sm:min-h-[96px] sm:rounded-2xl">
+              <motion.span animate={reduceMotion ? { rotate: 0 } : { rotate: [0, index === 1 ? 5 : -3, 0] }} transition={reduceMotion ? { duration: 0 } : { duration: 2.5, repeat: Infinity, delay: index * 0.45 }} className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-100/20 bg-cyan-200/10 text-cyan-100"><Icon className="h-5 w-5" /></motion.span>
               <span className="text-[10px] font-medium leading-tight text-slate-200 sm:text-xs">{node.label}</span>
             </motion.div>
           );
         })}
       </div>
       <motion.p key={artwork.outcome} initial={{ opacity: 0, y: reduceMotion ? 0 : 5 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.25 }} className="mt-4 text-center text-xs font-semibold text-cyan-50">{artwork.outcome}</motion.p>
+      <div className="mt-3 flex items-end justify-center gap-1.5" aria-hidden="true">
+        {[30, 48, 38, 68, 52, 88, 64, 100, 72, 84, 58, 92].map((height, index) => <motion.span key={`${slideIndex}-bar-${index}`} className="w-1.5 rounded-full bg-gradient-to-t from-blue-500/45 to-cyan-200/90 sm:w-2" animate={reduceMotion ? { height: 8 + height * 0.22, opacity: 0.65 } : { height: [8 + height * 0.16, 8 + height * 0.28, 8 + height * 0.16], opacity: [0.35, 0.9, 0.35] }} transition={reduceMotion ? { duration: 0 } : { duration: 1.25, delay: index * 0.055, repeat: Infinity, ease: 'easeInOut' }} />)}
+      </div>
     </div>
   );
 }
@@ -150,18 +154,18 @@ export default function WebinarPage() {
       <header className="relative z-10 border-b border-white/10 bg-[#041a36]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <a href="/academia" className="inline-flex items-center gap-2 text-sm font-medium text-cyan-100 transition hover:text-white"><ArrowLeft className="h-4 w-4" /> Academia ArkoData</a>
-          <span className="rounded-full border border-emerald-200/25 bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-100">WEBINAR · GRATIS · GRABADO</span>
+          <span className="rounded-full border border-emerald-200/25 bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-100">WEBINAR · GRATIS · BAJO DEMANDA</span>
         </div>
       </header>
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">Academia ArkoData · 8 minutos</p>
-            <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Cómo identificar una oportunidad real de IA en tu organización</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">Un webinar autoguiado para elegir un problema concreto, estimar su impacto y diseñar un piloto responsable.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200">Academia ArkoData · Webinar gratuito · 3 min</p>
+            <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Cómo encontrar una oportunidad de IA que genere valor</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">De un problema cotidiano a un piloto claro, seguro y medible.</p>
           </div>
-          <div className="flex items-center gap-2 text-xs text-slate-400"><Mic2 className="h-4 w-4 text-cyan-200" /> Presentación narrada</div>
+          <div className="flex items-center gap-2 text-xs text-slate-400"><Mic2 className="h-4 w-4 text-cyan-200" />{isNarrating ? <><span className="text-cyan-100">Narrando</span><span className="flex h-4 items-center gap-0.5" aria-hidden="true">{[0, 1, 2, 3, 4].map((bar) => <motion.span key={bar} className="w-0.5 rounded-full bg-cyan-200" animate={prefersReducedMotion ? { height: 5 } : { height: [4, 13, 6, 11, 4] }} transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.7, repeat: Infinity, delay: bar * 0.08 }} />)}</span></> : 'Presentación narrada'}</div>
         </div>
 
         <section aria-live="polite" className="relative overflow-hidden rounded-[1.75rem] border border-cyan-100/20 bg-[linear-gradient(135deg,rgba(7,57,111,.88),rgba(4,26,54,.97))] shadow-[0_30px_100px_rgba(0,0,0,.35)]">
@@ -187,12 +191,12 @@ export default function WebinarPage() {
               <aside className="flex flex-col justify-between border-t border-white/10 bg-slate-950/25 p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
                 <div>
                   <WebinarIllustration slideIndex={activeSlide} reduceMotion={Boolean(prefersReducedMotion)} />
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: prefersReducedMotion ? 0 : 0.2, duration: prefersReducedMotion ? 0 : 0.45 }}>
-                  <div className="flex items-center gap-2 text-sm font-medium text-cyan-100"><Volume2 className="h-4 w-4" /> Guion del relator</div>
-                  <p className="mt-5 text-sm leading-7 text-slate-300">{slide.narration}</p>
-                  </motion.div>
+                  <details className="group rounded-xl border border-white/10 bg-white/[0.025] px-4 py-3">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium text-cyan-100 marker:hidden"><span className="inline-flex items-center gap-2"><Volume2 className="h-4 w-4" /> Ver guion del relator</span><ArrowRight className="h-4 w-4 transition-transform group-open:rotate-90" /></summary>
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: prefersReducedMotion ? 0 : 0.25 }} className="mt-3 text-sm leading-6 text-slate-300">{slide.narration}</motion.p>
+                  </details>
                 </div>
-                <p className="mt-8 text-xs leading-5 text-slate-500">El audio se sintetiza en tu navegador al reproducir. También puedes seguir el webinar leyendo el guion.</p>
+                <p className="mt-4 text-xs leading-5 text-slate-500">Narración en español generada por tu navegador.</p>
               </aside>
             </motion.div>
           </AnimatePresence>
